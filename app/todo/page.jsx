@@ -25,7 +25,7 @@ export default function Todo() {
       })
       .then((res) => {
         if (!res.data.accessToken) {
-          return router.push("/verifyEmail");
+          return router.push("/");
         }
         dispatch(getToken(res.data.accessToken));
         setLoading(false);
@@ -39,18 +39,18 @@ export default function Todo() {
         <div className="flex h-screen w-screen justify-center items-center">
           <FontAwesomeIcon
             icon={faSpinner}
-            className="w-16 h-16 text-slate-300"
+            className="w-16 h-16 text-gray-600"
             spin={true}
           />
         </div>
       ) : (
         <>
           {token ? (
-            <div className="flex min-h-screen items-center justify-between p-24">
+            <div className="text-gray-600 flex min-h-screen items-center justify-between p-24">
               hello todo
             </div>
           ) : (
-            <p className="flex min-h-screen items-center justify-center text-lg">
+            <p className="text-gray-600 flex min-h-screen items-center justify-center text-lg">
               Please register to use todo-app
             </p>
           )}

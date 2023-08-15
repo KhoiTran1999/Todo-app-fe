@@ -12,6 +12,8 @@ import { env } from "@/config/env";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { getToken } from "@/app/GlobalRedux/Features/counter/tokenSlider";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function register({ params }) {
   const router = useRouter();
@@ -82,66 +84,80 @@ export default function register({ params }) {
     setIsLoading(false);
   };
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <FontAwesomeIcon icon={faUser} className="w-16 h-16 text-slate-300" />
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center justify-center"
-        method="post"
-      >
-        <input
-          className="mt-9 mb-6 py-1 px-3 text-xl text-white bg-white bg-opacity-25 placeholder-slate-300 rounded focus:outline-none"
-          type="text"
-          name="username"
-          placeholder="Username"
-          required
-          minLength={4}
-          maxLength={20}
-          autoFocus
-        />
-        <input
-          className="mb-6 py-1 px-3 text-xl text-white bg-white bg-opacity-25 placeholder-slate-300 rounded focus:outline-none"
-          type="email"
-          name="email"
-          placeholder={encodeEmail}
-          value={encodeEmail}
-          readOnly
-        />
-        <input
-          className="mb-6 py-1 px-3 text-xl text-white bg-white bg-opacity-25 placeholder-slate-300 rounded focus:outline-none"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          minLength={1}
-        />
-        <input
-          className="py-1 px-3 text-xl text-white bg-white bg-opacity-25 placeholder-slate-300 rounded focus:outline-none"
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          required
-          minLength={1}
-        />
-        <div className="w-full mt-5 flex justify-between items-center">
-          <FontAwesomeIcon
-            icon={faArrowLeftLong}
-            className="w-10 h-10 text-slate-300 hover:text-slate-50 ease-out duration-300 cursor-pointer"
-            onClick={() => router.push("/verifyEmail")}
+    <div className="flex min-h-screen min-w-full items-center justify-center">
+      <div className="w-2/5 p-4 mr-3 min-h-screen flex items-center justify-center">
+        <Image
+          src="/static/img/register.jpg"
+          className="rounded-lg"
+          width={600}
+          height={400}
+          alt="Main picture"
+        ></Image>
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <FontAwesomeIcon icon={faUser} className="w-16 h-16 text-gray-700" />
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center justify-center"
+          method="post"
+        >
+          <input
+            className="mt-9 mb-6 py-1 px-3 text-xl text-black bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+            minLength={4}
+            maxLength={20}
+            autoFocus
           />
-          {isLoading ? (
-            <FontAwesomeIcon
-              icon={faSpinner}
-              className="w-7 h-7 mr-5 text-slate-300"
-              spin={true}
-            />
-          ) : (
-            <button className="text-xl border py-1 px-3 rounded hover:bg-blue-500 hover:border-blue-500 ease-out duration-300">
-              Register
-            </button>
-          )}
+          <input
+            className="mb-6 py-1 px-3 text-xl text-black bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded cursor-not-allowed focus:outline-none"
+            type="email"
+            name="email"
+            placeholder={encodeEmail}
+            value={encodeEmail}
+            readOnly
+          />
+          <input
+            className="mb-6 py-1 px-3 text-xl text-black bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            minLength={1}
+          />
+          <input
+            className="py-1 px-3 text-xl text-black bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            required
+            minLength={1}
+          />
+          <div className="w-full mt-5 flex justify-between items-center">
+            {isLoading ? (
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="w-7 h-7 mr-5 text-slate-300"
+                spin={true}
+              />
+            ) : (
+              <button className="text-lg font-semibold py-2 px-3 w-full text-slate-600 text-center bg-yellow-400 hover:bg-yellow-500 rounded  ease-out duration-300">
+                Register
+              </button>
+            )}
+          </div>
+        </form>
+        <div className="mt-8 w-full pt-2 text-center border-t border-slate-600">
+          <Link
+            href="/login"
+            className="text-base font-semibold text-gray-800 text-center mt-3 hover:underline"
+          >
+            Already have an account? Sign in
+          </Link>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { getToken } from "./GlobalRedux/Features/counter/tokenSlider";
 import { useRouter } from "next/navigation";
 import { verify } from "jsonwebtoken";
 import { env } from "@/config/env";
+import Image from "next/image";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -48,31 +49,51 @@ export default function Home() {
               }
             )
             .then((res) => {
+              if (!res.success) {
+                return router.push("/login");
+              }
+
               dispatch(getToken(res.data.accessToken));
             })
             .catch((err) => {
-              router.push("/login");
+              console.log(err);
             });
         }
       });
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-5xl">Welcome to Todo-app</h1>
-      <div className="mt-10">
-        <Link
-          href="/login"
-          className="text-xl hover:bg-blue-500 py-1 mr-5 px-3 border hover:border-blue-500 rounded  ease-out duration-300"
-        >
-          Login
-        </Link>
-        <Link
-          href="/verifyEmail"
-          className="text-xl hover:bg-blue-500 py-1 px-3 border hover:border-blue-500 rounded  ease-out duration-300"
-        >
-          Register
-        </Link>
+    <main className="flex min-h-screen min-w-full items-center justify-center ">
+      <div className="w-2/5 p-4 mr-20 min-h-screen flex items-center justify-center">
+        <Image
+          src="/static/img/home.jpg"
+          className="rounded-lg"
+          width={600}
+          height={400}
+          alt="Main picture"
+        ></Image>
+      </div>
+      <div>
+        <h1 className="text-5xl font-bold text-black text-center">
+          Free your mind
+        </h1>
+        <p className="font-medium text-black my-8">
+          Simplify, Be Inspired, Be Original, Work Hard, Enjoy
+        </p>
+        <div className="flex flex-col">
+          <Link
+            href="/verifyEmail"
+            className="text-lg py-2 px-3 text-black text-center bg-yellow-400 hover:bg-yellow-500 font-semibold rounded  ease-out duration-300"
+          >
+            Register
+          </Link>
+          <Link
+            href="/login"
+            className="text-base font-semibold text-gray-800 text-center mt-3 hover:underline"
+          >
+            Already have an account? Sign in
+          </Link>
+        </div>
       </div>
     </main>
   );
