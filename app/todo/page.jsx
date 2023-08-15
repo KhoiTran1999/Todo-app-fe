@@ -1,31 +1,61 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getToken } from "../GlobalRedux/Features/counter/tokenSlider";
+import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function Todo() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.token.value);
+  const [loading, setLoading] = useState(true);
 
-  console.log(token);
   useEffect(() => {
-    if (!token) {
-      router.push("/verifyEmail");
-    }
+    setLoading(true);
+    axios
+      .get("http://localhost:3200/api/v1/auth/cookie/getToken", {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        if (!res.data.accessToken) {
+          return router.push("/verifyEmail");
+        }
+        dispatch(getToken(res.data.accessToken));
+        setLoading(false);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
-    <>
-      {token ? (
-        <div className="flex min-h-screen items-center justify-between p-24">
-          hello todo
+    <div>
+      {loading ? (
+        <div className="flex h-screen w-screen justify-center items-center">
+          <FontAwesomeIcon
+            icon={faSpinner}
+            className="w-16 h-16 text-slate-300"
+            spin={true}
+          />
         </div>
       ) : (
-        <p className="flex min-h-screen items-center justify-center text-lg">
-          Please register to use todo-app
-        </p>
+        <>
+          {token ? (
+            <div className="flex min-h-screen items-center justify-between p-24">
+              hello todo
+            </div>
+          ) : (
+            <p className="flex min-h-screen items-center justify-center text-lg">
+              Please register to use todo-app
+            </p>
+          )}
+        </>
       )}
-    </>
+    </div>
   );
 }
