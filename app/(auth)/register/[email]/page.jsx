@@ -19,17 +19,22 @@ export default function register({ params }) {
   const { email } = params;
   const encodeEmail = decodeURIComponent(email);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     // setToken();
+
+    const JSONdata = JSON.stringify({ email: encodeEmail });
     axios
-      .get(`${env.SERVER_URL}/api/v1/auth/cookie/setToken`, {
+      .post(`${env.SERVER_URL}/api/v1/auth/cookie/setToken`, JSONdata, {
         withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   }, []);
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,13 +54,12 @@ export default function register({ params }) {
         withCredentials: true,
       })
       .then((res) => {
-        const token = res.data.cookies.token;
+        const token = res.data.accessToken;
         const data = {
           username: e.target.username.value,
           email: e.target.email.value,
           password: e.target.password.value,
         };
-
         const JSONdata = JSON.stringify(data);
         axios
           .post(`${env.SERVER_URL}/api/v1/auth/register`, JSONdata, {

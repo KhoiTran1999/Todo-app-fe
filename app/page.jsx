@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getToken } from "./GlobalRedux/Features/counter/tokenSlider";
 import { useRouter } from "next/navigation";
+import { verify } from "jsonwebtoken";
+import { env } from "@/config/env";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -15,12 +17,43 @@ export default function Home() {
     axios
       .get("http://localhost:3200/api/v1/auth/cookie/getToken", {
         withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       .then((res) => {
-        if (res.data.cookies.token) {
-          router.push("/todo");
+        if (!res.data.accessToken) {
+          return;
         }
-        dispatch(getToken(res.data.cookies.token));
+        const isValidAccessToken = verify(
+          res.data.accessToken,
+          env.JWT_ACCESSTOKEN_PRIVATE_KEY
+        );
+        if (isValidAccessToken) {
+          router.push("/todo");
+          dispatch(getToken(res.data.accessToken));
+        } else {
+          const JSONdata = JSON.stringify({
+            refreshToken: res.data.refreshToken,
+          });
+          axios
+            .post(
+              "http://localhost:3200/api/v1/auth/cookie/refreshToken",
+              JSONdata,
+              {
+                withCredentials: true,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((res) => {
+              dispatch(getToken(res.data.accessToken));
+            })
+            .catch((err) => {
+              router.push("/login");
+            });
+        }
       });
   }, []);
 
