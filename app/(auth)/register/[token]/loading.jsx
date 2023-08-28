@@ -7,7 +7,7 @@ export default function Loading() {
     <div className="flex min-h-screen flex-col items-center justify-center">
       <FontAwesomeIcon
         icon={faSpinner}
-        className="w-16 h-16 text-slate-300"
+        className="w-16 h-16 text-slate-700"
         spin={true}
       />
     </div>

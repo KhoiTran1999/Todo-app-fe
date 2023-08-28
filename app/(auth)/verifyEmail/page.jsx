@@ -1,63 +1,39 @@
 "use client";
 
-import { getToken } from "@/app/GlobalRedux/Features/counter/tokenSlider";
-import { env } from "@/config/env";
+import { TokenSelector } from "@/app/GlobalRedux/selector";
+import { verifyEmailAxios } from "@/service/axiosService";
 import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function verifyEmail() {
   const router = useRouter();
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isSendEmail, setIsSendEmail] = useState(false);
   const [isResendEmail, setIsResendEmail] = useState(false);
 
+  const token = useSelector(TokenSelector);
+
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("http://localhost:3200/api/v1/auth/cookie/getToken", {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        if (res.data.accessToken) {
-          dispatch(getToken(res.data.accessToken));
-          return router.push("/todo");
-        }
-
-        if (res.data.refreshToken) {
-          return router.push("/");
-        }
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    if (token.accessToken && token.refreshToken) {
+      window.close();
+      return router.push("/todo/today");
+    }
+    setLoading(false);
+  }, [token]);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
     setIsLoading(true);
 
-    const data = {
-      email: e.target.email.value,
-    };
-
-    const JSONdata = JSON.stringify(data);
-    axios
-      .post(`${env.SERVER_URL}/api/v1/auth/verifyEmail`, JSONdata, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+    verifyEmailAxios({ email: e.target.email.value })
       .then((res) => {
         setIsSendEmail(true);
         setTimeout(() => {
@@ -66,7 +42,7 @@ export default function verifyEmail() {
         }, 1000 * 60);
       })
       .catch((err) => {
-        alert(`Error => ${err.response.data.message}`);
+        alert(`Error => ${err.response?.data?.message}`);
         setIsLoading(false);
       });
   };
@@ -82,7 +58,7 @@ export default function verifyEmail() {
         <div className="flex min-h-screen min-w-full items-center justify-center">
           <FontAwesomeIcon
             icon={faSpinner}
-            className="w-16 h-16 text-slate-300"
+            className="w-16 h-16 text-slate-700"
             spin={true}
           />
         </div>
@@ -100,7 +76,7 @@ export default function verifyEmail() {
           <div className="flex flex-col items-center justify-center">
             <FontAwesomeIcon
               icon={faUser}
-              className="w-16 h-16 text-gray-700"
+              className="w-16 h-16 text-slate-700"
             />
             <form
               onSubmit={(handleOnSubmit, handleResentEmail)}
@@ -108,7 +84,7 @@ export default function verifyEmail() {
               id="formEmail"
             >
               {isSendEmail && !isResendEmail ? (
-                <p className="my-5 text-slate-600 text-center">
+                <p className="my-5 text-slate-700 text-center">
                   A link have been sent to your email for verification.<br></br>
                   <strong>This link is only valid for the next 1 minute</strong>
                 </p>
@@ -116,7 +92,7 @@ export default function verifyEmail() {
                 <>
                   <label
                     htmlFor="otp"
-                    className="text-xl text-slate-600 mt-7 mb-5"
+                    className="text-base font-medium text-slate-700 mt-7 mb-5"
                   >
                     Enter your email here:
                   </label>
@@ -163,10 +139,10 @@ export default function verifyEmail() {
                 </>
               )}
             </form>
-            <div className="mt-8 w-full pt-2 text-center border-t border-slate-600">
+            <div className="mt-8 w-full pt-2 text-center border-t border-slate-400">
               <Link
                 href="/login"
-                className="text-base font-semibold text-gray-800 text-center mt-3 hover:underline"
+                className="text-base font-medium text-gray-800 text-center mt-3 hover:underline"
               >
                 Already have an account? Sign in
               </Link>
