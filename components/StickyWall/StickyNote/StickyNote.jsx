@@ -6,11 +6,8 @@ import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
-  rectSortingStrategy,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
-
-// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Masonry from "react-responsive-masonry";
 
 function StickyNote() {
@@ -60,7 +57,7 @@ function StickyNote() {
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
-    if (active.id === over.id) return;
+    if (active?.id === over?.id || !active || !over) return;
 
     setTodoList((prev) => {
       const activeIndex = prev.findIndex((object) => object.id === active.id);
