@@ -11,12 +11,13 @@ import { verify } from "jsonwebtoken";
 import { env } from "@/config/env";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { TodoHeader } from "@/components/TodoHeader/TodoHeader";
 
 export default function layout({ children }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const token = useSelector(TokenSelector);
 
   useEffect(() => {
@@ -64,9 +65,12 @@ export default function layout({ children }) {
           />
         </div>
       ) : (
-        <div className="flex h-full items-start justify-start p-5">
-          <SideBar />
-          {children}
+        <div className="relative">
+          <TodoHeader />
+          <div className="mt-[59px] flex h-full items-start justify-start">
+            <SideBar />
+            {children}
+          </div>
         </div>
       )}
     </>

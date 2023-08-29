@@ -1,17 +1,19 @@
+import { ViewModeSelector } from "@/app/GlobalRedux/selector";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
   faBell,
-  faFillDrip,
+  faPalette,
   faTag,
   faThumbTack,
-  faTrashAlt,
   faTrashCan,
-  faTrashCanArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
 
 export const Todo = ({ id, title, content }) => {
+  const viewMode = useSelector(ViewModeSelector);
+
   const {
     attributes,
     listeners,
@@ -34,7 +36,9 @@ export const Todo = ({ id, title, content }) => {
       {...listeners}
       className={`${
         isDragging && "z-[100]"
-      } break-inside-avoid px-4 pt-2 pb-12 mb-3 w-[240px] bg-white border border-slate-200 transition-shadow rounded-xl hover:shadow-lg cursor-default active:cursor-move relative`}
+      } break-inside-avoid px-4 pt-2 pb-12 mb-3 ${
+        viewMode ? "w-[240px]" : "w-full max-w-[600px]"
+      } bg-white border border-slate-200 transition-shadow rounded-xl hover:shadow-lg cursor-default active:cursor-move relative`}
     >
       <h4 className="text-lg font-semibold text-slate-700 mb-2">{title}</h4>
       <p className="min-h-[115px] max-h-[355px] line-clamp-[15] text-ellipsis overflow-hidden">
@@ -47,7 +51,7 @@ export const Todo = ({ id, title, content }) => {
           </div>
           <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
             <FontAwesomeIcon
-              icon={faFillDrip}
+              icon={faPalette}
               className="w-5 h-5 text-slate-500"
             />
           </div>

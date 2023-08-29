@@ -3,7 +3,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Providers } from "./GlobalRedux/provider";
-import FirstRender from "@/components/FirstRender";
+import FirstRender from "@/components/FirstRender/FirstRender";
 
 const inter = Inter({ subsets: ["latin"] });
 

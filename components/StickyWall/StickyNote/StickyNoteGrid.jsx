@@ -8,9 +8,9 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import Masonry from "react-responsive-masonry";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
-function StickyNote() {
+function StickyNoteGrid() {
   const [todoList, setTodoList] = useState([
     {
       id: "z",
@@ -68,25 +68,37 @@ function StickyNote() {
 
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <ul className="mt-6">
+      <ul>
         <SortableContext
           items={todoList}
           strategy={horizontalListSortingStrategy}
         >
-          <Masonry columnsCount={4}>
-            {todoList.map((val, idx) => (
-              <Todo
-                key={idx}
-                id={val.id}
-                content={val.content}
-                title={val.title}
-              />
-            ))}
-          </Masonry>
+          <ResponsiveMasonry
+            columnsCountBreakPoints={{
+              686: 1,
+              804: 2,
+              1045: 3,
+              1292: 4,
+              1536: 5,
+              1780: 6,
+              2036: 7,
+            }}
+          >
+            <Masonry>
+              {todoList.map((val, idx) => (
+                <Todo
+                  key={idx}
+                  id={val.id}
+                  content={val.content}
+                  title={val.title}
+                />
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
         </SortableContext>
       </ul>
     </DndContext>
   );
 }
 
-export default StickyNote;
+export default StickyNoteGrid;

@@ -6,11 +6,11 @@ const initialState = {
   value: true,
 };
 
-export const sidebarSlider = createSlice({
+export const viewModeSlider = createSlice({
   name: "sidebar",
   initialState,
   reducers: {
-    toggleSidebar: (state, action) => {
+    toggleviewMode: (state, action) => {
       if (action.payload) {
         state.value = action.payload;
       }
@@ -19,5 +19,5 @@ export const sidebarSlider = createSlice({
   },
 });
 
-export const { toggleSidebar } = sidebarSlider.actions;
-export default sidebarSlider.reducer;
+export const { toggleviewMode } = viewModeSlider.actions;
+export default viewModeSlider.reducer;
