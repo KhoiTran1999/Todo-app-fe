@@ -1,4 +1,5 @@
-import { ViewModeSelector } from "@/app/GlobalRedux/selector";
+import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { TodoListSelector, ViewModeSelector } from "@/app/GlobalRedux/selector";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -9,10 +10,12 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Todo = ({ id, title, content }) => {
+  const dispatch = useDispatch();
   const viewMode = useSelector(ViewModeSelector);
+  const todoList = useSelector(TodoListSelector);
 
   const {
     attributes,
@@ -28,6 +31,11 @@ export const Todo = ({ id, title, content }) => {
     transition,
   };
 
+  const handleDeleteTodo = (e) => {
+    const newTodoList = todoList.filter((val) => val.id !== id);
+    dispatch(getTodoList(newTodoList));
+  };
+
   return (
     <li
       ref={setNodeRef}
@@ -40,12 +48,14 @@ export const Todo = ({ id, title, content }) => {
         viewMode ? "w-[240px]" : "w-full max-w-[600px]"
       } bg-white border border-slate-200 transition-shadow rounded-xl hover:shadow-lg cursor-default active:cursor-move relative`}
     >
-      <h4 className="text-lg font-semibold text-slate-700 mb-2">{title}</h4>
-      <p className="min-h-[115px] max-h-[355px] line-clamp-[15] text-ellipsis overflow-hidden">
+      <h4 className="max-h-[100px] line-clamp-[3] text-ellipsis overflow-hidden text-lg font-semibold text-slate-700 mb-2">
+        {title}
+      </h4>
+      <p className="max-h-[355px] line-clamp-[15] text-ellipsis overflow-hidden">
         {content}
       </p>
       <div className="opacity-0 hover:opacity-100 transition-all absolute w-full h-full top-0 left-0">
-        <div className="pt-4 flex justify-center items-center absolute bottom-0 left-10">
+        <div className="pt-4 flex justify-center items-center absolute bottom-0 left-1/2 -translate-x-1/2">
           <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
             <FontAwesomeIcon icon={faBell} className="w-5 h-5 text-slate-500" />
           </div>
@@ -58,7 +68,10 @@ export const Todo = ({ id, title, content }) => {
           <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
             <FontAwesomeIcon icon={faTag} className="w-5 h-5 text-slate-500" />
           </div>
-          <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+          <div
+            onClick={handleDeleteTodo}
+            className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+          >
             <FontAwesomeIcon
               icon={faTrashCan}
               className="w-5 h-5 text-slate-500"

@@ -32,7 +32,7 @@ const verifyEmailAxios = async (data) => {
   return res.data;
 };
 
-const registerAxios = async (token, data) => {
+const registerAxios = async (data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(
     `${env.SERVER_URL}/api/v1/auth/register`,
@@ -41,7 +41,6 @@ const registerAxios = async (token, data) => {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -62,21 +61,6 @@ const useGetToken = () => {
     "http://localhost:3200/api/v1/auth/cookie/getToken",
     fetcher
   );
-};
-
-const setTokenAxios = async (data) => {
-  const JSONdata = JSON.stringify({ data });
-  const res = await axios.post(
-    `${env.SERVER_URL}/api/v1/auth/cookie/setToken`,
-    JSONdata,
-    {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  return res.data;
 };
 
 const refreshTokenAxios = async (data) => {
@@ -111,8 +95,24 @@ export {
   loginAxios,
   verifyEmailAxios,
   registerAxios,
-  setTokenAxios,
   refreshTokenAxios,
   clearTokenAxios,
   useGetToken,
 };
+
+//Example using Authorization
+// const registerAxios = async (token, data) => {
+//   const JSONdata = JSON.stringify(data);
+//   const res = await axios.post(
+//     `${env.SERVER_URL}/api/v1/auth/register`,
+//     JSONdata,
+//     {
+//       withCredentials: true,
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     }
+//   );
+//   return res.data;
+// };

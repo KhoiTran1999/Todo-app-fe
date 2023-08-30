@@ -2,7 +2,7 @@
 
 import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
 import { TokenSelector } from "@/app/GlobalRedux/selector";
-import { loginAxios } from "@/service/axiosService";
+import { loginAxios } from "@/service/axiosService/authAxios";
 import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";

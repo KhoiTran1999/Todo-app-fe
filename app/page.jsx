@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { verify } from "jsonwebtoken";
 import { env } from "@/config/env";
 import Image from "next/image";
-import { refreshTokenAxios } from "@/service/axiosService";
+import { refreshTokenAxios } from "@/service/axiosService/authAxios";
 import { TokenSelector } from "./GlobalRedux/selector";
 import { getToken } from "./GlobalRedux/Features/data/tokenSlider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -47,7 +47,6 @@ export default function Home() {
           router.push("/todo/today");
         })
         .catch((err) => {
-          console.log(err);
           router.push("/login");
         });
     }
@@ -84,9 +83,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col">
                 <button
-                  onClick={() =>
-                    window.open("http://localhost:3000/verifyEmail")
-                  }
+                  onClick={() => router.push("/verifyEmail")}
                   className="text-base py-2 px-3 text-slate-700 text-center bg-yellow-400 hover:bg-yellow-500 font-semibold rounded  ease-out duration-300"
                 >
                   Get Started

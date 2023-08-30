@@ -5,13 +5,15 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TokenSelector } from "../GlobalRedux/selector";
-import { refreshTokenAxios } from "@/service/axiosService";
+import { refreshTokenAxios } from "@/service/axiosService/authAxios";
 import { getToken } from "../GlobalRedux/Features/data/tokenSlider";
 import { verify } from "jsonwebtoken";
 import { env } from "@/config/env";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { TodoHeader } from "@/components/TodoHeader/TodoHeader";
+import { useGetTodo } from "@/service/axiosService/todoAxios";
+import { getTodoList } from "../GlobalRedux/Features/data/todoListSlider";
 
 export default function layout({ children }) {
   const router = useRouter();
@@ -19,6 +21,25 @@ export default function layout({ children }) {
 
   const [loading, setLoading] = useState(false);
   const token = useSelector(TokenSelector);
+
+  const { data, error, isloading } = useGetTodo(token.accessToken);
+
+  if (isloading)
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <FontAwesomeIcon
+          icon={faSpinner}
+          className="w-16 h-16 text-slate-700"
+          spin={true}
+        />
+      </div>
+    );
+
+  if (data) {
+    dispatch(getTodoList(data.data));
+  }
+
+  if (error) console.log(error);
 
   useEffect(() => {
     setLoading(true);

@@ -1,7 +1,7 @@
 "use client";
 
 import { TokenSelector } from "@/app/GlobalRedux/selector";
-import { verifyEmailAxios } from "@/service/axiosService";
+import { verifyEmailAxios } from "@/service/axiosService/authAxios";
 import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";

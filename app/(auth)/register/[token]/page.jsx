@@ -9,12 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
 import Image from "next/image";
 import { verify } from "jsonwebtoken";
-import {
-  getTokenAxios,
-  registerAxios,
-  setTokenAxios,
-} from "@/service/axiosService";
-import { TokenSelector } from "@/app/GlobalRedux/selector";
+import { registerAxios } from "@/service/axiosService/authAxios";
 
 export default function register({ params }) {
   const router = useRouter();
@@ -59,15 +54,10 @@ export default function register({ params }) {
       email: e.target.email.value,
       password: e.target.password.value,
     };
-    registerAxios(token, data)
+    registerAxios(data)
       .then((res) => {
         if (res.success) {
-          dispatch(getToken(token));
-          // setToken();
-          setTokenAxios(email)
-            .then((res) => console.log(res.message))
-            .catch((err) => console.log(err));
-          return router.push("/todo/today");
+          return router.push("/login");
         }
       })
       .catch((err) => {

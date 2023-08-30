@@ -1,7 +1,7 @@
 import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
 import { toggleSidebar } from "@/app/GlobalRedux/Features/toggle/sidebarSlider";
 import { toggleviewMode } from "@/app/GlobalRedux/Features/toggle/viewModeSlider";
-import { clearTokenAxios } from "@/service/axiosService";
+import { clearTokenAxios } from "@/service/axiosService/authAxios";
 import {
   faArrowRightFromBracket,
   faBars,
