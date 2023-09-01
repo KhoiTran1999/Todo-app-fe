@@ -17,11 +17,13 @@ import {
 } from "@dnd-kit/sortable";
 import Masonry from "react-responsive-masonry";
 import { useDispatch, useSelector } from "react-redux";
-import { TodoListSelector } from "@/app/GlobalRedux/selector";
+import { TodoListSelector, TokenSelector } from "@/app/GlobalRedux/selector";
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { updateTodoAxios } from "@/service/axiosService/todoAxios";
 
 function StickyNoteList() {
   const dispatch = useDispatch();
+  const token = useSelector(TokenSelector);
   const todoList = useSelector(TodoListSelector);
 
   const handleDragEnd = (event) => {
@@ -29,9 +31,21 @@ function StickyNoteList() {
 
     if (active?.id === over?.id || !active || !over) return;
 
-    const activeIndex = todoList.findIndex((object) => object.id === active.id);
-    const overIndex = todoList.findIndex((object) => object.id === over.id);
-    const newTodoList = arrayMove(todoList, activeIndex, overIndex);
+    const idList = todoList.map((val) => val.id);
+    const oldIndex = todoList.findIndex((object) => object.id === active.id);
+    const newIndex = todoList.findIndex((object) => object.id === over.id);
+
+    const movedList = arrayMove(todoList, oldIndex, newIndex);
+
+    const newTodoList = movedList.map((val, idx) => ({
+      ...val,
+      id: idList[idx],
+    }));
+
+    newTodoList.forEach((val) => {
+      updateTodoAxios(token.accessToken, val.id, val);
+    });
+
     dispatch(getTodoList(newTodoList));
   };
 
@@ -62,6 +76,9 @@ function StickyNoteList() {
                   id={val.id}
                   content={val.content}
                   title={val.title}
+                  color={val.color}
+                  pin={val.pin}
+                  reminder={val.reminder}
                 />
               ))}
             </Masonry>

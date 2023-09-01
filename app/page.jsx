@@ -22,7 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true);
-    if (!token.accessToken || !token.refreshToken) return setLoading(false);
+    if (!token.refreshToken) return setLoading(false);
 
     try {
       const isValidAccessToken = verify(
@@ -36,7 +36,6 @@ export default function Home() {
           if (!res.success) {
             return router.push("/login");
           }
-
           dispatch(
             getToken({
               accessToken: res.accessToken,

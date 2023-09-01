@@ -5,7 +5,7 @@ import useSWRImmutable from "swr/immutable";
 const loginAxios = async (data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(
-    "http://localhost:3200/api/v1/auth/login",
+    `${env.SERVER_URL}/api/v1/auth/login`,
     JSONdata,
     {
       withCredentials: true,
@@ -58,20 +58,19 @@ const useGetToken = () => {
       })
       .then((res) => res.data);
   return useSWRImmutable(
-    "http://localhost:3200/api/v1/auth/cookie/getToken",
+    `${env.SERVER_URL}/api/v1/auth/cookie/getToken`,
     fetcher
   );
 };
 
-const refreshTokenAxios = async (data) => {
-  const JSONdata = JSON.stringify({ data });
-  const res = await axios.post(
-    "http://localhost:3200/api/v1/auth/cookie/refreshToken",
-    JSONdata,
+const refreshTokenAxios = async (token) => {
+  const res = await axios.get(
+    `${env.SERVER_URL}/api/v1/auth/cookie/refreshToken`,
     {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -80,7 +79,7 @@ const refreshTokenAxios = async (data) => {
 
 const clearTokenAxios = async () => {
   const res = await axios.delete(
-    "http://localhost:3200/api/v1/auth/cookie/clearToken",
+    `${env.SERVER_URL}/api/v1/auth/cookie/clearToken`,
     {
       withCredentials: true,
       headers: {

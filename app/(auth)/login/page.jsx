@@ -49,7 +49,7 @@ export default function login() {
         return router.push("/todo/today");
       })
       .catch((err) => {
-        alert(`Error => ${err.response.data.message}`);
+        alert(`Error => ${err.response.data?.message}`);
         e.target.password.value = "";
         setIsLoading(false);
       });
