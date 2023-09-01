@@ -16,13 +16,13 @@ import {
 } from "@dnd-kit/sortable";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useDispatch, useSelector } from "react-redux";
-import { TodoListSelector, TokenSelector } from "@/app/GlobalRedux/selector";
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { TokenSelector } from "@/app/GlobalRedux/selector";
+import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
 import { updateTodoAxios } from "@/service/axiosService/todoAxios";
+import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 
-function StickyNoteGrid() {
+function StickyNoteGrid({ isPin, todoList }) {
   const dispatch = useDispatch();
-  const todoList = useSelector(TodoListSelector);
   const token = useSelector(TokenSelector);
 
   const handleDragEnd = (event) => {
@@ -45,7 +45,8 @@ function StickyNoteGrid() {
       updateTodoAxios(token.accessToken, val.id, val);
     });
 
-    dispatch(getTodoList(newTodoList));
+    if (isPin) return dispatch(getTodoListPin(newTodoList));
+    dispatch(getTodoListUnpin(newTodoList));
   };
 
   const mouseSensor = useSensor(MouseSensor, {

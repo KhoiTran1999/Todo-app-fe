@@ -1,4 +1,5 @@
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
+import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 import { TokenSelector } from "@/app/GlobalRedux/selector";
 import { addTodoAxios } from "@/service/axiosService/todoAxios";
 import React, { useRef, useEffect } from "react";
@@ -14,7 +15,9 @@ export function useClickOutsideStickyWall(
   contentRef,
   setColorToggle,
   color,
-  setColor
+  setColor,
+  isPin,
+  setIsPin
 ) {
   const dispatch = useDispatch();
   const token = useSelector(TokenSelector);
@@ -30,8 +33,14 @@ export function useClickOutsideStickyWall(
             title: titleRef.current?.value?.trim(),
             content: contentRef.current?.value?.trim(),
             color,
+            pin: isPin,
           }).then((res) => {
-            dispatch(getTodoList(res.data));
+            dispatch(
+              getTodoListUnpin(res.data.filter((val) => val.pin === false))
+            );
+            dispatch(
+              getTodoListPin(res.data.filter((val) => val.pin === true))
+            );
           });
         }
 
@@ -43,6 +52,7 @@ export function useClickOutsideStickyWall(
         setTexterea(false);
         setColorToggle(false);
         setColor("white");
+        setIsPin(false);
       }
     }
     // Bind the event listener

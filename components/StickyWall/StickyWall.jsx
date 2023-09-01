@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import StickyNoteGrid from "./StickyNote/StickyNoteGrid";
 import {
   SidebarSelector,
+  TodoListPinSelector,
+  TodoListUnpinSelector,
   TokenSelector,
   ViewModeSelector,
 } from "@/app/GlobalRedux/selector";
@@ -19,7 +21,9 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { addTodoAxios } from "@/service/axiosService/todoAxios";
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
+import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
+import Image from "next/image";
 
 const colorList = [
   "#FAAFA8",
@@ -40,10 +44,13 @@ const StickyWall = () => {
   const [isFocus, setIsFocus] = useState(false);
   const [colorToggle, setColorToggle] = useState(false);
   const [color, setColor] = useState("white");
+  const [isPin, setIsPin] = useState(false);
 
   const toggle = useSelector(SidebarSelector);
   const viewMode = useSelector(ViewModeSelector);
   const token = useSelector(TokenSelector);
+  const todoListUnpin = useSelector(TodoListUnpinSelector);
+  const todoListPin = useSelector(TodoListPinSelector);
 
   const titleRef = useRef("");
   const contentRef = useRef("");
@@ -56,7 +63,9 @@ const StickyWall = () => {
     contentRef,
     setColorToggle,
     color,
-    setColor
+    setColor,
+    isPin,
+    setIsPin
   );
 
   const autoGrow = (element) => {
@@ -72,18 +81,22 @@ const StickyWall = () => {
         title: e.target.title.value.trim(),
         content: e.target.content.value.trim(),
         color,
+        pin: isPin,
       }).then((res) => {
-        dispatch(getTodoList(res.data));
+        dispatch(getTodoListUnpin(res.data.filter((val) => val.pin === false)));
+        dispatch(getTodoListPin(res.data.filter((val) => val.pin === true)));
         titleRef.current.style.height = "24px";
         contentRef.current.style.height = "24px";
         e.target.title.value = null;
         e.target.content.value = null;
         setIsFocus(false);
+        setIsPin(false);
       });
     }
 
     e.target.title.value = null;
     e.target.content.value = null;
+    setIsPin(false);
     setIsFocus(false);
     setColor("white");
     setColorToggle(false);
@@ -103,7 +116,7 @@ const StickyWall = () => {
   const handleChangeColor = (e, elementColor) => {
     setColor(elementColor);
   };
-  console.log(colorToggle);
+
   return (
     <div
       className={`pl-3 pb-3 w-full h-full ${
@@ -180,11 +193,23 @@ const StickyWall = () => {
                     Đóng
                   </button>
                 </div>
-                <div className="absolute top-0 right-0 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-                  <FontAwesomeIcon
-                    icon={faThumbTack}
-                    className="w-5 h-5 text-slate-500"
-                  />
+                <div className="absolute top-0 right-0 flex items-center justify-center cursor-pointer p-1 hover:bg-slate-200 rounded-full">
+                  {isPin ? (
+                    <FontAwesomeIcon
+                      onClick={() => setIsPin(false)}
+                      icon={faThumbTack}
+                      className="w-5 h-5 text-slate-500"
+                    />
+                  ) : (
+                    <Image
+                      onClick={() => setIsPin(true)}
+                      className=" text-slate-500"
+                      width={22}
+                      height={22}
+                      src="/static/img/unpin.ico"
+                      alt=""
+                    />
+                  )}
                 </div>
               </>
             ) : (
@@ -216,7 +241,37 @@ const StickyWall = () => {
           )}
         </div>
       </div>
-      {viewMode ? <StickyNoteGrid /> : <StickyNoteList />}
+      {viewMode ? (
+        <>
+          <div>
+            <div className="text-[11px] m-3 font-medium text text-slate-500">
+              ĐƯỢC GHIM
+            </div>
+            <StickyNoteGrid isPin={true} todoList={todoListPin} />
+          </div>
+          <div className="mt-10">
+            <div className="text-[11px] m-3 font-medium text text-slate-500">
+              KHÁC
+            </div>
+            <StickyNoteGrid isPin={false} todoList={todoListUnpin} />
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
+              ĐƯỢC GHIM
+            </div>
+            <StickyNoteList isPin={true} todoList={todoListPin} />
+          </div>
+          <div className="mt-10">
+            <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
+              KHÁC
+            </div>
+            <StickyNoteList isPin={false} todoList={todoListUnpin} />
+          </div>
+        </>
+      )}
     </div>
   );
 };

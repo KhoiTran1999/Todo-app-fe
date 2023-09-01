@@ -1,12 +1,15 @@
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
+import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 import {
-  TodoListSelector,
+  TodoListPinSelector,
+  TodoListUnpinSelector,
   TokenSelector,
   ViewModeSelector,
 } from "@/app/GlobalRedux/selector";
 import { useClickOutsideTodo } from "@/hooks/useClickOutsideTodo";
 import {
   deleteTodoAxios,
+  getTodoAxios,
   updateTodoAxios,
 } from "@/service/axiosService/todoAxios";
 import { useSortable } from "@dnd-kit/sortable";
@@ -20,6 +23,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -41,7 +45,8 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
   const dispatch = useDispatch();
 
   const viewMode = useSelector(ViewModeSelector);
-  const todoList = useSelector(TodoListSelector);
+  const todoListUnpin = useSelector(TodoListUnpinSelector);
+  const todoListPin = useSelector(TodoListPinSelector);
   const token = useSelector(TokenSelector);
 
   const [colorToggle, setColorToggle] = useState(false);
@@ -65,8 +70,12 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
 
   const handleDeleteTodo = (e) => {
     deleteTodoAxios(token.accessToken, id).then((res) => {
-      const newTodoList = todoList.filter((val) => val.id !== id);
-      dispatch(getTodoList(newTodoList));
+      if (pin) {
+        const newTodoList = todoListPin.filter((val) => val.id !== id);
+        return dispatch(getTodoListUnpin(newTodoList));
+      }
+      const newTodoList = todoListUnpin.filter((val) => val.id !== id);
+      dispatch(getTodoListUnpin(newTodoList));
     });
   };
 
@@ -75,14 +84,25 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
   };
 
   const handleChangeColor = (e, elementColor) => {
-    const newTodoList = todoList.map((val) => {
-      if (val.id === id) {
-        const newTodo = { ...val, color: elementColor };
-        return newTodo;
-      }
-      return val;
-    });
-    dispatch(getTodoList(newTodoList));
+    if (pin) {
+      const newTodoList = todoListPin.map((val) => {
+        if (val.id === id) {
+          const newTodo = { ...val, color: elementColor };
+          return newTodo;
+        }
+        return val;
+      });
+      dispatch(getTodoListPin(newTodoList));
+    } else {
+      const newTodoList = todoListUnpin.map((val) => {
+        if (val.id === id) {
+          const newTodo = { ...val, color: elementColor };
+          return newTodo;
+        }
+        return val;
+      });
+      dispatch(getTodoListUnpin(newTodoList));
+    }
 
     updateTodoAxios(token.accessToken, id, {
       title,
@@ -91,6 +111,18 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
       pin,
       reminder,
     });
+  };
+
+  const handlePin = async (isPin) => {
+    await updateTodoAxios(token.accessToken, id, { pin: isPin });
+    const newTodoList = await getTodoAxios(token.accessToken);
+
+    dispatch(
+      getTodoListUnpin(newTodoList.data.filter((val) => val.pin === false))
+    );
+    dispatch(
+      getTodoListPin(newTodoList.data.filter((val) => val.pin === true))
+    );
   };
 
   return (
@@ -168,10 +200,22 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
           </div>
         </div>
         <div className="absolute -top-1 -right-1 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-          <FontAwesomeIcon
-            icon={faThumbTack}
-            className="w-5 h-5 text-slate-500"
-          />
+          {pin ? (
+            <FontAwesomeIcon
+              onClick={() => handlePin(true)}
+              icon={faThumbTack}
+              className="w-5 h-5 text-slate-500"
+            />
+          ) : (
+            <Image
+              onClick={() => handlePin(false)}
+              className=" text-slate-500"
+              width={21}
+              height={21}
+              src="/static/img/unpin.ico"
+              alt=""
+            />
+          )}
         </div>
       </div>
     </li>

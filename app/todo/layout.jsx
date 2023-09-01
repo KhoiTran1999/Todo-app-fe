@@ -12,8 +12,9 @@ import { env } from "@/config/env";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { TodoHeader } from "@/components/TodoHeader/TodoHeader";
-import { useGetTodo } from "@/service/axiosService/todoAxios";
-import { getTodoList } from "../GlobalRedux/Features/data/todoListSlider";
+import { getTodoAxios } from "@/service/axiosService/todoAxios";
+import { getTodoListUnpin } from "../GlobalRedux/Features/data/todoListUnPinSlider";
+import { getTodoListPin } from "../GlobalRedux/Features/data/todoListPinSlider";
 
 export default function layout({ children }) {
   const router = useRouter();
@@ -22,24 +23,16 @@ export default function layout({ children }) {
   const [loading, setLoading] = useState(false);
   const token = useSelector(TokenSelector);
 
-  const { data, error, isloading } = useGetTodo(token.accessToken);
-
-  if (isloading)
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <FontAwesomeIcon
-          icon={faSpinner}
-          className="w-16 h-16 text-slate-700"
-          spin={true}
-        />
-      </div>
-    );
-
-  if (data) {
-    dispatch(getTodoList(data.data));
-  }
-
-  if (error) console.log(error);
+  useEffect(() => {
+    setLoading(true);
+    getTodoAxios(token.accessToken)
+      .then((res) => {
+        dispatch(getTodoListUnpin(res.data.filter((val) => val.pin === false)));
+        dispatch(getTodoListPin(res.data.filter((val) => val.pin === true)));
+        setLoading(false);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     setLoading(true);

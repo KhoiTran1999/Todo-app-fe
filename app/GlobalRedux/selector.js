@@ -1,8 +1,15 @@
 import { createSelector } from "@reduxjs/toolkit";
 
 const TokenSelector = (state) => state.token.value;
-const TodoListSelector = (state) => state.todoList.value;
+const TodoListUnpinSelector = (state) => state.todoListUnpin.value;
+const TodoListPinSelector = (state) => state.todoListPin.value;
 const SidebarSelector = (state) => state.sidebar.value;
 const ViewModeSelector = (state) => state.viewMode.value;
 
-export { TokenSelector, SidebarSelector, ViewModeSelector, TodoListSelector };
+export {
+  TokenSelector,
+  SidebarSelector,
+  ViewModeSelector,
+  TodoListUnpinSelector,
+  TodoListPinSelector,
+};

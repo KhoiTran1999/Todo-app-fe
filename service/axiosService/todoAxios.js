@@ -1,19 +1,16 @@
 import { env } from "@/config/env";
 import axios from "axios";
-import useSWRImmutable from "swr/immutable";
 
-const useGetTodo = (token) => {
-  const fetcher = (url) =>
-    axios
-      .get(url, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => res.data);
-  return useSWRImmutable(`${env.SERVER_URL}/api/v1/todo`, fetcher);
+const getTodoAxios = async (token) => {
+  const res = await axios.get(`${env.SERVER_URL}/api/v1/todo`, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
 };
 
 const addTodoAxios = async (token, data) => {
@@ -53,4 +50,4 @@ const updateTodoAxios = async (token, id, data) => {
   return res.data;
 };
 
-export { useGetTodo, addTodoAxios, deleteTodoAxios, updateTodoAxios };
+export { getTodoAxios, addTodoAxios, deleteTodoAxios, updateTodoAxios };

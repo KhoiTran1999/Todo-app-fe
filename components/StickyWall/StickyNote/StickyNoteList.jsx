@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Todo } from "./Todo";
 import {
   DndContext,
@@ -18,13 +17,13 @@ import {
 import Masonry from "react-responsive-masonry";
 import { useDispatch, useSelector } from "react-redux";
 import { TodoListSelector, TokenSelector } from "@/app/GlobalRedux/selector";
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
 import { updateTodoAxios } from "@/service/axiosService/todoAxios";
+import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 
-function StickyNoteList() {
+function StickyNoteList({ isPin, todoList }) {
   const dispatch = useDispatch();
   const token = useSelector(TokenSelector);
-  const todoList = useSelector(TodoListSelector);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -46,7 +45,8 @@ function StickyNoteList() {
       updateTodoAxios(token.accessToken, val.id, val);
     });
 
-    dispatch(getTodoList(newTodoList));
+    if (isPin) return dispatch(getTodoListPin(newTodoList));
+    dispatch(getTodoListUnpin(newTodoList));
   };
 
   const mouseSensor = useSensor(MouseSensor, {

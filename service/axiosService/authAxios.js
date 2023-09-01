@@ -1,6 +1,5 @@
 import { env } from "@/config/env";
 import axios from "axios";
-import useSWRImmutable from "swr/immutable";
 
 const loginAxios = async (data) => {
   const JSONdata = JSON.stringify(data);
@@ -47,20 +46,14 @@ const registerAxios = async (data) => {
   return res.data;
 };
 
-const useGetToken = () => {
-  const fetcher = (url) =>
-    axios
-      .get(url, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => res.data);
-  return useSWRImmutable(
-    `${env.SERVER_URL}/api/v1/auth/cookie/getToken`,
-    fetcher
-  );
+const getTokenAxios = async () => {
+  const res = await axios.get(`${env.SERVER_URL}/api/v1/auth/cookie/getToken`, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return res.data;
 };
 
 const refreshTokenAxios = async (token) => {
@@ -96,7 +89,7 @@ export {
   registerAxios,
   refreshTokenAxios,
   clearTokenAxios,
-  useGetToken,
+  getTokenAxios,
 };
 
 //Example using Authorization
