@@ -1,4 +1,5 @@
 import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
+import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 import { TokenSelector } from "@/app/GlobalRedux/selector";
 import { addTodoAxios } from "@/service/axiosService/todoAxios";
@@ -28,19 +29,13 @@ export function useClickOutsideStickyWall(
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
         if (contentRef.current?.value?.trim().length !== 0) {
-          console.log(color);
           addTodoAxios(token.accessToken, {
             title: titleRef.current?.value?.trim(),
             content: contentRef.current?.value?.trim(),
             color,
             pin: isPin,
           }).then((res) => {
-            dispatch(
-              getTodoListUnpin(res.data.filter((val) => val.pin === false))
-            );
-            dispatch(
-              getTodoListPin(res.data.filter((val) => val.pin === true))
-            );
+            dispatch(getTodoList(res.data));
           });
         }
 

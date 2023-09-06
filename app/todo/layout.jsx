@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TokenSelector } from "../GlobalRedux/selector";
-import { refreshTokenAxios } from "@/service/axiosService/authAxios";
+import {
+  getTokenAxios,
+  refreshTokenAxios,
+} from "@/service/axiosService/authAxios";
 import { getToken } from "../GlobalRedux/Features/data/tokenSlider";
 import { verify } from "jsonwebtoken";
 import { env } from "@/config/env";
@@ -13,10 +16,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { TodoHeader } from "@/components/TodoHeader/TodoHeader";
 import { getTodoAxios } from "@/service/axiosService/todoAxios";
-import { getTodoListUnpin } from "../GlobalRedux/Features/data/todoListUnPinSlider";
-import { getTodoListPin } from "../GlobalRedux/Features/data/todoListPinSlider";
+import { getLabelAxios } from "@/service/axiosService/labelAxios";
+import { getLabel } from "../GlobalRedux/Features/data/labelSlider";
+import { getTodoList } from "../GlobalRedux/Features/data/todoListSlider";
+import { EditLabelModal } from "@/components/SideBar/EditLabelModal/EditLabelModal";
+import { EditTodoModal } from "@/components/StickyWall/EditTodoModal/EditTodoModal";
 
-export default function layout({ children }) {
+export default function Layout({ children }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -24,47 +30,55 @@ export default function layout({ children }) {
   const token = useSelector(TokenSelector);
 
   useEffect(() => {
-    setLoading(true);
-    getTodoAxios(token.accessToken)
-      .then((res) => {
-        dispatch(getTodoListUnpin(res.data.filter((val) => val.pin === false)));
-        dispatch(getTodoListPin(res.data.filter((val) => val.pin === true)));
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    getTokenAxios((res) => {
+      const accessToken = res.accessToken;
+      const refreshToken = res.refreshToken;
 
-  useEffect(() => {
-    setLoading(true);
+      if (!refreshToken) return router.push("/login");
 
-    if (!token.accessToken || !token.refreshToken) return router.push("/");
-
-    try {
-      const isValidToken = verify(
-        token.accessToken,
-        env.JWT_ACCESSTOKEN_PRIVATE_KEY
-      );
-      if (isValidToken) setLoading(false);
-    } catch (error) {
-      if (!token.refreshToken) return router.push("/login");
-
-      refreshTokenAxios(token.refreshToken)
-        .then((res) => {
-          if (!res.success) {
-            return router.push("/login");
-          }
+      if (!accessToken) {
+        refreshTokenAxios(refreshToken).then((res) => {
           dispatch(
             getToken({
               accessToken: res.accessToken,
-              refreshToken: token.refreshToken,
+              refreshToken: refreshToken,
             })
           );
-        })
-        .catch((err) => {
-          console.log(err);
-          return router.push("/");
         });
-      console.log(error);
+        return setLoading(false);
+      }
+
+      const isValidToken = verify(accessToken, env.JWT_ACCESSTOKEN_PRIVATE_KEY);
+
+      if (isValidToken) {
+        dispatch(
+          getToken({
+            accessToken,
+            refreshToken,
+          })
+        );
+        return setLoading(false);
+      }
+
+      router.push("/login");
+    });
+  }, []);
+
+  useEffect(() => {
+    if (token.accessToken) {
+      setLoading(true);
+      getTodoAxios(token.accessToken)
+        .then((res) => {
+          dispatch(getTodoList(res.data));
+        })
+        .catch((err) => console.log(err));
+
+      getLabelAxios(token.accessToken)
+        .then((res) => {
+          dispatch(getLabel(res.data));
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
     }
   }, [token]);
 
@@ -87,6 +101,8 @@ export default function layout({ children }) {
           </div>
         </div>
       )}
+      <EditLabelModal />
+      <EditTodoModal />
     </>
   );
 }

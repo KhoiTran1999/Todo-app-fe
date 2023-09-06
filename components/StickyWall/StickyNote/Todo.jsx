@@ -1,8 +1,5 @@
-import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
-import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 import {
-  TodoListPinSelector,
-  TodoListUnpinSelector,
+  TodoListSelector,
   TokenSelector,
   ViewModeSelector,
 } from "@/app/GlobalRedux/selector";
@@ -26,33 +23,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-const colorList = [
-  "#FAAFA8",
-  "#F39F76",
-  "#FFF8B8",
-  "#E2F6D3",
-  "#B4DDD3",
-  "#D4E4ED",
-  "#AECCDC",
-  "#D3BFDB",
-  "#F6E2DD",
-  "#E9E3D4",
-  "#EFEFF1",
-];
+import { AddTodoLabel } from "./AddTodoLabel/AddTodoLabel";
+import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { colorList } from "@/constant/colorList";
+import { toggleEditTodoModal } from "@/app/GlobalRedux/Features/toggle/editTodoModalSlider";
+import { getTodoForm } from "@/app/GlobalRedux/Features/data/todoFormSlider";
 
 export const Todo = ({ id, title, content, color, pin, reminder }) => {
   const dispatch = useDispatch();
 
   const viewMode = useSelector(ViewModeSelector);
-  const todoListUnpin = useSelector(TodoListUnpinSelector);
-  const todoListPin = useSelector(TodoListPinSelector);
+  const todoList = useSelector(TodoListSelector);
   const token = useSelector(TokenSelector);
 
   const [colorToggle, setColorToggle] = useState(false);
+  const [labelToggle, setLabelToggle] = useState(false);
 
   const colorRef = useRef();
+  const labelRef = useRef();
+
   useClickOutsideTodo(colorRef, setColorToggle);
+  useClickOutsideTodo(labelRef, setLabelToggle);
 
   const {
     attributes,
@@ -68,65 +59,54 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
     transition,
   };
 
-  const handleDeleteTodo = (e) => {
-    deleteTodoAxios(token.accessToken, id).then((res) => {
-      if (pin) {
-        const newTodoList = todoListPin.filter((val) => val.id !== id);
-        return dispatch(getTodoListUnpin(newTodoList));
-      }
-      const newTodoList = todoListUnpin.filter((val) => val.id !== id);
-      dispatch(getTodoListUnpin(newTodoList));
-    });
+  const handleDeleteTodo = async () => {
+    await deleteTodoAxios(token.accessToken, id);
+
+    const newTodoList = todoList.filter((val) => val.id !== id);
+    dispatch(getTodoList(newTodoList));
   };
 
   const handleColorToggle = () => {
     setColorToggle((prev) => !prev);
   };
 
-  const handleChangeColor = (e, elementColor) => {
-    if (pin) {
-      const newTodoList = todoListPin.map((val) => {
-        if (val.id === id) {
-          const newTodo = { ...val, color: elementColor };
-          return newTodo;
-        }
-        return val;
-      });
-      dispatch(getTodoListPin(newTodoList));
-    } else {
-      const newTodoList = todoListUnpin.map((val) => {
-        if (val.id === id) {
-          const newTodo = { ...val, color: elementColor };
-          return newTodo;
-        }
-        return val;
-      });
-      dispatch(getTodoListUnpin(newTodoList));
-    }
-
-    updateTodoAxios(token.accessToken, id, {
+  const handleChangeColor = async (e, elementColor) => {
+    await updateTodoAxios(token.accessToken, id, {
       title,
       content,
       color: elementColor,
       pin,
       reminder,
     });
+
+    const newTodoList = todoList.map((val) => {
+      if (val.id === id) {
+        const newTodo = { ...val, color: elementColor };
+        return newTodo;
+      }
+      return val;
+    });
+    dispatch(getTodoList(newTodoList));
   };
 
   const handlePin = async (isPin) => {
     await updateTodoAxios(token.accessToken, id, { pin: isPin });
     const newTodoList = await getTodoAxios(token.accessToken);
+    dispatch(getTodoList(newTodoList.data));
+  };
 
-    dispatch(
-      getTodoListUnpin(newTodoList.data.filter((val) => val.pin === false))
-    );
-    dispatch(
-      getTodoListPin(newTodoList.data.filter((val) => val.pin === true))
-    );
+  const handleAddTodoLabel = () => {
+    setLabelToggle((prev) => !prev);
+  };
+
+  const handleClickTodo = () => {
+    dispatch(toggleEditTodoModal(true));
+    dispatch(getTodoForm({ id, title, content, color, pin, reminder }));
   };
 
   return (
     <li
+      onClick={handleClickTodo}
       ref={setNodeRef}
       style={{ ...style, backgroundColor: color }}
       {...attributes}
@@ -186,8 +166,12 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-            <FontAwesomeIcon icon={faTag} className="w-5 h-5 text-slate-500" />
+          <div className="flex items-center justify-center cursor-pointer">
+            <FontAwesomeIcon
+              onClick={handleAddTodoLabel}
+              icon={faTag}
+              className="w-5 h-5 text-slate-500 p-2 hover:bg-slate-200 rounded-full"
+            />
           </div>
           <div
             onClick={handleDeleteTodo}
@@ -202,13 +186,13 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
         <div className="absolute -top-1 -right-1 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
           {pin ? (
             <FontAwesomeIcon
-              onClick={() => handlePin(true)}
+              onClick={() => handlePin(false)}
               icon={faThumbTack}
               className="w-5 h-5 text-slate-500"
             />
           ) : (
             <Image
-              onClick={() => handlePin(false)}
+              onClick={() => handlePin(true)}
               className=" text-slate-500"
               width={21}
               height={21}
@@ -218,6 +202,11 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
           )}
         </div>
       </div>
+      {labelToggle && (
+        <div ref={labelRef}>
+          <AddTodoLabel todoId={id} />
+        </div>
+      )}
     </li>
   );
 };

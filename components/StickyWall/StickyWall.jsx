@@ -15,42 +15,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
   faDropletSlash,
+  faFaceSmile,
   faPalette,
   faTag,
   faThumbTack,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { addTodoAxios } from "@/service/axiosService/todoAxios";
-import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
-import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
 import Image from "next/image";
-
-const colorList = [
-  "#FAAFA8",
-  "#F39F76",
-  "#FFF8B8",
-  "#E2F6D3",
-  "#B4DDD3",
-  "#D4E4ED",
-  "#AECCDC",
-  "#D3BFDB",
-  "#F6E2DD",
-  "#E9E3D4",
-  "#EFEFF1",
-];
+import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import { colorList } from "@/constant/colorList";
 
 const StickyWall = () => {
   const dispatch = useDispatch();
   const [isFocus, setIsFocus] = useState(false);
+  const [colorPosition, setColorPosition] = useState(48);
   const [colorToggle, setColorToggle] = useState(false);
   const [color, setColor] = useState("white");
   const [isPin, setIsPin] = useState(false);
 
+  const todoListUnpin = useSelector(TodoListUnpinSelector);
+  const todoListPin = useSelector(TodoListPinSelector);
   const toggle = useSelector(SidebarSelector);
   const viewMode = useSelector(ViewModeSelector);
   const token = useSelector(TokenSelector);
-  const todoListUnpin = useSelector(TodoListUnpinSelector);
-  const todoListPin = useSelector(TodoListPinSelector);
 
   const titleRef = useRef("");
   const contentRef = useRef("");
@@ -71,27 +59,27 @@ const StickyWall = () => {
   const autoGrow = (element) => {
     element.target.style.height = "5px";
     element.target.style.height = element.target.scrollHeight + "px";
+    setColorPosition((prev) => `${prev + element.target.scrollHeight}px`);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (e.target.content.value.trim().length !== 0) {
-      addTodoAxios(token.accessToken, {
+      const res = await addTodoAxios(token.accessToken, {
         title: e.target.title.value.trim(),
         content: e.target.content.value.trim(),
         color,
         pin: isPin,
-      }).then((res) => {
-        dispatch(getTodoListUnpin(res.data.filter((val) => val.pin === false)));
-        dispatch(getTodoListPin(res.data.filter((val) => val.pin === true)));
-        titleRef.current.style.height = "24px";
-        contentRef.current.style.height = "24px";
-        e.target.title.value = null;
-        e.target.content.value = null;
-        setIsFocus(false);
-        setIsPin(false);
       });
+
+      dispatch(getTodoList(res.data));
+      titleRef.current.style.height = "24px";
+      contentRef.current.style.height = "24px";
+      e.target.title.value = null;
+      e.target.content.value = null;
+      setIsFocus(false);
+      setIsPin(false);
     }
 
     e.target.title.value = null;
@@ -217,7 +205,9 @@ const StickyWall = () => {
             )}
           </div>
           {colorToggle && (
-            <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute top-48 z-50 cursor-pointer">
+            <div
+              className={`bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute ${colorPosition} z-50 cursor-pointer`}
+            >
               <div className="flex justify-center items-center">
                 <div
                   onClick={(e) => handleChangeColor(e, "white")}
@@ -241,35 +231,65 @@ const StickyWall = () => {
           )}
         </div>
       </div>
-      {viewMode ? (
-        <>
-          <div>
-            <div className="text-[11px] m-3 font-medium text text-slate-500">
-              ĐƯỢC GHIM
-            </div>
-            <StickyNoteGrid isPin={true} todoList={todoListPin} />
+      {todoListPin.length === 0 && todoListUnpin.length === 0 ? (
+        <div className="w-full h-screen flex flex-col justify-start items-center">
+          <FontAwesomeIcon
+            icon={faFaceSmile}
+            className="w-24 h-24 text-slate-500 mb-6 mt-16"
+          />
+          <div className="text-2xl text-slate-500 font-medium">
+            Không có ghi chú nào có nhãn này
           </div>
-          <div className="mt-10">
-            <div className="text-[11px] m-3 font-medium text text-slate-500">
-              KHÁC
-            </div>
-            <StickyNoteGrid isPin={false} todoList={todoListUnpin} />
-          </div>
-        </>
+        </div>
       ) : (
         <>
-          <div>
-            <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
-              ĐƯỢC GHIM
-            </div>
-            <StickyNoteList isPin={true} todoList={todoListPin} />
-          </div>
-          <div className="mt-10">
-            <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
-              KHÁC
-            </div>
-            <StickyNoteList isPin={false} todoList={todoListUnpin} />
-          </div>
+          {viewMode ? (
+            <>
+              <div>
+                {todoListPin.length === 0 ? (
+                  <></>
+                ) : (
+                  <div className="text-[11px] m-3 font-medium text text-slate-500">
+                    ĐƯỢC GHIM
+                  </div>
+                )}
+                <StickyNoteGrid isPin={true} todoList={todoListPin} />
+              </div>
+              <div className="mt-10">
+                {todoListUnpin.length === 0 ? (
+                  <></>
+                ) : (
+                  <div className="text-[11px] m-3 font-medium text text-slate-500">
+                    KHÁC
+                  </div>
+                )}
+                <StickyNoteGrid isPin={false} todoList={todoListUnpin} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                {todoListPin.length === 0 ? (
+                  <></>
+                ) : (
+                  <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
+                    ĐƯỢC GHIM
+                  </div>
+                )}
+                <StickyNoteList isPin={true} todoList={todoListPin} />
+              </div>
+              <div className="mt-10">
+                {todoListUnpin.length === 0 ? (
+                  <></>
+                ) : (
+                  <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
+                    KHÁC
+                  </div>
+                )}
+                <StickyNoteList isPin={false} todoList={todoListUnpin} />
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

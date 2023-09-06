@@ -16,7 +16,7 @@ import {
 } from "@dnd-kit/sortable";
 import Masonry from "react-responsive-masonry";
 import { useDispatch, useSelector } from "react-redux";
-import { TodoListSelector, TokenSelector } from "@/app/GlobalRedux/selector";
+import { TokenSelector } from "@/app/GlobalRedux/selector";
 import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
 import { updateTodoAxios } from "@/service/axiosService/todoAxios";
 import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
@@ -42,7 +42,13 @@ function StickyNoteList({ isPin, todoList }) {
     }));
 
     newTodoList.forEach((val) => {
-      updateTodoAxios(token.accessToken, val.id, val);
+      updateTodoAxios(token.accessToken, val.id, {
+        title: val.title,
+        content: val.content,
+        pin: val.pin,
+        reminder: val.reminder,
+        color: val.color,
+      });
     });
 
     if (isPin) return dispatch(getTodoListPin(newTodoList));

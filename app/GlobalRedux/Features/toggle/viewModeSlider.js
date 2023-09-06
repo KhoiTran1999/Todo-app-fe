@@ -11,9 +11,6 @@ export const viewModeSlider = createSlice({
   initialState,
   reducers: {
     toggleviewMode: (state, action) => {
-      if (action.payload) {
-        state.value = action.payload;
-      }
       state.value = !state.value;
     },
   },

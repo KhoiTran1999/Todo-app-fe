@@ -46,14 +46,15 @@ const registerAxios = async (data) => {
   return res.data;
 };
 
-const getTokenAxios = async () => {
-  const res = await axios.get(`${env.SERVER_URL}/api/v1/auth/cookie/getToken`, {
-    withCredentials: true,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  return res.data;
+const getTokenAxios = async (fulfilledHandling, rejectHandling) => {
+  await axios
+    .get(`${env.SERVER_URL}/api/v1/auth/cookie/getToken`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(async (res) => await fulfilledHandling(res.data));
 };
 
 const refreshTokenAxios = async (token) => {

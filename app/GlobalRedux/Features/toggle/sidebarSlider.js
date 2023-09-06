@@ -11,9 +11,6 @@ export const sidebarSlider = createSlice({
   initialState,
   reducers: {
     toggleSidebar: (state, action) => {
-      if (action.payload) {
-        state.value = action.payload;
-      }
       state.value = !state.value;
     },
   },

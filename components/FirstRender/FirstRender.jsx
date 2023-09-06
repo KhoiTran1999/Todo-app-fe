@@ -11,16 +11,14 @@ const FirstRender = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getTokenAxios()
-      .then((res) => {
-        dispatch(
-          getToken({
-            accessToken: res.accessToken,
-            refreshToken: res.refreshToken,
-          })
-        );
-      })
-      .catch((err) => console.log(err));
+    getTokenAxios((res) => {
+      dispatch(
+        getToken({
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+        })
+      );
+    });
   }, []);
 
   return <>{children}</>;

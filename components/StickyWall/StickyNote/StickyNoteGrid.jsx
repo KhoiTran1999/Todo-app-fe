@@ -42,7 +42,13 @@ function StickyNoteGrid({ isPin, todoList }) {
     }));
 
     newTodoList.forEach((val) => {
-      updateTodoAxios(token.accessToken, val.id, val);
+      updateTodoAxios(token.accessToken, val.id, {
+        title: val.title,
+        content: val.content,
+        pin: val.pin,
+        reminder: val.reminder,
+        color: val.color,
+      });
     });
 
     if (isPin) return dispatch(getTodoListPin(newTodoList));
