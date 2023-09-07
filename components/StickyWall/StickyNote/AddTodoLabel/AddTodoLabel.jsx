@@ -32,7 +32,7 @@ export const AddTodoLabel = ({ todoId }) => {
   };
 
   return (
-    <div className="p-2 bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] absolute left-52 -bottom-2 z-[1000] rounded cursor-default">
+    <div className="p-2 bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded cursor-default">
       <h4 className="text-slate-700 text-sm font-medium">Ghi chú nhãn</h4>
       <form action="" className="mt-2 flex justify-start items-center">
         <input

@@ -29,7 +29,15 @@ import { colorList } from "@/constant/colorList";
 import { toggleEditTodoModal } from "@/app/GlobalRedux/Features/toggle/editTodoModalSlider";
 import { getTodoForm } from "@/app/GlobalRedux/Features/data/todoFormSlider";
 
-export const Todo = ({ id, title, content, color, pin, reminder }) => {
+export const Todo = ({
+  id,
+  title,
+  content,
+  color,
+  pin,
+  reminder,
+  updatedAt,
+}) => {
   const dispatch = useDispatch();
 
   const viewMode = useSelector(ViewModeSelector);
@@ -59,18 +67,21 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
     transition,
   };
 
-  const handleDeleteTodo = async () => {
+  const handleDeleteTodo = async (e) => {
+    e.stopPropagation();
     await deleteTodoAxios(token.accessToken, id);
 
     const newTodoList = todoList.filter((val) => val.id !== id);
     dispatch(getTodoList(newTodoList));
   };
 
-  const handleColorToggle = () => {
+  const handleColorToggle = (e) => {
+    e.stopPropagation();
     setColorToggle((prev) => !prev);
   };
 
   const handleChangeColor = async (e, elementColor) => {
+    e.stopPropagation();
     await updateTodoAxios(token.accessToken, id, {
       title,
       content,
@@ -89,19 +100,23 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
     dispatch(getTodoList(newTodoList));
   };
 
-  const handlePin = async (isPin) => {
+  const handlePin = async (e, isPin) => {
+    e.stopPropagation();
     await updateTodoAxios(token.accessToken, id, { pin: isPin });
     const newTodoList = await getTodoAxios(token.accessToken);
     dispatch(getTodoList(newTodoList.data));
   };
 
-  const handleAddTodoLabel = () => {
+  const handleAddTodoLabel = (e) => {
+    e.stopPropagation();
     setLabelToggle((prev) => !prev);
   };
 
   const handleClickTodo = () => {
     dispatch(toggleEditTodoModal(true));
-    dispatch(getTodoForm({ id, title, content, color, pin, reminder }));
+    dispatch(
+      getTodoForm({ id, title, content, color, pin, reminder, updatedAt })
+    );
   };
 
   return (
@@ -186,13 +201,13 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
         <div className="absolute -top-1 -right-1 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
           {pin ? (
             <FontAwesomeIcon
-              onClick={() => handlePin(false)}
+              onClick={(e) => handlePin(e, false)}
               icon={faThumbTack}
               className="w-5 h-5 text-slate-500"
             />
           ) : (
             <Image
-              onClick={() => handlePin(true)}
+              onClick={(e) => handlePin(e, true)}
               className=" text-slate-500"
               width={21}
               height={21}
@@ -203,7 +218,7 @@ export const Todo = ({ id, title, content, color, pin, reminder }) => {
         </div>
       </div>
       {labelToggle && (
-        <div ref={labelRef}>
+        <div className="absolute left-52 -bottom-2 z-[1000]" ref={labelRef}>
           <AddTodoLabel todoId={id} />
         </div>
       )}

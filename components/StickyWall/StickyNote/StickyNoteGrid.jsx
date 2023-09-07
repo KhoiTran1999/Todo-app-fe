@@ -62,7 +62,6 @@ function StickyNoteGrid({ isPin, todoList }) {
   });
   const keyboardSensor = useSensor(KeyboardSensor);
   const sensors = useSensors(mouseSensor, keyboardSensor);
-
   return (
     <DndContext
       sensors={sensors}
@@ -95,6 +94,7 @@ function StickyNoteGrid({ isPin, todoList }) {
                   color={val.color}
                   pin={val.pin}
                   reminder={val.reminder}
+                  updatedAt={val.updatedAt}
                 />
               ))}
             </Masonry>

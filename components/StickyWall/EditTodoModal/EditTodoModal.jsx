@@ -1,27 +1,63 @@
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+
 import {
   EditTodoModalSelector,
   TodoFormSelector,
+  TodoListSelector,
+  TokenSelector,
 } from "@/app/GlobalRedux/selector";
+import { useClickOutsideTodo } from "@/hooks/useClickOutsideTodo";
 import { useClickOutsideTodoModal } from "@/hooks/useClickOutsideTodoModal";
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import {
+  faBell,
+  faDropletSlash,
+  faPalette,
+  faTag,
+  faThumbtack,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { colorList } from "@/constant/colorList";
+import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+import {
+  deleteTodoAxios,
+  getTodoAxios,
+  updateTodoAxios,
+} from "@/service/axiosService/todoAxios";
+import { getTodoForm } from "@/app/GlobalRedux/Features/data/todoFormSlider";
+import Image from "next/image";
+import { AddTodoLabel } from "../StickyNote/AddTodoLabel/AddTodoLabel";
+import { toggleEditTodoModal } from "@/app/GlobalRedux/Features/toggle/editTodoModalSlider";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export const EditTodoModal = () => {
-  const [colorPosition, setColorPosition] = useState(48);
-
-  const toggleTodoModal = useSelector(EditTodoModalSelector);
-  const todoForm = useSelector(TodoFormSelector);
+  const dispatch = useDispatch();
 
   const modalRef = useRef();
   const titleRef = useRef("");
   const contentRef = useRef("");
+  const colorRef = useRef("");
+  const labelRef = useRef("");
+
+  const [colorToggle, setColorToggle] = useState(false);
+  const [labelToggle, setLabelToggle] = useState(false);
+  const [titleValue, setTitleValue] = useState(titleRef.current.value);
+  const [contentValue, setContentValue] = useState(contentRef.current.value);
+
+  const todoList = useSelector(TodoListSelector);
+  const toggleTodoModal = useSelector(EditTodoModalSelector);
+  const todoForm = useSelector(TodoFormSelector);
+  const { accessToken } = useSelector(TokenSelector);
 
   useClickOutsideTodoModal(modalRef);
+  useClickOutsideTodo(colorRef, setColorToggle);
+  useClickOutsideTodo(labelRef, setLabelToggle);
 
   const autoGrow = (element) => {
     element.target.style.height = "25px";
     element.target.style.height = element.target.scrollHeight + "px";
-    setColorPosition((prev) => `${prev + element.target.scrollHeight}px`);
   };
 
   useEffect(() => {
@@ -38,49 +74,125 @@ export const EditTodoModal = () => {
     }
   }, [toggleTodoModal]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const titleDebounce = useDebounce(titleValue, 1000);
+  const contentDebounce = useDebounce(contentValue, 1000);
 
-    if (e.target.content.value.trim().length !== 0) {
-      const res = await addTodoAxios(token.accessToken, {
-        title: e.target.title.value.trim(),
-        content: e.target.content.value.trim(),
-        color,
-        pin: isPin,
+  useEffect(() => {
+    const updateData = async () => {
+      if (contentDebounce.trim().length === 0) return;
+      if (!todoForm.id) {
+        setTitleValue("");
+        setContentValue("");
+        return;
+      }
+
+      await updateTodoAxios(accessToken, todoForm.id, {
+        title: titleDebounce.trim(),
+        content: contentDebounce.trim(),
+        color: todoForm.color,
+        pin: todoForm.pin,
       });
+      const newTodoList = await getTodoAxios(accessToken);
+      dispatch(getTodoList(newTodoList.data));
+      dispatch(
+        getTodoForm({
+          ...todoForm,
+          title: titleDebounce,
+          content: contentDebounce,
+        })
+      );
+    };
+    updateData();
+  }, [titleDebounce, contentDebounce]);
 
-      dispatch(getTodoList(res.data));
-      titleRef.current.style.height = "24px";
-      contentRef.current.style.height = "24px";
-      e.target.title.value = null;
-      e.target.content.value = null;
-      setIsFocus(false);
-      setIsPin(false);
-    }
+  const handleUpdateTodo = async (e) => {
+    e.preventDefault();
+    setTitleValue(titleRef.current.value);
+    setContentValue(contentRef.current.value);
+  };
 
-    e.target.title.value = null;
-    e.target.content.value = null;
-    setIsPin(false);
-    setIsFocus(false);
-    setColor("white");
-    setColorToggle(false);
+  const handleColorToggle = (e) => {
+    e.stopPropagation();
+    setColorToggle((prev) => !prev);
+  };
+
+  const handleChangeColor = async (e, elementColor) => {
+    e.stopPropagation();
+    await updateTodoAxios(accessToken, todoForm.id, {
+      title: todoForm.title,
+      content: todoForm.content,
+      color: elementColor,
+      pin: todoForm.pin,
+      reminder: todoForm.reminder,
+    });
+
+    const newTodoList = todoList.map((val) => {
+      if (val.id === todoForm.id) {
+        const newTodo = { ...val, color: elementColor };
+        return newTodo;
+      }
+      return val;
+    });
+    dispatch(getTodoList(newTodoList));
+    dispatch(getTodoForm({ ...todoForm, color: elementColor }));
+  };
+
+  const handlePin = async (e, isPin) => {
+    e.stopPropagation();
+    await updateTodoAxios(accessToken, todoForm.id, { pin: isPin });
+
+    const newTodoList = todoList.map((val) => {
+      if (val.id === todoForm.id) {
+        const newTodo = { ...val, pin: isPin };
+        return newTodo;
+      }
+      return val;
+    });
+    dispatch(getTodoList(newTodoList));
+    dispatch(getTodoForm({ ...todoForm, pin: isPin }));
+  };
+
+  const handleAddTodoLabel = (e) => {
+    e.stopPropagation();
+    setLabelToggle((prev) => !prev);
+  };
+
+  const handleDeleteTodo = async (e) => {
+    e.stopPropagation();
+    await deleteTodoAxios(accessToken, todoForm.id);
+
+    const newTodoList = todoList.filter((val) => val.id !== todoForm.id);
+    dispatch(getTodoList(newTodoList));
+    dispatch(toggleEditTodoModal(false));
+    dispatch(getTodoForm({}));
+  };
+
+  const handleClose = () => {
+    dispatch(toggleEditTodoModal(false));
+    dispatch(getTodoForm({}));
   };
 
   return (
     <div
       className={`${
-        toggleTodoModal ? "w-screen h-screen" : "hidden"
+        toggleTodoModal
+          ? "w-screen h-screen opacity-100 visible"
+          : "w-0 h-0 invisible opacity-0"
       } first-letter:text-center bg-neutral-700 bg-opacity-30 fixed top-0 left-0 z-[1001]`}
     >
       <div
         ref={modalRef}
-        className="bg-white w-[600px] max-h-[580px] flex flex-col justify-between items-center absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 rounded select-none"
+        className={`bg-white ${
+          toggleTodoModal ? "opacity-100" : "opacity-0"
+        } w-[600px] max-h-[580px] transition-opacity flex flex-col justify-between items-center absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 rounded select-none`}
+        style={{ backgroundColor: todoForm.color }}
       >
         <form
           action=""
           id="updateTodo"
           className="w-full h-full px-4 overflow-y-auto overscroll-none"
-          onSubmit={handleSubmit}
+          // onSubmit={handleSubmit}
+          onChange={handleUpdateTodo}
         >
           <textarea
             ref={titleRef}
@@ -100,13 +212,101 @@ export const EditTodoModal = () => {
             className={`resize-none overflow-hidden w-full mt-5 bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
             placeholder="Tạo ghi chú..."
           />
+          <div className="text-right text-sm text-slate-700 my-1">
+            updated at {moment(todoForm.updatedAt).fromNow()}
+          </div>
         </form>
 
-        <div className="m-4 flex justify-end items-center">
-          <button className="py-2 px-4 text-slate-700 font-medium hover:bg-slate-100 rounded">
-            Xong
+        <div className="px-3 py-1 w-full shadow-[0_-1px_10px_1px_rgba(0,0,0,0.3)] flex justify-center items-center relative">
+          <div className="flex justify-center items-center">
+            <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+              <FontAwesomeIcon
+                icon={faBell}
+                className="w-5 h-5 text-slate-500"
+              />
+            </div>
+            <div
+              ref={colorRef}
+              onClick={handleColorToggle}
+              className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+            >
+              <FontAwesomeIcon
+                icon={faPalette}
+                className="w-5 h-5 text-slate-500"
+              />
+              {colorToggle && (
+                <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute -top-[52px] ">
+                  <div className="flex justify-center items-center">
+                    <div
+                      onClick={(e) => handleChangeColor(e, "white")}
+                      className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
+                    >
+                      <FontAwesomeIcon
+                        icon={faDropletSlash}
+                        className="w-4 h-4 text-slate-500"
+                      />
+                    </div>
+                    {colorList.map((val, idx) => (
+                      <div
+                        onClick={(e) => handleChangeColor(e, val)}
+                        key={idx}
+                        className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
+                        style={{ backgroundColor: val }}
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+              <FontAwesomeIcon
+                onClick={handleAddTodoLabel}
+                icon={faTag}
+                className="w-5 h-5 text-slate-500"
+              />
+            </div>
+            <div
+              onClick={handleDeleteTodo}
+              className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+            >
+              <FontAwesomeIcon
+                icon={faTrashCan}
+                className="w-5 h-5 text-slate-500"
+              />
+            </div>
+          </div>
+          <button
+            onClick={handleClose}
+            form="addTodo"
+            type="submit"
+            className="font-medium text-slate-700 px-5 py-1 rounded hover:bg-slate-100 absolute right-3"
+          >
+            Đóng
           </button>
         </div>
+        <div className="absolute top-0 right-0 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+          {todoForm.pin ? (
+            <FontAwesomeIcon
+              onClick={(e) => handlePin(e, false)}
+              icon={faThumbtack}
+              className="w-5 h-5 text-slate-500"
+            />
+          ) : (
+            <Image
+              onClick={(e) => handlePin(e, true)}
+              className=" text-slate-500"
+              width={21}
+              height={21}
+              src="/static/img/unpin.ico"
+              alt=""
+            />
+          )}
+        </div>
+        {labelToggle && (
+          <div className="absolute left-60 bottom-12 z-[1000]" ref={labelRef}>
+            <AddTodoLabel todoId={todoForm.id} />
+          </div>
+        )}
       </div>
     </div>
   );
