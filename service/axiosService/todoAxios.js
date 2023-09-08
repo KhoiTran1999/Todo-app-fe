@@ -37,6 +37,18 @@ const getDeletedTodoAxios = async (token) => {
   return res.data;
 };
 
+const getAllTodoAxios = async (token) => {
+  const res = await axios.get(`${env.SERVER_URL}/api/v1/todo/all`, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
 const addTodoAxios = async (token, data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(`${env.SERVER_URL}/api/v1/todo`, JSONdata, {
@@ -105,6 +117,7 @@ export {
   getTodoAxios,
   getArchiveTodoAxios,
   getDeletedTodoAxios,
+  getAllTodoAxios,
   deletePermanentTodoAxios,
   addTodoAxios,
   deleteTodoAxios,

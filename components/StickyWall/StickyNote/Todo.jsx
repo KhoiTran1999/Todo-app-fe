@@ -208,6 +208,7 @@ export const Todo = ({
                 anchorSelect="#restoreTrash"
                 place="bottom"
                 opacity={0.9}
+                style={{ transition: "none" }}
               >
                 Khôi phục
               </Tooltip>
@@ -226,6 +227,7 @@ export const Todo = ({
                 anchorSelect="#deletedPermanence"
                 place="bottom"
                 opacity={0.9}
+                style={{ transition: "none" }}
               >
                 Xóa vĩnh viễn
               </Tooltip>
@@ -241,7 +243,12 @@ export const Todo = ({
                   className="w-5 h-5 text-slate-500"
                 />
               </div>
-              <Tooltip anchorSelect="#reminder" place="bottom" opacity={0.9}>
+              <Tooltip
+                anchorSelect="#reminder"
+                place="bottom"
+                opacity={0.9}
+                style={{ transition: "none" }}
+              >
                 Nhắc tôi
               </Tooltip>
 
@@ -283,6 +290,7 @@ export const Todo = ({
                 anchorSelect="#selectedBackground"
                 place="bottom"
                 opacity={0.9}
+                style={{ transition: "none" }}
               >
                 Lựa chọn nền
               </Tooltip>
@@ -301,6 +309,7 @@ export const Todo = ({
                 anchorSelect="#selectedLabel"
                 place="bottom"
                 opacity={0.9}
+                style={{ transition: "none" }}
               >
                 Thêm nhãn
               </Tooltip>
@@ -315,8 +324,13 @@ export const Todo = ({
                   className="w-5 h-5 text-slate-500"
                 />
               </div>
-              <Tooltip anchorSelect="#addArchive" place="bottom" opacity={0.9}>
-                {pathname === "/todo/archive" ? "Hủy lưu trữ" : "Lưu trữ"}
+              <Tooltip
+                anchorSelect="#addArchive"
+                place="bottom"
+                opacity={0.9}
+                style={{ transition: "none" }}
+              >
+                {archive ? "Hủy lưu trữ" : "Lưu trữ"}
               </Tooltip>
 
               <div
@@ -329,7 +343,12 @@ export const Todo = ({
                   className="w-5 h-5 text-slate-500"
                 />
               </div>
-              <Tooltip anchorSelect="#deletedTodo" place="bottom" opacity={0.9}>
+              <Tooltip
+                anchorSelect="#deletedTodo"
+                place="bottom"
+                opacity={0.9}
+                style={{ transition: "none" }}
+              >
                 Xóa ghi chú
               </Tooltip>
             </>

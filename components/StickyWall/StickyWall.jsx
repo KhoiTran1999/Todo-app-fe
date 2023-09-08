@@ -123,7 +123,9 @@ const StickyWall = () => {
       ) : (
         <></>
       )}
-      {pathname === "/todo/archive" || pathname === "/todo/trash" ? (
+      {pathname === "/todo/archive" ||
+      pathname === "/todo/trash" ||
+      pathname === "/todo/search" ? (
         <></>
       ) : (
         <div className="w-full my-10 flex justify-center items-center">
@@ -285,7 +287,7 @@ const StickyWall = () => {
           ) : (
             <>
               <div>
-                {todoListPin.length === 0 ? (
+                {todoListPin.length === 0 || pathname === "/todo/trash" ? (
                   <></>
                 ) : (
                   <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
@@ -295,7 +297,7 @@ const StickyWall = () => {
                 <StickyNoteList isPin={true} todoList={todoListPin} />
               </div>
               <div className="mt-10">
-                {todoListUnpin.length === 0 ? (
+                {todoListUnpin.length === 0 || pathname === "/todo/trash" ? (
                   <></>
                 ) : (
                   <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
