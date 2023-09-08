@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
+import { Tooltip } from "react-tooltip";
 
 export const TodoHeader = () => {
   const dispatch = useDispatch();
@@ -59,15 +60,24 @@ export const TodoHeader = () => {
 
       <div>
         <FontAwesomeIcon
+          id="viewMode"
           onClick={handleViewMode}
           icon={faListUl}
           className="w-4 h-4 p-3 text-slate-700 hover:bg-slate-300 rounded-full cursor-pointer"
         />
+        <Tooltip anchorSelect="#viewMode" place="bottom" opacity={0.9}>
+          Chuyển chế độ xem
+        </Tooltip>
+
         <FontAwesomeIcon
+          id="logout"
           onClick={handleLogout}
           icon={faArrowRightFromBracket}
           className="w-4 h-4 p-3 text-slate-700 hover:bg-slate-300 rounded-full cursor-pointer"
         />
+        <Tooltip anchorSelect="#logout" place="bottom" opacity={0.9}>
+          Đăng xuất
+        </Tooltip>
       </div>
     </div>
   );

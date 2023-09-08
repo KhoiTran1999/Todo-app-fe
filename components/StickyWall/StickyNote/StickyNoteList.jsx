@@ -85,6 +85,7 @@ function StickyNoteList({ isPin, todoList }) {
                   color={val.color}
                   pin={val.pin}
                   reminder={val.reminder}
+                  archive={val.archive}
                   updatedAt={val.updatedAt}
                 />
               ))}

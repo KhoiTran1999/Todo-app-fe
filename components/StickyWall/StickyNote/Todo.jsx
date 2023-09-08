@@ -1,3 +1,11 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Image from "next/image";
+import { CSS } from "@dnd-kit/utilities";
+import { useSortable } from "@dnd-kit/sortable";
+import { Tooltip } from "react-tooltip";
+
 import {
   TodoListSelector,
   TokenSelector,
@@ -5,29 +13,29 @@ import {
 } from "@/app/GlobalRedux/selector";
 import { useClickOutsideTodo } from "@/hooks/useClickOutsideTodo";
 import {
+  deletePermanentTodoAxios,
   deleteTodoAxios,
+  getArchiveTodoAxios,
   getTodoAxios,
+  restoreTodoAxios,
   updateTodoAxios,
 } from "@/service/axiosService/todoAxios";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import {
+  faArchive,
   faBell,
   faDropletSlash,
   faPalette,
   faTag,
   faThumbTack,
   faTrashCan,
+  faTrashCanArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { AddTodoLabel } from "./AddTodoLabel/AddTodoLabel";
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import { colorList } from "@/constant/colorList";
 import { toggleEditTodoModal } from "@/app/GlobalRedux/Features/toggle/editTodoModalSlider";
 import { getTodoForm } from "@/app/GlobalRedux/Features/data/todoFormSlider";
+import { usePathname } from "next/navigation";
 
 export const Todo = ({
   id,
@@ -36,9 +44,11 @@ export const Todo = ({
   color,
   pin,
   reminder,
+  archive,
   updatedAt,
 }) => {
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   const viewMode = useSelector(ViewModeSelector);
   const todoList = useSelector(TodoListSelector);
@@ -103,8 +113,14 @@ export const Todo = ({
   const handlePin = async (e, isPin) => {
     e.stopPropagation();
     await updateTodoAxios(token.accessToken, id, { pin: isPin });
-    const newTodoList = await getTodoAxios(token.accessToken);
-    dispatch(getTodoList(newTodoList.data));
+    const newTodoList = todoList.map((val) => {
+      if (val.id === id) {
+        const newTodo = { ...val, pin: isPin };
+        return newTodo;
+      }
+      return val;
+    });
+    dispatch(getTodoList(newTodoList));
   };
 
   const handleAddTodoLabel = (e) => {
@@ -117,6 +133,37 @@ export const Todo = ({
     dispatch(
       getTodoForm({ id, title, content, color, pin, reminder, updatedAt })
     );
+  };
+
+  const handleArchive = async (e) => {
+    e.stopPropagation();
+
+    if (archive) {
+      await updateTodoAxios(token.accessToken, id, { archive: false });
+      const newTodoList = await getArchiveTodoAxios(token.accessToken);
+      dispatch(getTodoList(newTodoList.data));
+      return;
+    }
+
+    await updateTodoAxios(token.accessToken, id, { archive: true });
+    const newTodoList = await getTodoAxios(token.accessToken);
+    dispatch(getTodoList(newTodoList.data));
+  };
+
+  const handleRestoreTodo = async (e) => {
+    e.stopPropagation();
+
+    const res = await restoreTodoAxios(token.accessToken, id);
+    dispatch(getTodoList(res.data));
+  };
+
+  const HandleDeleteTodoPermanently = async (e) => {
+    e.stopPropagation();
+
+    await deletePermanentTodoAxios(token.accessToken, id);
+
+    const newTodoList = todoList.filter((val) => val.id !== id);
+    dispatch(getTodoList(newTodoList));
   };
 
   return (
@@ -132,10 +179,10 @@ export const Todo = ({
         viewMode ? "w-[240px]" : "w-full max-w-[600px]"
       } bg-white  border border-slate-200 transition-shadow rounded-xl hover:shadow-lg cursor-default active:cursor-move relative`}
     >
-      <h4 className="max-h-[100px] line-clamp-[3] text-ellipsis overflow-hidden text-lg font-semibold text-slate-700 mb-2">
+      <h4 className="max-h-[100px] break-words line-clamp-[3] text-ellipsis overflow-hidden text-lg font-semibold text-slate-700 mb-2">
         {title}
       </h4>
-      <p className="max-h-[355px] line-clamp-[15] text-ellipsis overflow-hidden">
+      <p className="max-h-[355px] break-words line-clamp-[15] text-ellipsis overflow-hidden">
         {content}
       </p>
 
@@ -145,77 +192,169 @@ export const Todo = ({
         } transition-all absolute w-full h-full top-0 left-0`}
       >
         <div className="pt-4 flex justify-center items-center absolute bottom-0 left-1/2 -translate-x-1/2 z-[100]">
-          <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-            <FontAwesomeIcon icon={faBell} className="w-5 h-5 text-slate-500" />
-          </div>
-          <div
-            ref={colorRef}
-            onClick={handleColorToggle}
-            className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
-          >
-            <FontAwesomeIcon
-              icon={faPalette}
-              className="w-5 h-5 text-slate-500"
-            />
-            {colorToggle && (
-              <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute -bottom-[52px] ">
-                <div className="flex justify-center items-center">
-                  <div
-                    onClick={(e) => handleChangeColor(e, "white")}
-                    className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
-                  >
-                    <FontAwesomeIcon
-                      icon={faDropletSlash}
-                      className="w-4 h-4 text-slate-500"
-                    />
-                  </div>
-                  {colorList.map((val, idx) => (
-                    <div
-                      onClick={(e) => handleChangeColor(e, val)}
-                      key={idx}
-                      className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
-                      style={{ backgroundColor: val }}
-                    ></div>
-                  ))}
-                </div>
+          {pathname === "/todo/trash" ? (
+            <>
+              <div
+                onClick={handleRestoreTodo}
+                id="restoreTrash"
+                className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+              >
+                <FontAwesomeIcon
+                  icon={faTrashCanArrowUp}
+                  className="w-5 h-5 text-slate-500"
+                />
               </div>
-            )}
-          </div>
-          <div className="flex items-center justify-center cursor-pointer">
-            <FontAwesomeIcon
-              onClick={handleAddTodoLabel}
-              icon={faTag}
-              className="w-5 h-5 text-slate-500 p-2 hover:bg-slate-200 rounded-full"
-            />
-          </div>
-          <div
-            onClick={handleDeleteTodo}
-            className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
-          >
-            <FontAwesomeIcon
-              icon={faTrashCan}
-              className="w-5 h-5 text-slate-500"
-            />
-          </div>
-        </div>
-        <div className="absolute -top-1 -right-1 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-          {pin ? (
-            <FontAwesomeIcon
-              onClick={(e) => handlePin(e, false)}
-              icon={faThumbTack}
-              className="w-5 h-5 text-slate-500"
-            />
+              <Tooltip
+                anchorSelect="#restoreTrash"
+                place="bottom"
+                opacity={0.9}
+              >
+                Khôi phục
+              </Tooltip>
+
+              <div
+                onClick={HandleDeleteTodoPermanently}
+                id="deletedPermanence"
+                className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+              >
+                <FontAwesomeIcon
+                  icon={faTrashCan}
+                  className="w-5 h-5 text-slate-500"
+                />
+              </div>
+              <Tooltip
+                anchorSelect="#deletedPermanence"
+                place="bottom"
+                opacity={0.9}
+              >
+                Xóa vĩnh viễn
+              </Tooltip>
+            </>
           ) : (
-            <Image
-              onClick={(e) => handlePin(e, true)}
-              className=" text-slate-500"
-              width={21}
-              height={21}
-              src="/static/img/unpin.ico"
-              alt=""
-            />
+            <>
+              <div
+                id="reminder"
+                className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+              >
+                <FontAwesomeIcon
+                  icon={faBell}
+                  className="w-5 h-5 text-slate-500"
+                />
+              </div>
+              <Tooltip anchorSelect="#reminder" place="bottom" opacity={0.9}>
+                Nhắc tôi
+              </Tooltip>
+
+              <div
+                id="selectedBackground"
+                ref={colorRef}
+                onClick={handleColorToggle}
+                className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+              >
+                <FontAwesomeIcon
+                  icon={faPalette}
+                  className="w-5 h-5 text-slate-500"
+                />
+                {colorToggle && (
+                  <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute -bottom-[52px] ">
+                    <div className="flex justify-center items-center">
+                      <div
+                        onClick={(e) => handleChangeColor(e, "white")}
+                        className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
+                      >
+                        <FontAwesomeIcon
+                          icon={faDropletSlash}
+                          className="w-4 h-4 text-slate-500"
+                        />
+                      </div>
+                      {colorList.map((val, idx) => (
+                        <div
+                          onClick={(e) => handleChangeColor(e, val)}
+                          key={idx}
+                          className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
+                          style={{ backgroundColor: val }}
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <Tooltip
+                anchorSelect="#selectedBackground"
+                place="bottom"
+                opacity={0.9}
+              >
+                Lựa chọn nền
+              </Tooltip>
+
+              <div
+                id="selectedLabel"
+                className="flex items-center justify-center cursor-pointer"
+              >
+                <FontAwesomeIcon
+                  onClick={handleAddTodoLabel}
+                  icon={faTag}
+                  className="w-5 h-5 text-slate-500 p-2 hover:bg-slate-200 rounded-full"
+                />
+              </div>
+              <Tooltip
+                anchorSelect="#selectedLabel"
+                place="bottom"
+                opacity={0.9}
+              >
+                Thêm nhãn
+              </Tooltip>
+
+              <div
+                id="addArchive"
+                onClick={handleArchive}
+                className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+              >
+                <FontAwesomeIcon
+                  icon={faArchive}
+                  className="w-5 h-5 text-slate-500"
+                />
+              </div>
+              <Tooltip anchorSelect="#addArchive" place="bottom" opacity={0.9}>
+                {pathname === "/todo/archive" ? "Hủy lưu trữ" : "Lưu trữ"}
+              </Tooltip>
+
+              <div
+                id="deletedTodo"
+                onClick={handleDeleteTodo}
+                className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+              >
+                <FontAwesomeIcon
+                  icon={faTrashCan}
+                  className="w-5 h-5 text-slate-500"
+                />
+              </div>
+              <Tooltip anchorSelect="#deletedTodo" place="bottom" opacity={0.9}>
+                Xóa ghi chú
+              </Tooltip>
+            </>
           )}
         </div>
+        {pathname !== "/todo/trash" && (
+          <div className="absolute -top-1 -right-1 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+            {pin ? (
+              <FontAwesomeIcon
+                onClick={(e) => handlePin(e, false)}
+                icon={faThumbTack}
+                className="w-5 h-5 text-slate-500"
+              />
+            ) : (
+              <Image
+                onClick={(e) => handlePin(e, true)}
+                className=" text-slate-500"
+                width={21}
+                height={21}
+                src="/static/img/unpin.ico"
+                alt=""
+              />
+            )}
+          </div>
+        )}
       </div>
       {labelToggle && (
         <div className="absolute left-52 -bottom-2 z-[1000]" ref={labelRef}>

@@ -72,6 +72,7 @@ const SideBar = () => {
         <p className={`font-medium ${!toggle && "hidden"}`}>Chỉnh sửa nhãn</p>
       </div>
       <div
+        onClick={() => router.push("/todo/archive")}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? "rounded-full" : "rounded-r-full"
         } cursor-pointer ${
@@ -85,6 +86,7 @@ const SideBar = () => {
         <p className={`font-medium ${!toggle && "hidden"}`}>Lưu trữ</p>
       </div>
       <div
+        onClick={() => router.push("/todo/trash")}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? "rounded-full" : "rounded-r-full"
         } cursor-pointer ${
