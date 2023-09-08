@@ -44,6 +44,7 @@ const SideBar = () => {
         <p className={`font-medium ${!toggle && "hidden"}`}>Ghi chú</p>
       </div>
       <div
+        onClick={() => router.push("/todo/reminder")}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? "rounded-full" : "rounded-r-full"
         } cursor-pointer ${

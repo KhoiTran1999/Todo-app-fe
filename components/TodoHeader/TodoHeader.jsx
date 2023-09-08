@@ -59,6 +59,7 @@ export const TodoHeader = () => {
     clearTokenAxios().then((res) => {
       dispatch(getToken({}));
     });
+    router.push("/");
   };
 
   const handleViewMode = () => {

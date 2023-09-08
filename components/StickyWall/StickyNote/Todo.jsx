@@ -52,6 +52,7 @@ export const Todo = ({
   reminder,
   archive,
   updatedAt,
+  deletedAt,
 }) => {
   const dispatch = useDispatch();
   const pathname = usePathname();
@@ -176,14 +177,18 @@ export const Todo = ({
     dispatch(getTodoList(newTodoList));
   };
 
-  useEffect(() => {
-    if (token) {
-      const updateTime = async () => {
-        await updateTodoAxios(token.accessToken, id, { reminder: timeValue });
-      };
-      updateTime();
-    }
-  }, [timeValue]);
+  const handleChangeDatePicker = async (value) => {
+    setTimeValue(value);
+
+    await updateTodoAxios(token.accessToken, id, { reminder: value });
+    const newTodoList = todoList.map((val) => {
+      if (val.id === id) {
+        return { ...val, reminder: value };
+      }
+      return val;
+    });
+    dispatch(getTodoList(newTodoList));
+  };
 
   return (
     <>
@@ -422,9 +427,11 @@ export const Todo = ({
           >
             <div className=" bg-white">
               <DateTimePicker
-                onChange={setTimeValue}
+                className={"border-none"}
+                onChange={handleChangeDatePicker}
                 value={timeValue}
                 disableClock
+                minDate={new Date()}
               />
             </div>
           </div>

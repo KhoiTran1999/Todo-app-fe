@@ -54,7 +54,8 @@ const getTokenAxios = async (fulfilledHandling, rejectHandling) => {
         "Content-Type": "application/json",
       },
     })
-    .then(async (res) => await fulfilledHandling(res.data));
+    .then(async (res) => await fulfilledHandling(res.data))
+    .catch(async (err) => await rejectHandling(err));
 };
 
 const refreshTokenAxios = async (token) => {

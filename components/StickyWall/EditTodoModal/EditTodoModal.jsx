@@ -17,13 +17,16 @@ import {
   faTag,
   faThumbtack,
   faTrashCan,
+  faTrashCanArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { colorList } from "@/constant/colorList";
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import {
+  deletePermanentTodoAxios,
   deleteTodoAxios,
   getTodoAxios,
+  restoreTodoAxios,
   updateTodoAxios,
 } from "@/service/axiosService/todoAxios";
 import { getTodoForm } from "@/app/GlobalRedux/Features/data/todoFormSlider";
@@ -31,9 +34,12 @@ import Image from "next/image";
 import { AddTodoLabel } from "../StickyNote/AddTodoLabel/AddTodoLabel";
 import { toggleEditTodoModal } from "@/app/GlobalRedux/Features/toggle/editTodoModalSlider";
 import { useDebounce } from "@/hooks/useDebounce";
+import { usePathname } from "next/navigation";
+import { Tooltip } from "react-tooltip";
 
 export const EditTodoModal = () => {
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   const modalRef = useRef();
   const titleRef = useRef("");
@@ -172,6 +178,24 @@ export const EditTodoModal = () => {
     dispatch(getTodoForm({}));
   };
 
+  const handleRestoreTodo = async (e) => {
+    e.stopPropagation();
+
+    const res = await restoreTodoAxios(accessToken, todoForm.id);
+    dispatch(getTodoList(res.data));
+    dispatch(toggleEditTodoModal(false));
+  };
+
+  const HandleDeleteTodoPermanently = async (e) => {
+    e.stopPropagation();
+
+    await deletePermanentTodoAxios(accessToken, todoForm.id);
+
+    const newTodoList = todoList.filter((val) => val.id !== todoForm.id);
+    dispatch(getTodoList(newTodoList));
+    dispatch(toggleEditTodoModal(false));
+  };
+
   return (
     <div
       className={`${
@@ -194,24 +218,43 @@ export const EditTodoModal = () => {
           // onSubmit={handleSubmit}
           onChange={handleUpdateTodo}
         >
-          <textarea
-            ref={titleRef}
-            maxLength={1000}
-            onInput={autoGrow}
-            type="text"
-            name="title"
-            className="resize-none overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
-            placeholder="Tiêu đề"
-          />
-          <textarea
-            ref={contentRef}
-            maxLength={20000}
-            onInput={autoGrow}
-            type="text"
-            name="content"
-            className={`resize-none overflow-hidden w-full mt-5 bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
-            placeholder="Tạo ghi chú..."
-          />
+          {pathname === "/todo/trash" ? (
+            <>
+              <div
+                ref={titleRef}
+                className="overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
+              >
+                {todoForm.title}
+              </div>
+              <div
+                ref={contentRef}
+                className={`overflow-hidden w-full mt-5 bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
+              >
+                {todoForm.content}
+              </div>
+            </>
+          ) : (
+            <>
+              <textarea
+                ref={titleRef}
+                maxLength={1000}
+                onInput={autoGrow}
+                type="text"
+                name="title"
+                className="resize-none overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
+                placeholder="Tiêu đề"
+              />
+              <textarea
+                ref={contentRef}
+                maxLength={20000}
+                onInput={autoGrow}
+                type="text"
+                name="content"
+                className={`resize-none overflow-hidden w-full mt-5 bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
+                placeholder="Tạo ghi chú..."
+              />
+            </>
+          )}
           <div className="text-right text-sm text-slate-700 my-1">
             updated at {moment(todoForm.updatedAt).fromNow()}
           </div>
@@ -219,61 +262,105 @@ export const EditTodoModal = () => {
 
         <div className="px-3 py-1 w-full shadow-[0_-1px_10px_1px_rgba(0,0,0,0.3)] flex justify-center items-center relative">
           <div className="flex justify-center items-center">
-            <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-              <FontAwesomeIcon
-                icon={faBell}
-                className="w-5 h-5 text-slate-500"
-              />
-            </div>
-            <div
-              ref={colorRef}
-              onClick={handleColorToggle}
-              className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
-            >
-              <FontAwesomeIcon
-                icon={faPalette}
-                className="w-5 h-5 text-slate-500"
-              />
-              {colorToggle && (
-                <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute -top-[52px] ">
-                  <div className="flex justify-center items-center">
-                    <div
-                      onClick={(e) => handleChangeColor(e, "white")}
-                      className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
-                    >
-                      <FontAwesomeIcon
-                        icon={faDropletSlash}
-                        className="w-4 h-4 text-slate-500"
-                      />
-                    </div>
-                    {colorList.map((val, idx) => (
-                      <div
-                        onClick={(e) => handleChangeColor(e, val)}
-                        key={idx}
-                        className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
-                        style={{ backgroundColor: val }}
-                      ></div>
-                    ))}
-                  </div>
+            {pathname === "/todo/trash" ? (
+              <>
+                <div
+                  onClick={handleRestoreTodo}
+                  id="restoreTrash"
+                  className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                >
+                  <FontAwesomeIcon
+                    icon={faTrashCanArrowUp}
+                    className="w-5 h-5 text-slate-500"
+                  />
                 </div>
-              )}
-            </div>
-            <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-              <FontAwesomeIcon
-                onClick={handleAddTodoLabel}
-                icon={faTag}
-                className="w-5 h-5 text-slate-500"
-              />
-            </div>
-            <div
-              onClick={handleDeleteTodo}
-              className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
-            >
-              <FontAwesomeIcon
-                icon={faTrashCan}
-                className="w-5 h-5 text-slate-500"
-              />
-            </div>
+                <Tooltip
+                  anchorSelect="#restoreTrash"
+                  place="bottom"
+                  opacity={0.9}
+                  style={{ transition: "none" }}
+                >
+                  Khôi phục
+                </Tooltip>
+
+                <div
+                  onClick={HandleDeleteTodoPermanently}
+                  id="deletedPermanence"
+                  className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                >
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className="w-5 h-5 text-slate-500"
+                  />
+                </div>
+                <Tooltip
+                  anchorSelect="#deletedPermanence"
+                  place="bottom"
+                  opacity={0.9}
+                  style={{ transition: "none" }}
+                >
+                  Xóa vĩnh viễn
+                </Tooltip>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+                  <FontAwesomeIcon
+                    icon={faBell}
+                    className="w-5 h-5 text-slate-500"
+                  />
+                </div>
+                <div
+                  ref={colorRef}
+                  onClick={handleColorToggle}
+                  className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                >
+                  <FontAwesomeIcon
+                    icon={faPalette}
+                    className="w-5 h-5 text-slate-500"
+                  />
+                  {colorToggle && (
+                    <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute -top-[52px] ">
+                      <div className="flex justify-center items-center">
+                        <div
+                          onClick={(e) => handleChangeColor(e, "white")}
+                          className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
+                        >
+                          <FontAwesomeIcon
+                            icon={faDropletSlash}
+                            className="w-4 h-4 text-slate-500"
+                          />
+                        </div>
+                        {colorList.map((val, idx) => (
+                          <div
+                            onClick={(e) => handleChangeColor(e, val)}
+                            key={idx}
+                            className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
+                            style={{ backgroundColor: val }}
+                          ></div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+                  <FontAwesomeIcon
+                    onClick={handleAddTodoLabel}
+                    icon={faTag}
+                    className="w-5 h-5 text-slate-500"
+                  />
+                </div>
+                <div
+                  onClick={handleDeleteTodo}
+                  className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                >
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className="w-5 h-5 text-slate-500"
+                  />
+                </div>
+              </>
+            )}
           </div>
           <button
             onClick={handleClose}
@@ -284,24 +371,26 @@ export const EditTodoModal = () => {
             Đóng
           </button>
         </div>
-        <div className="absolute top-0 right-0 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-          {todoForm.pin ? (
-            <FontAwesomeIcon
-              onClick={(e) => handlePin(e, false)}
-              icon={faThumbtack}
-              className="w-5 h-5 text-slate-500"
-            />
-          ) : (
-            <Image
-              onClick={(e) => handlePin(e, true)}
-              className=" text-slate-500"
-              width={21}
-              height={21}
-              src="/static/img/unpin.ico"
-              alt=""
-            />
-          )}
-        </div>
+        {pathname !== "/todo/trash" && (
+          <div className="absolute top-0 right-0 flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+            {todoForm.pin ? (
+              <FontAwesomeIcon
+                onClick={(e) => handlePin(e, false)}
+                icon={faThumbtack}
+                className="w-5 h-5 text-slate-500"
+              />
+            ) : (
+              <Image
+                onClick={(e) => handlePin(e, true)}
+                className=" text-slate-500"
+                width={21}
+                height={21}
+                src="/static/img/unpin.ico"
+                alt=""
+              />
+            )}
+          </div>
+        )}
         {labelToggle && (
           <div className="absolute left-60 bottom-12 z-[1000]" ref={labelRef}>
             <AddTodoLabel todoId={todoForm.id} />

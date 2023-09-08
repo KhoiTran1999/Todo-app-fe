@@ -96,6 +96,7 @@ function StickyNoteGrid({ isPin, todoList }) {
                   reminder={val.reminder}
                   archive={val.archive}
                   updatedAt={val.updatedAt}
+                  deletedAt={val.deletedAt}
                 />
               ))}
             </Masonry>
