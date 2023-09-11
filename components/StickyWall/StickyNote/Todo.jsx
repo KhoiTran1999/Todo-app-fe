@@ -74,6 +74,10 @@ export const Todo = ({
   useClickOutsideTodo(labelRef, setLabelToggle);
   useClickOutsideTodo(datePickerRef, setTimePickerToggle);
 
+  useEffect(() => {
+    setTimeValue(reminder);
+  }, [reminder]);
+
   const {
     attributes,
     listeners,
@@ -216,9 +220,7 @@ export const Todo = ({
               icon={faClock}
               className="w-3 h-3 text-slate-500"
             />
-            <span className="text-xs ml-2">
-              {timeValue && moment(timeValue).calendar()}
-            </span>
+            <span className="text-xs ml-2">{moment(timeValue).calendar()}</span>
           </div>
         )}
         <div
@@ -231,7 +233,7 @@ export const Todo = ({
               <>
                 <div
                   onClick={handleRestoreTodo}
-                  id="restoreTrash"
+                  id={`restoreTrash` + id}
                   className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
                 >
                   <FontAwesomeIcon
@@ -240,7 +242,7 @@ export const Todo = ({
                   />
                 </div>
                 <Tooltip
-                  anchorSelect="#restoreTrash"
+                  anchorSelect={`#restoreTrash` + id}
                   place="bottom"
                   opacity={0.9}
                   style={{ transition: "none" }}
@@ -250,7 +252,7 @@ export const Todo = ({
 
                 <div
                   onClick={HandleDeleteTodoPermanently}
-                  id="deletedPermanence"
+                  id={`deletedPermanence` + id}
                   className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
                 >
                   <FontAwesomeIcon
@@ -259,7 +261,7 @@ export const Todo = ({
                   />
                 </div>
                 <Tooltip
-                  anchorSelect="#deletedPermanence"
+                  anchorSelect={`#deletedPermanence` + id}
                   place="bottom"
                   opacity={0.9}
                   style={{ transition: "none" }}
@@ -274,7 +276,7 @@ export const Todo = ({
                     e.stopPropagation();
                     setTimePickerToggle((prev) => !prev);
                   }}
-                  id="reminder"
+                  id={`reminder` + id}
                   className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
                 >
                   <FontAwesomeIcon
@@ -283,7 +285,7 @@ export const Todo = ({
                   />
                 </div>
                 <Tooltip
-                  anchorSelect="#reminder"
+                  anchorSelect={`#reminder` + id}
                   place="bottom"
                   opacity={0.9}
                   style={{ transition: "none" }}
@@ -292,7 +294,7 @@ export const Todo = ({
                 </Tooltip>
 
                 <div
-                  id="selectedBackground"
+                  id={`selectedBackground` + id}
                   ref={colorRef}
                   onClick={handleColorToggle}
                   className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
@@ -326,7 +328,7 @@ export const Todo = ({
                   )}
                 </div>
                 <Tooltip
-                  anchorSelect="#selectedBackground"
+                  anchorSelect={`#selectedBackground` + id}
                   place="bottom"
                   opacity={0.9}
                   style={{ transition: "none" }}
@@ -335,7 +337,7 @@ export const Todo = ({
                 </Tooltip>
 
                 <div
-                  id="selectedLabel"
+                  id={`selectedLabel` + id}
                   className="flex items-center justify-center cursor-pointer"
                 >
                   <FontAwesomeIcon
@@ -345,7 +347,7 @@ export const Todo = ({
                   />
                 </div>
                 <Tooltip
-                  anchorSelect="#selectedLabel"
+                  anchorSelect={`#selectedLabel` + id}
                   place="bottom"
                   opacity={0.9}
                   style={{ transition: "none" }}
@@ -354,7 +356,7 @@ export const Todo = ({
                 </Tooltip>
 
                 <div
-                  id="addArchive"
+                  id={`addArchive` + id}
                   onClick={handleArchive}
                   className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
                 >
@@ -364,7 +366,7 @@ export const Todo = ({
                   />
                 </div>
                 <Tooltip
-                  anchorSelect="#addArchive"
+                  anchorSelect={`#addArchive` + id}
                   place="bottom"
                   opacity={0.9}
                   style={{ transition: "none" }}
@@ -373,7 +375,7 @@ export const Todo = ({
                 </Tooltip>
 
                 <div
-                  id="deletedTodo"
+                  id={`deletedTodo` + id}
                   onClick={handleDeleteTodo}
                   className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
                 >
@@ -383,7 +385,7 @@ export const Todo = ({
                   />
                 </div>
                 <Tooltip
-                  anchorSelect="#deletedTodo"
+                  anchorSelect={`#deletedTodo` + id}
                   place="bottom"
                   opacity={0.9}
                   style={{ transition: "none" }}
@@ -427,7 +429,6 @@ export const Todo = ({
           >
             <div className=" bg-white">
               <DateTimePicker
-                className={"border-none"}
                 onChange={handleChangeDatePicker}
                 value={timeValue}
                 disableClock

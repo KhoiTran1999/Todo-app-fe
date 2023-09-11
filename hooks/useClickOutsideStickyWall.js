@@ -18,7 +18,9 @@ export function useClickOutsideStickyWall(
   color,
   setColor,
   isPin,
-  setIsPin
+  setIsPin,
+  setTimeValue,
+  timeValue
 ) {
   const dispatch = useDispatch();
   const token = useSelector(TokenSelector);
@@ -34,6 +36,7 @@ export function useClickOutsideStickyWall(
             content: contentRef.current?.value?.trim(),
             color,
             pin: isPin,
+            reminder: timeValue,
           }).then((res) => {
             dispatch(getTodoList(res.data));
           });
@@ -48,6 +51,7 @@ export function useClickOutsideStickyWall(
         setColorToggle(false);
         setColor("white");
         setIsPin(false);
+        setTimeValue(null);
       }
     }
     // Bind the event listener
@@ -56,5 +60,5 @@ export function useClickOutsideStickyWall(
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [ref, color]);
+  }, [ref, color, timeValue]);
 }

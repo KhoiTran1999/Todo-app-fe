@@ -10,7 +10,6 @@ import {
   faBars,
   faListUl,
   faMagnifyingGlass,
-  faSpinner,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,14 +30,13 @@ export const TodoHeader = () => {
 
   useEffect(() => {
     const getData = async () => {
+      const res = await getAllTodoAxios(accessToken);
+
       if (searchValue.trim().length === 0) {
-        setDeletedIcon(false);
-        const res = await getAllTodoAxios(accessToken);
         return dispatch(getTodoList(res.data));
       }
 
-      setDeletedIcon(true);
-      const newTodoList = todoList.filter((val) => {
+      const newTodoList = res.data.filter((val) => {
         const regex = new RegExp(`${searchValue}`, "gi");
         const titleIndex = val.title.search(regex);
         const contentIndex = val.content.search(regex);
@@ -67,11 +65,13 @@ export const TodoHeader = () => {
   };
 
   const handleFocus = () => {
+    setDeletedIcon(true);
     router.push("/todo/search");
   };
 
   const handleDeleteSearch = () => {
     setSearchValue("");
+    setDeletedIcon(false);
     router.push("/todo/today");
   };
 
@@ -113,7 +113,7 @@ export const TodoHeader = () => {
           <FontAwesomeIcon
             onClick={handleDeleteSearch}
             icon={faX}
-            className="w-4 h-4 px-2 py-2 text-slate-700 bg-slate-100 hover:bg-slate-300 rounded-full cursor-pointer absolute right-0 top-1/2 -translate-y-1/2"
+            className="w-4 h-4 px-2 py-[7px] text-slate-700 bg-slate-100 hover:bg-slate-300 rounded-full cursor-pointer absolute right-0 top-1/2 -translate-y-1/2"
           />
         )}
       </div>

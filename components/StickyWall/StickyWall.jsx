@@ -1,17 +1,14 @@
 "use client";
-import { useDispatch, useSelector } from "react-redux";
-import StickyNoteGrid from "./StickyNote/StickyNoteGrid";
-import {
-  SidebarSelector,
-  TodoListPinSelector,
-  TodoListUnpinSelector,
-  TokenSelector,
-  ViewModeSelector,
-} from "@/app/GlobalRedux/selector";
-import StickyNoteList from "./StickyNote/StickyNoteList";
+
 import { useRef, useState } from "react";
-import { useClickOutsideStickyWall } from "@/hooks/useClickOutsideStickyWall";
+import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { DateTimePicker } from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import StickyNoteGrid from "./StickyNote/StickyNoteGrid";
 import {
   faBell,
   faDropletSlash,
@@ -21,23 +18,42 @@ import {
   faThumbTack,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import { addTodoAxios } from "@/service/axiosService/todoAxios";
-import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { Tooltip } from "react-tooltip";
+
+import {
+  SidebarSelector,
+  TodoListPinSelector,
+  TodoListSelector,
+  TodoListUnpinSelector,
+  TokenSelector,
+  ViewModeSelector,
+} from "@/app/GlobalRedux/selector";
+import StickyNoteList from "./StickyNote/StickyNoteList";
+import { useClickOutsideStickyWall } from "@/hooks/useClickOutsideStickyWall";
+import {
+  addTodoAxios,
+  deletePermanentTodoAxios,
+} from "@/service/axiosService/todoAxios";
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import { colorList } from "@/constant/colorList";
-import { usePathname } from "next/navigation";
+import { useClickOutsideTodo } from "@/hooks/useClickOutsideTodo";
 
 const StickyWall = () => {
   const dispatch = useDispatch();
   const pathname = usePathname();
+
   const [isFocus, setIsFocus] = useState(false);
   const [colorPosition, setColorPosition] = useState(48);
   const [colorToggle, setColorToggle] = useState(false);
   const [color, setColor] = useState("white");
   const [isPin, setIsPin] = useState(false);
+  const [timePickerToggle, setTimePickerToggle] = useState(false);
+  const [timeValue, setTimeValue] = useState(null);
 
   const todoListUnpin = useSelector(TodoListUnpinSelector);
   const todoListPin = useSelector(TodoListPinSelector);
+  const todoList = useSelector(TodoListSelector);
   const toggle = useSelector(SidebarSelector);
   const viewMode = useSelector(ViewModeSelector);
   const token = useSelector(TokenSelector);
@@ -45,6 +61,7 @@ const StickyWall = () => {
   const titleRef = useRef("");
   const contentRef = useRef("");
   const wrapperRef = useRef(null);
+  const datePickerRef = useRef(null);
 
   useClickOutsideStickyWall(
     wrapperRef,
@@ -55,8 +72,11 @@ const StickyWall = () => {
     color,
     setColor,
     isPin,
-    setIsPin
+    setIsPin,
+    setTimeValue,
+    timeValue
   );
+  useClickOutsideTodo(datePickerRef, setTimePickerToggle);
 
   const autoGrow = (element) => {
     element.target.style.height = "5px";
@@ -73,23 +93,21 @@ const StickyWall = () => {
         content: e.target.content.value.trim(),
         color,
         pin: isPin,
+        reminder: timeValue,
       });
-
       dispatch(getTodoList(res.data));
-      titleRef.current.style.height = "24px";
-      contentRef.current.style.height = "24px";
-      e.target.title.value = null;
-      e.target.content.value = null;
-      setIsFocus(false);
-      setIsPin(false);
     }
 
+    titleRef.current.style.height = "24px";
+    contentRef.current.style.height = "24px";
     e.target.title.value = null;
     e.target.content.value = null;
     setIsPin(false);
     setIsFocus(false);
     setColor("white");
     setColorToggle(false);
+    setTimeValue(null);
+    setTimePickerToggle(false);
   };
 
   const handleDeleteTodo = () => {
@@ -107,6 +125,17 @@ const StickyWall = () => {
     setColor(elementColor);
   };
 
+  const hanldeReminder = () => {
+    setTimePickerToggle((prev) => !prev);
+  };
+
+  const handleDeleteAllTrash = () => {
+    todoList.forEach((val) => {
+      deletePermanentTodoAxios(token.accessToken, val.id);
+      dispatch(getTodoList([]));
+    });
+  };
+
   return (
     <div
       className={`pl-3 pb-3 w-full h-full ${
@@ -114,7 +143,10 @@ const StickyWall = () => {
       }`}
     >
       {pathname === "/todo/trash" ? (
-        <div className="text-center italic font-medium text-slate-700 mt-7">
+        <div
+          onClick={handleDeleteAllTrash}
+          className="text-center italic font-medium text-slate-700 mt-7"
+        >
           Ghi chú trong Thùng rác bị xóa sau 7 ngày.{" "}
           <span className="text-sm not-italic text-blue-500 hover:underline cursor-pointer">
             Dọn sạch thùng rác
@@ -129,7 +161,7 @@ const StickyWall = () => {
         <></>
       ) : (
         <div className="w-full my-10 flex justify-center items-center">
-          <div ref={wrapperRef} className="w-2/5">
+          <div ref={wrapperRef} className="w-2/5 relative">
             <div
               className="pt-2 pl-4 pr-7 max-h-[650px] overflow-y-auto bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg relative"
               style={{ backgroundColor: color }}
@@ -160,13 +192,27 @@ const StickyWall = () => {
               {isFocus ? (
                 <>
                   <div className="mt-4 flex justify-center items-center relative">
-                    <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+                    <div
+                      id="Reminder"
+                      onClick={hanldeReminder}
+                      className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                    >
                       <FontAwesomeIcon
                         icon={faBell}
                         className="w-5 h-5 text-slate-500"
                       />
                     </div>
+                    <Tooltip
+                      place="top"
+                      anchorSelect="#Reminder"
+                      opacity={0.9}
+                      style={{ transition: "none" }}
+                    >
+                      Nhắc tôi
+                    </Tooltip>
+
                     <div
+                      id="SelectedBackground"
                       onClick={handleColorToggle}
                       className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
                     >
@@ -175,13 +221,17 @@ const StickyWall = () => {
                         className="w-5 h-5 text-slate-500"
                       />
                     </div>
-                    <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
-                      <FontAwesomeIcon
-                        icon={faTag}
-                        className="w-5 h-5 text-slate-500"
-                      />
-                    </div>
+                    <Tooltip
+                      place="top"
+                      anchorSelect="#SelectedBackground"
+                      opacity={0.9}
+                      style={{ transition: "none" }}
+                    >
+                      Lựa chọn nền
+                    </Tooltip>
+
                     <div
+                      id="DeletedTodo"
                       onClick={handleDeleteTodo}
                       className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
                     >
@@ -190,6 +240,15 @@ const StickyWall = () => {
                         className="w-5 h-5 text-slate-500"
                       />
                     </div>
+                    <Tooltip
+                      place="top"
+                      anchorSelect="#DeletedTodo"
+                      opacity={0.9}
+                      style={{ transition: "none" }}
+                    >
+                      Xóa ghi chú
+                    </Tooltip>
+
                     <button
                       form="addTodo"
                       type="submit"
@@ -243,6 +302,22 @@ const StickyWall = () => {
                       style={{ backgroundColor: val }}
                     ></div>
                   ))}
+                </div>
+              </div>
+            )}
+            {timePickerToggle && (
+              <div
+                ref={datePickerRef}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute left-1/2 -bottom-10 -translate-x-1/2 z-[1000]"
+              >
+                <div className=" bg-white">
+                  <DateTimePicker
+                    onChange={(value) => setTimeValue(value)}
+                    value={timeValue}
+                    disableClock
+                    minDate={new Date()}
+                  />
                 </div>
               </div>
             )}

@@ -12,6 +12,7 @@ import { useClickOutsideTodo } from "@/hooks/useClickOutsideTodo";
 import { useClickOutsideTodoModal } from "@/hooks/useClickOutsideTodoModal";
 import {
   faBell,
+  faClock,
   faDropletSlash,
   faPalette,
   faTag,
@@ -36,35 +37,44 @@ import { toggleEditTodoModal } from "@/app/GlobalRedux/Features/toggle/editTodoM
 import { useDebounce } from "@/hooks/useDebounce";
 import { usePathname } from "next/navigation";
 import { Tooltip } from "react-tooltip";
+import DateTimePicker from "react-datetime-picker";
 
 export const EditTodoModal = () => {
   const dispatch = useDispatch();
   const pathname = usePathname();
-
-  const modalRef = useRef();
-  const titleRef = useRef("");
-  const contentRef = useRef("");
-  const colorRef = useRef("");
-  const labelRef = useRef("");
-
-  const [colorToggle, setColorToggle] = useState(false);
-  const [labelToggle, setLabelToggle] = useState(false);
-  const [titleValue, setTitleValue] = useState(titleRef.current.value);
-  const [contentValue, setContentValue] = useState(contentRef.current.value);
 
   const todoList = useSelector(TodoListSelector);
   const toggleTodoModal = useSelector(EditTodoModalSelector);
   const todoForm = useSelector(TodoFormSelector);
   const { accessToken } = useSelector(TokenSelector);
 
+  const modalRef = useRef();
+  const titleRef = useRef("");
+  const contentRef = useRef("");
+  const colorRef = useRef("");
+  const labelRef = useRef("");
+  const datePickerRef = useRef();
+
+  const [colorToggle, setColorToggle] = useState(false);
+  const [labelToggle, setLabelToggle] = useState(false);
+  const [titleValue, setTitleValue] = useState(titleRef.current.value);
+  const [contentValue, setContentValue] = useState(contentRef.current.value);
+  const [timePickerToggle, setTimePickerToggle] = useState(false);
+  const [timeValue, setTimeValue] = useState(todoForm.reminder);
+
   useClickOutsideTodoModal(modalRef);
   useClickOutsideTodo(colorRef, setColorToggle);
   useClickOutsideTodo(labelRef, setLabelToggle);
+  useClickOutsideTodo(datePickerRef, setTimePickerToggle);
 
   const autoGrow = (element) => {
     element.target.style.height = "25px";
     element.target.style.height = element.target.scrollHeight + "px";
   };
+
+  useEffect(() => {
+    setTimeValue(todoForm.reminder);
+  }, [todoForm.reminder]);
 
   useEffect(() => {
     if (toggleTodoModal) {
@@ -83,6 +93,7 @@ export const EditTodoModal = () => {
   const titleDebounce = useDebounce(titleValue, 1000);
   const contentDebounce = useDebounce(contentValue, 1000);
 
+  console.log("timeValue: ", timeValue);
   useEffect(() => {
     const updateData = async () => {
       if (contentDebounce.trim().length === 0) return;
@@ -109,7 +120,7 @@ export const EditTodoModal = () => {
       );
     };
     updateData();
-  }, [titleDebounce, contentDebounce]);
+  }, [titleDebounce, contentDebounce, timeValue]);
 
   const handleUpdateTodo = async (e) => {
     e.preventDefault();
@@ -125,11 +136,7 @@ export const EditTodoModal = () => {
   const handleChangeColor = async (e, elementColor) => {
     e.stopPropagation();
     await updateTodoAxios(accessToken, todoForm.id, {
-      title: todoForm.title,
-      content: todoForm.content,
       color: elementColor,
-      pin: todoForm.pin,
-      reminder: todoForm.reminder,
     });
 
     const newTodoList = todoList.map((val) => {
@@ -196,6 +203,19 @@ export const EditTodoModal = () => {
     dispatch(toggleEditTodoModal(false));
   };
 
+  const handleChangeDatePicker = async (value) => {
+    setTimeValue(value);
+
+    await updateTodoAxios(accessToken, todoForm.id, { reminder: value });
+    const newTodoList = todoList.map((val) => {
+      if (val.id === todoForm.id) {
+        return { ...val, reminder: value };
+      }
+      return val;
+    });
+    dispatch(getTodoList(newTodoList));
+  };
+
   return (
     <div
       className={`${
@@ -215,7 +235,6 @@ export const EditTodoModal = () => {
           action=""
           id="updateTodo"
           className="w-full h-full px-4 overflow-y-auto overscroll-none"
-          // onSubmit={handleSubmit}
           onChange={handleUpdateTodo}
         >
           {pathname === "/todo/trash" ? (
@@ -254,6 +273,17 @@ export const EditTodoModal = () => {
                 placeholder="Tạo ghi chú..."
               />
             </>
+          )}
+          {timeValue && (
+            <div className="px-2 mt-4 bg-slate-100 w-fit rounded-full">
+              <FontAwesomeIcon
+                icon={faClock}
+                className="w-3 h-3 text-slate-500"
+              />
+              <span className="text-xs ml-2">
+                {moment(timeValue).calendar()}
+              </span>
+            </div>
           )}
           <div className="text-right text-sm text-slate-700 my-1">
             updated at {moment(todoForm.updatedAt).fromNow()}
@@ -304,7 +334,13 @@ export const EditTodoModal = () => {
               </>
             ) : (
               <>
-                <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setTimePickerToggle((prev) => !prev);
+                  }}
+                  className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                >
                   <FontAwesomeIcon
                     icon={faBell}
                     className="w-5 h-5 text-slate-500"
@@ -394,6 +430,18 @@ export const EditTodoModal = () => {
         {labelToggle && (
           <div className="absolute left-60 bottom-12 z-[1000]" ref={labelRef}>
             <AddTodoLabel todoId={todoForm.id} />
+          </div>
+        )}
+        {timePickerToggle && (
+          <div ref={datePickerRef} className="absolute -bottom-8 z-[1000]">
+            <div className=" bg-white">
+              <DateTimePicker
+                onChange={handleChangeDatePicker}
+                value={timeValue}
+                disableClock
+                minDate={new Date()}
+              />
+            </div>
           </div>
         )}
       </div>
