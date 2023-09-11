@@ -3,6 +3,7 @@ import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
 import { toggleSidebar } from "@/app/GlobalRedux/Features/toggle/sidebarSlider";
 import { toggleviewMode } from "@/app/GlobalRedux/Features/toggle/viewModeSlider";
 import { TodoListSelector, TokenSelector } from "@/app/GlobalRedux/selector";
+import { useDebounce } from "@/hooks/useDebounce";
 import { clearTokenAxios } from "@/service/axiosService/authAxios";
 import { getAllTodoAxios } from "@/service/axiosService/todoAxios";
 import {
@@ -22,22 +23,23 @@ export const TodoHeader = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const todoList = useSelector(TodoListSelector);
   const { accessToken } = useSelector(TokenSelector);
 
   const [searchValue, setSearchValue] = useState("");
   const [deletedIcon, setDeletedIcon] = useState(false);
 
+  const searchDebounce = useDebounce(searchValue, 1000);
+
   useEffect(() => {
     const getData = async () => {
       const res = await getAllTodoAxios(accessToken);
 
-      if (searchValue.trim().length === 0) {
+      if (searchDebounce.trim().length === 0) {
         return dispatch(getTodoList(res.data));
       }
 
       const newTodoList = res.data.filter((val) => {
-        const regex = new RegExp(`${searchValue}`, "gi");
+        const regex = new RegExp(`${searchDebounce}`, "gi");
         const titleIndex = val.title.search(regex);
         const contentIndex = val.content.search(regex);
         if (titleIndex === -1 && contentIndex === -1) return false;
@@ -47,7 +49,7 @@ export const TodoHeader = () => {
     };
 
     if (accessToken) getData();
-  }, [searchValue]);
+  }, [searchDebounce]);
 
   const handleSidebar = () => {
     dispatch(toggleSidebar());

@@ -4,7 +4,11 @@ import SideBar from "@/components/SideBar/SideBar";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TokenSelector } from "../GlobalRedux/selector";
+import {
+  EditLabelModalSelector,
+  EditTodoModalSelector,
+  TokenSelector,
+} from "../GlobalRedux/selector";
 import {
   getTokenAxios,
   refreshTokenAxios,
@@ -28,6 +32,8 @@ export default function Layout({ children }) {
 
   const [loading, setLoading] = useState(false);
   const token = useSelector(TokenSelector);
+  const toggleEditLabelModalSelector = useSelector(EditLabelModalSelector);
+  const toggleTodoModal = useSelector(EditTodoModalSelector);
 
   useEffect(() => {
     getTokenAxios((res) => {
@@ -101,8 +107,8 @@ export default function Layout({ children }) {
           </div>
         </div>
       )}
-      <EditLabelModal />
-      <EditTodoModal />
+      {toggleEditLabelModalSelector && <EditLabelModal />}
+      {toggleTodoModal && <EditTodoModal />}
     </>
   );
 }

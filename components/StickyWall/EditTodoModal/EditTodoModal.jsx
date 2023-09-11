@@ -93,7 +93,6 @@ export const EditTodoModal = () => {
   const titleDebounce = useDebounce(titleValue, 1000);
   const contentDebounce = useDebounce(contentValue, 1000);
 
-  console.log("timeValue: ", timeValue);
   useEffect(() => {
     const updateData = async () => {
       if (contentDebounce.trim().length === 0) return;
@@ -120,7 +119,7 @@ export const EditTodoModal = () => {
       );
     };
     updateData();
-  }, [titleDebounce, contentDebounce, timeValue]);
+  }, [titleDebounce, contentDebounce]);
 
   const handleUpdateTodo = async (e) => {
     e.preventDefault();
