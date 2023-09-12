@@ -1,12 +1,13 @@
 "use client";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { env } from "@/config/env";
-import { useDispatch, useSelector } from "react-redux";
-import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 import { verify } from "jsonwebtoken";
 import { registerAxios } from "@/service/axiosService/authAxios";
@@ -45,7 +46,10 @@ export default function register({ params }) {
       e.target.password.value = "";
       e.target.confirmPassword.value = "";
       setIsLoading(false);
-      return alert("Password didn't match");
+      return toast("Password didn't match", {
+        type: "error",
+        containerId: "normalError",
+      });
     }
 
     //register
@@ -61,7 +65,10 @@ export default function register({ params }) {
         }
       })
       .catch((err) => {
-        alert(`Error => ${err.response.message}`);
+        toast(`${err.response.message}`, {
+          type: "error",
+          containerId: "normalError",
+        });
         router.push("/verifyEmail");
       });
     setIsLoading(false);

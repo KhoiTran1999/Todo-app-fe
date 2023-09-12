@@ -9,9 +9,11 @@ import { useClickOutsideLabelModal } from "@/hooks/useClickOutsideLabelModal";
 import { addLabelAxios } from "@/service/axiosService/labelAxios";
 import { faCheck, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LabelContent } from "./LabelContent";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const EditLabelModal = () => {
   const dispatch = useDispatch();
@@ -36,7 +38,10 @@ export const EditLabelModal = () => {
       })
       .catch((err) => {
         if (err.response.data.message === "Validation error")
-          alert("Can not duplicate Label");
+          toast("Can not duplicate Label", {
+            type: "error",
+            containerId: "normalError",
+          });
       });
 
     e.target.label.value = null;

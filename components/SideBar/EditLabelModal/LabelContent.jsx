@@ -8,6 +8,8 @@ import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const LabelContent = ({ name, id }) => {
   const dispatch = useDispatch();
@@ -48,7 +50,10 @@ export const LabelContent = ({ name, id }) => {
           }
         });
         dispatch(getLabel(labelList));
-        alert("Could not duplicate label");
+        toast("Could not duplicate label", {
+          type: "error",
+          containerId: "normalError",
+        });
       }
     );
   };

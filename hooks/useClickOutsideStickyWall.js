@@ -3,8 +3,10 @@ import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 import { TokenSelector } from "@/app/GlobalRedux/selector";
 import { addTodoAxios } from "@/service/axiosService/todoAxios";
-import React, { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -39,6 +41,13 @@ export function useClickOutsideStickyWall(
             reminder: timeValue,
           }).then((res) => {
             dispatch(getTodoList(res.data));
+          });
+        }
+
+        if (contentRef.current?.value?.trim().length === 0) {
+          toast("Content could not empty", {
+            type: "error",
+            toastId: "contentError",
           });
         }
 

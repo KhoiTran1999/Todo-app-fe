@@ -38,6 +38,8 @@ import {
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import { colorList } from "@/constant/colorList";
 import { useClickOutsideTodo } from "@/hooks/useClickOutsideTodo";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const StickyWall = () => {
   const dispatch = useDispatch();
@@ -96,6 +98,14 @@ const StickyWall = () => {
         reminder: timeValue,
       });
       dispatch(getTodoList(res.data));
+    }
+
+    if (e.target.content.value.trim().length === 0) {
+      toast("Content could not empty", {
+        type: "error",
+        toastId: "contentError",
+        containerId: "normalError",
+      });
     }
 
     titleRef.current.style.height = "24px";
@@ -161,167 +171,189 @@ const StickyWall = () => {
         <></>
       ) : (
         <div className="w-full my-10 flex justify-center items-center">
-          <div ref={wrapperRef} className="w-2/5 relative">
-            <div
-              className="pt-2 pl-4 pr-7 max-h-[650px] overflow-y-auto bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg relative"
-              style={{ backgroundColor: color }}
-            >
-              <form id="addTodo" onSubmit={handleSubmit} action="addTodo">
-                <textarea
-                  ref={titleRef}
-                  maxLength={1000}
-                  onInput={autoGrow}
-                  onFocus={() => setIsFocus(true)}
-                  className="resize-none overflow-hidden h-6 font-medium w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
-                  type="text"
-                  name="title"
-                  placeholder={isFocus ? "Tiêu đề" : "Tạo ghi chú..."}
-                />
-                <textarea
-                  ref={contentRef}
-                  maxLength={20000}
-                  onInput={autoGrow}
-                  className={`resize-none overflow-hidden ${
-                    isFocus ? "h-6 w-full mt-5" : "h-0 w-0"
-                  } bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
-                  type="text"
-                  name="content"
-                  placeholder="Tạo ghi chú..."
-                />
-              </form>
-              {isFocus ? (
-                <>
-                  <div className="mt-4 flex justify-center items-center relative">
-                    <div
-                      id="Reminder"
-                      onClick={hanldeReminder}
-                      className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
-                    >
-                      <FontAwesomeIcon
-                        icon={faBell}
-                        className="w-5 h-5 text-slate-500"
-                      />
-                    </div>
-                    <Tooltip
-                      place="top"
-                      anchorSelect="#Reminder"
-                      opacity={0.9}
-                      style={{ transition: "none" }}
-                    >
-                      Nhắc tôi
-                    </Tooltip>
-
-                    <div
-                      id="SelectedBackground"
-                      onClick={handleColorToggle}
-                      className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
-                    >
-                      <FontAwesomeIcon
-                        icon={faPalette}
-                        className="w-5 h-5 text-slate-500"
-                      />
-                    </div>
-                    <Tooltip
-                      place="top"
-                      anchorSelect="#SelectedBackground"
-                      opacity={0.9}
-                      style={{ transition: "none" }}
-                    >
-                      Lựa chọn nền
-                    </Tooltip>
-
-                    <div
-                      id="DeletedTodo"
-                      onClick={handleDeleteTodo}
-                      className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
-                    >
-                      <FontAwesomeIcon
-                        icon={faTrashCan}
-                        className="w-5 h-5 text-slate-500"
-                      />
-                    </div>
-                    <Tooltip
-                      place="top"
-                      anchorSelect="#DeletedTodo"
-                      opacity={0.9}
-                      style={{ transition: "none" }}
-                    >
-                      Xóa ghi chú
-                    </Tooltip>
-
-                    <button
-                      form="addTodo"
-                      type="submit"
-                      className="font-medium text-slate-700 px-5 py-1 rounded hover:bg-slate-100  absolute right-0 top-1/2 -translate-y-1/2"
-                    >
-                      Đóng
-                    </button>
-                  </div>
-                  <div className="absolute top-0 right-0 flex items-center justify-center cursor-pointer p-1 hover:bg-slate-200 rounded-full">
-                    {isPin ? (
-                      <FontAwesomeIcon
-                        onClick={() => setIsPin(false)}
-                        icon={faThumbTack}
-                        className="w-5 h-5 text-slate-500"
-                      />
-                    ) : (
-                      <Image
-                        onClick={() => setIsPin(true)}
-                        className=" text-slate-500"
-                        width={22}
-                        height={22}
-                        src="/static/img/unpin.ico"
-                        alt=""
-                      />
-                    )}
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
-            </div>
-            {colorToggle && (
+          {!isFocus ? (
+            <div className="w-2/5 relative">
               <div
-                className={`bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute ${colorPosition} z-50 cursor-pointer`}
+                className="pt-2 pl-4 pr-7 max-h-[650px] overflow-y-auto bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg relative"
+                style={{ backgroundColor: color }}
               >
-                <div className="flex justify-center items-center">
-                  <div
-                    onClick={(e) => handleChangeColor(e, "white")}
-                    className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
-                  >
-                    <FontAwesomeIcon
-                      icon={faDropletSlash}
-                      className="w-4 h-4 text-slate-500"
+                <form id="addTodo" onSubmit={handleSubmit} action="addTodo">
+                  <textarea
+                    ref={titleRef}
+                    maxLength={1000}
+                    onInput={autoGrow}
+                    onFocus={() => setIsFocus(true)}
+                    className="resize-none overflow-hidden h-6 font-medium w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
+                    type="text"
+                    name="title"
+                    placeholder={isFocus ? "Tiêu đề" : "Tạo ghi chú..."}
+                  />
+                </form>
+              </div>
+            </div>
+          ) : (
+            <div ref={wrapperRef} className="w-2/5 relative">
+              <div
+                className="pt-2 pl-4 pr-7 max-h-[650px] overflow-y-auto bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg relative"
+                style={{ backgroundColor: color }}
+              >
+                <form id="addTodo" onSubmit={handleSubmit} action="addTodo">
+                  <textarea
+                    ref={titleRef}
+                    maxLength={1000}
+                    onInput={autoGrow}
+                    onFocus={() => setIsFocus(true)}
+                    className="resize-none overflow-hidden h-6 font-medium w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
+                    type="text"
+                    name="title"
+                    placeholder={isFocus ? "Tiêu đề" : "Tạo ghi chú..."}
+                  />
+                  <textarea
+                    ref={contentRef}
+                    maxLength={20000}
+                    onInput={autoGrow}
+                    className={`resize-none overflow-hidden ${
+                      isFocus ? "h-6 w-full mt-5" : "h-0 w-0"
+                    } bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
+                    type="text"
+                    name="content"
+                    placeholder="Tạo ghi chú..."
+                  />
+                </form>
+                {isFocus ? (
+                  <>
+                    <div className="mt-4 flex justify-center items-center relative">
+                      <div
+                        id="Reminder"
+                        onClick={hanldeReminder}
+                        className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                      >
+                        <FontAwesomeIcon
+                          icon={faBell}
+                          className="w-5 h-5 text-slate-500"
+                        />
+                      </div>
+                      <Tooltip
+                        place="top"
+                        anchorSelect="#Reminder"
+                        opacity={0.9}
+                        style={{ transition: "none" }}
+                      >
+                        Nhắc tôi
+                      </Tooltip>
+
+                      <div
+                        id="SelectedBackground"
+                        onClick={handleColorToggle}
+                        className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                      >
+                        <FontAwesomeIcon
+                          icon={faPalette}
+                          className="w-5 h-5 text-slate-500"
+                        />
+                      </div>
+                      <Tooltip
+                        place="top"
+                        anchorSelect="#SelectedBackground"
+                        opacity={0.9}
+                        style={{ transition: "none" }}
+                      >
+                        Lựa chọn nền
+                      </Tooltip>
+
+                      <div
+                        id="DeletedTodo"
+                        onClick={handleDeleteTodo}
+                        className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                      >
+                        <FontAwesomeIcon
+                          icon={faTrashCan}
+                          className="w-5 h-5 text-slate-500"
+                        />
+                      </div>
+                      <Tooltip
+                        place="top"
+                        anchorSelect="#DeletedTodo"
+                        opacity={0.9}
+                        style={{ transition: "none" }}
+                      >
+                        Xóa ghi chú
+                      </Tooltip>
+
+                      <button
+                        form="addTodo"
+                        type="submit"
+                        className="font-medium text-slate-700 px-5 py-1 rounded hover:bg-slate-100  absolute right-0 top-1/2 -translate-y-1/2"
+                      >
+                        Đóng
+                      </button>
+                    </div>
+                    <div className="absolute top-0 right-0 flex items-center justify-center cursor-pointer p-1 hover:bg-slate-200 rounded-full">
+                      {isPin ? (
+                        <FontAwesomeIcon
+                          onClick={() => setIsPin(false)}
+                          icon={faThumbTack}
+                          className="w-5 h-5 text-slate-500"
+                        />
+                      ) : (
+                        <Image
+                          onClick={() => setIsPin(true)}
+                          className=" text-slate-500"
+                          width={22}
+                          height={22}
+                          src="/static/img/unpin.ico"
+                          alt=""
+                        />
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+              {colorToggle && (
+                <div
+                  className={`bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute ${colorPosition} z-50 cursor-pointer`}
+                >
+                  <div className="flex justify-center items-center">
+                    <div
+                      onClick={(e) => handleChangeColor(e, "white")}
+                      className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
+                    >
+                      <FontAwesomeIcon
+                        icon={faDropletSlash}
+                        className="w-4 h-4 text-slate-500"
+                      />
+                    </div>
+                    {colorList.map((val, idx) => (
+                      <div
+                        onClick={(e) => handleChangeColor(e, val)}
+                        key={idx}
+                        className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
+                        style={{ backgroundColor: val }}
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {timePickerToggle && (
+                <div
+                  ref={datePickerRef}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute left-1/2 -bottom-10 -translate-x-1/2 z-[1000]"
+                >
+                  <div className=" bg-white">
+                    <DateTimePicker
+                      onChange={(value) => setTimeValue(value)}
+                      value={timeValue}
+                      disableClock
+                      minDate={new Date()}
                     />
                   </div>
-                  {colorList.map((val, idx) => (
-                    <div
-                      onClick={(e) => handleChangeColor(e, val)}
-                      key={idx}
-                      className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
-                      style={{ backgroundColor: val }}
-                    ></div>
-                  ))}
                 </div>
-              </div>
-            )}
-            {timePickerToggle && (
-              <div
-                ref={datePickerRef}
-                onClick={(e) => e.stopPropagation()}
-                className="absolute left-1/2 -bottom-10 -translate-x-1/2 z-[1000]"
-              >
-                <div className=" bg-white">
-                  <DateTimePicker
-                    onChange={(value) => setTimeValue(value)}
-                    value={timeValue}
-                    disableClock
-                    minDate={new Date()}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       )}
       {todoListPin.length === 0 && todoListUnpin.length === 0 ? (

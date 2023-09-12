@@ -1,5 +1,7 @@
 "use client";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
 import { TokenSelector } from "@/app/GlobalRedux/selector";
 import { loginAxios } from "@/service/axiosService/authAxios";
@@ -49,7 +51,19 @@ export default function login() {
         return router.push("/todo/today");
       })
       .catch((err) => {
-        alert(`Error => ${err.response.data?.message}`);
+        if (err.response.status === 429) {
+          toast(`${err.response.data?.message}`, {
+            type: "error",
+            containerId: "limiterError",
+            toastId: "limiterError",
+          });
+        }
+        if (err.response.status === 401) {
+          toast(`${err.response.data?.message}`, {
+            type: "error",
+            containerId: "normalError",
+          });
+        }
         e.target.password.value = "";
         setIsLoading(false);
       });

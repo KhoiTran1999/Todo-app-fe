@@ -1,5 +1,7 @@
 import { env } from "@/config/env";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const loginAxios = async (data) => {
   const JSONdata = JSON.stringify(data);
@@ -55,7 +57,9 @@ const getTokenAxios = async (fulfilledHandling, rejectHandling) => {
       },
     })
     .then(async (res) => await fulfilledHandling(res.data))
-    .catch(async (err) => await rejectHandling(err));
+    .catch(async (err) => {
+      await rejectHandling(err);
+    });
 };
 
 const refreshTokenAxios = async (token) => {

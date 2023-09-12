@@ -4,6 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Providers } from "./GlobalRedux/provider";
 import FirstRender from "@/components/FirstRender/FirstRender";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,19 @@ export default function RootLayout({ children }) {
       <body className={(inter.className, "bg-white h-screen select-none")}>
         <Providers>
           <FirstRender>{children}</FirstRender>
+          <ToastContainer
+            containerId={"normalError"}
+            autoClose={3000}
+            position="top-center"
+            enableMultiContainer
+          />
+          <ToastContainer
+            containerId={"limiterError"}
+            autoClose={60 * 1000}
+            position="top-center"
+            pauseOnFocusLoss={false}
+            enableMultiContainer
+          />
         </Providers>
       </body>
     </html>
