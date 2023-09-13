@@ -6,14 +6,18 @@ const TodoListSelector = (state) => state.todoList.value;
 
 const TodoListUnpinSelector = createSelector(
   TodoListSelector,
-  (TodoListSelector) => {
+  (state) => state.todoListUnpin.value,
+  (TodoListSelector, state) => {
+    if (state.length > 0) return state;
     return TodoListSelector.filter((val) => val.pin === false);
   }
 );
 
 const TodoListPinSelector = createSelector(
   TodoListSelector,
-  (TodoListSelector) => {
+  (state) => state.todoListPin.value,
+  (TodoListSelector, state) => {
+    if (state.length > 0) return state;
     return TodoListSelector.filter((val) => val.pin === true);
   }
 );
@@ -23,6 +27,7 @@ const ViewModeSelector = (state) => state.viewMode.value;
 const EditLabelModalSelector = (state) => state.editLabelModal.value;
 const EditTodoModalSelector = (state) => state.editTodoModal.value;
 const TodoFormSelector = (state) => state.todoForm.value;
+const LimitSelector = (state) => state.limit.value;
 
 export {
   TokenSelector,
@@ -35,4 +40,5 @@ export {
   TodoListUnpinSelector,
   TodoListPinSelector,
   TodoFormSelector,
+  LimitSelector,
 };

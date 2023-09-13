@@ -2,10 +2,10 @@ import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
 import { toggleSidebar } from "@/app/GlobalRedux/Features/toggle/sidebarSlider";
 import { toggleviewMode } from "@/app/GlobalRedux/Features/toggle/viewModeSlider";
-import { TodoListSelector, TokenSelector } from "@/app/GlobalRedux/selector";
+import { LimitSelector, TokenSelector } from "@/app/GlobalRedux/selector";
 import { useDebounce } from "@/hooks/useDebounce";
 import { clearTokenAxios } from "@/service/axiosService/authAxios";
-import { getAllTodoAxios } from "@/service/axiosService/todoAxios";
+import { getSearchTodoAxios } from "@/service/axiosService/todoAxios";
 import {
   faArrowRightFromBracket,
   faBars,
@@ -14,7 +14,7 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Tooltip } from "react-tooltip";
@@ -22,8 +22,10 @@ import { Tooltip } from "react-tooltip";
 export const TodoHeader = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   const { accessToken } = useSelector(TokenSelector);
+  const limit = useSelector(LimitSelector);
 
   const [searchValue, setSearchValue] = useState("");
   const [deletedIcon, setDeletedIcon] = useState(false);
@@ -32,23 +34,13 @@ export const TodoHeader = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await getAllTodoAxios(accessToken);
-
-      if (searchDebounce.trim().length === 0) {
-        return dispatch(getTodoList(res.data));
-      }
-
-      const newTodoList = res.data.filter((val) => {
-        const regex = new RegExp(`${searchDebounce}`, "gi");
-        const titleIndex = val.title.search(regex);
-        const contentIndex = val.content.search(regex);
-        if (titleIndex === -1 && contentIndex === -1) return false;
-        else return true;
-      });
-      dispatch(getTodoList(newTodoList));
+      const res = await getSearchTodoAxios(accessToken, searchDebounce, limit);
+      dispatch(getTodoList(res.data));
     };
 
-    if (accessToken) getData();
+    if (accessToken && pathname === "/todo/search") {
+      getData();
+    }
   }, [searchDebounce]);
 
   const handleSidebar = () => {
@@ -125,7 +117,7 @@ export const TodoHeader = () => {
           id="viewMode"
           onClick={handleViewMode}
           icon={faListUl}
-          className="w-4 h-4 p-3 text-slate-700 hover:bg-slate-300 rounded-full cursor-pointer"
+          className="w-4 h-4 p-3 text-slate-700 hover:bg-slate-300 rounded-full outline-none cursor-pointer"
         />
         <Tooltip anchorSelect="#viewMode" place="bottom" opacity={0.9}>
           Chuyển chế độ xem

@@ -85,7 +85,7 @@ function StickyNoteGrid({ isPin, todoList }) {
             }}
           >
             <Masonry>
-              {[...todoList].reverse().map((val, idx) => (
+              {todoList.map((val, idx) => (
                 <Todo
                   key={idx}
                   id={val.id}

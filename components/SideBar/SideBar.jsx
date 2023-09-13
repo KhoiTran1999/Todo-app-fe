@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 import { Label } from "./LabelList/Label";
 import { usePathname, useRouter } from "next/navigation";
+import { getLimit } from "@/app/GlobalRedux/Features/data/limitSlider";
 
 const SideBar = () => {
   const router = useRouter();
@@ -32,7 +33,10 @@ const SideBar = () => {
       } h-screen py-3 bg-white fixed top-0 left-0 right-0 mt-[59px] hover:shadow z-[100] transition-all overflow-hidden hover:overflow-y-auto overscroll-none`}
     >
       <div
-        onClick={() => router.push("/todo/today")}
+        onClick={() => {
+          dispatch(getLimit(10));
+          router.push("/todo/today");
+        }}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-full ${
           pathname === "/todo/today" ? "bg-blue-200" : "hover:bg-slate-100"
         } ${!toggle ? "rounded-full" : "rounded-r-full"} cursor-pointer`}
@@ -44,7 +48,10 @@ const SideBar = () => {
         <p className={`font-medium ${!toggle && "hidden"}`}>Ghi chú</p>
       </div>
       <div
-        onClick={() => router.push("/todo/reminder")}
+        onClick={() => {
+          dispatch(getLimit(10));
+          router.push("/todo/reminder");
+        }}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? "rounded-full" : "rounded-r-full"
         } cursor-pointer ${
@@ -73,7 +80,10 @@ const SideBar = () => {
         <p className={`font-medium ${!toggle && "hidden"}`}>Chỉnh sửa nhãn</p>
       </div>
       <div
-        onClick={() => router.push("/todo/archive")}
+        onClick={() => {
+          dispatch(getLimit(10));
+          router.push("/todo/archive");
+        }}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? "rounded-full" : "rounded-r-full"
         } cursor-pointer ${

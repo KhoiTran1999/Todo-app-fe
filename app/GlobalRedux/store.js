@@ -11,6 +11,7 @@ import viewModeReducer from "./Features/toggle/viewModeSlider";
 import EditLabelModalReducer from "./Features/toggle/editLabelModalSlider";
 import EditTodoModalReducer from "./Features/toggle/editTodoModalSlider";
 import TodoFormReducer from "./Features/data/todoFormSlider";
+import limitReducer from "./Features/data/limitSlider";
 
 export const store = configureStore({
   reducer: {
@@ -24,5 +25,6 @@ export const store = configureStore({
     editLabelModal: EditLabelModalReducer,
     editTodoModal: EditTodoModalReducer,
     todoForm: TodoFormReducer,
+    limit: limitReducer,
   },
 });

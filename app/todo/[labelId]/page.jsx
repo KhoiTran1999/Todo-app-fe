@@ -4,6 +4,7 @@ import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlide
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 import {
+  LimitSelector,
   TodoListPinSelector,
   TodoListUnpinSelector,
   TokenSelector,
@@ -17,10 +18,11 @@ export default function page({ params }) {
   const dispatch = useDispatch();
 
   const { accessToken } = useSelector(TokenSelector);
+  const limit = useSelector(LimitSelector);
 
   useEffect(() => {
     if (accessToken) {
-      getTodoLabelAxios(accessToken, params.labelId).then((res) => {
+      getTodoLabelAxios(accessToken, params.labelId, limit).then((res) => {
         dispatch(getTodoList(res.data));
       });
     }

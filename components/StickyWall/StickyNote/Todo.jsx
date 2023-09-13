@@ -13,6 +13,7 @@ import "react-clock/dist/Clock.css";
 import moment from "moment";
 
 import {
+  LimitSelector,
   TodoListSelector,
   TokenSelector,
   ViewModeSelector,
@@ -60,6 +61,7 @@ export const Todo = ({
   const viewMode = useSelector(ViewModeSelector);
   const todoList = useSelector(TodoListSelector);
   const token = useSelector(TokenSelector);
+  const limit = useSelector(LimitSelector);
 
   const [colorToggle, setColorToggle] = useState(false);
   const [labelToggle, setLabelToggle] = useState(false);
@@ -155,13 +157,13 @@ export const Todo = ({
 
     if (archive) {
       await updateTodoAxios(token.accessToken, id, { archive: false });
-      const newTodoList = await getArchiveTodoAxios(token.accessToken);
+      const newTodoList = await getArchiveTodoAxios(token.accessToken, limit);
       dispatch(getTodoList(newTodoList.data));
       return;
     }
 
     await updateTodoAxios(token.accessToken, id, { archive: true });
-    const newTodoList = await getTodoAxios(token.accessToken);
+    const newTodoList = await getTodoAxios(token.accessToken, limit);
     dispatch(getTodoList(newTodoList.data));
   };
 
@@ -211,16 +213,28 @@ export const Todo = ({
         <h4 className="max-h-[100px] break-words line-clamp-[3] text-ellipsis overflow-hidden text-lg font-semibold text-slate-700 mb-2">
           {title}
         </h4>
-        <p className="max-h-[355px] break-words line-clamp-[15] text-ellipsis overflow-hidden">
+        <p className="max-h-[360px] break-words line-clamp-[15] text-ellipsis overflow-hidden">
           {content}
         </p>
         {timeValue && (
           <div className="px-2 mt-4 bg-slate-100 w-fit rounded-full">
             <FontAwesomeIcon
               icon={faClock}
-              className="w-3 h-3 text-slate-500"
+              className={`w-3 h-3 text-slate-500 ${
+                new Date(timeValue).getTime() - new Date().getTime() < 0
+                  ? "text-red-500"
+                  : ""
+              }`}
             />
-            <span className="text-xs ml-2">{moment(timeValue).calendar()}</span>
+            <span
+              className={`text-xs ml-2 ${
+                new Date(timeValue).getTime() - new Date().getTime() < 0
+                  ? "text-red-500"
+                  : ""
+              }`}
+            >
+              {moment(timeValue).calendar()}
+            </span>
           </div>
         )}
         <div

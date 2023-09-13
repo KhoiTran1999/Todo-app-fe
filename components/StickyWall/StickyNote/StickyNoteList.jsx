@@ -76,7 +76,7 @@ function StickyNoteList({ isPin, todoList }) {
             strategy={verticalListSortingStrategy}
           >
             <Masonry columnsCount={1}>
-              {[...todoList].reverse().map((val, idx) => (
+              {todoList.map((val, idx) => (
                 <Todo
                   key={idx}
                   id={val.id}

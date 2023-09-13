@@ -1,8 +1,11 @@
 import { env } from "@/config/env";
 import axios from "axios";
 
-const getTodoAxios = async (token) => {
+const getTodoAxios = async (token, limit) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/todo`, {
+    params: {
+      limit,
+    },
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",
@@ -13,8 +16,11 @@ const getTodoAxios = async (token) => {
   return res.data;
 };
 
-const getArchiveTodoAxios = async (token) => {
+const getArchiveTodoAxios = async (token, limit) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/todo/archive`, {
+    params: {
+      limit,
+    },
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",
@@ -37,8 +43,27 @@ const getDeletedTodoAxios = async (token) => {
   return res.data;
 };
 
-const getAllTodoAxios = async (token) => {
+const getAllTodoAxios = async (token, limit) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/todo/all`, {
+    params: {
+      limit,
+    },
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+const getSearchTodoAxios = async (token, query, limit) => {
+  const res = await axios.get(`${env.SERVER_URL}/api/v1/todo/search`, {
+    params: {
+      value: query,
+      limit,
+    },
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",
@@ -118,6 +143,7 @@ export {
   getArchiveTodoAxios,
   getDeletedTodoAxios,
   getAllTodoAxios,
+  getSearchTodoAxios,
   deletePermanentTodoAxios,
   addTodoAxios,
   deleteTodoAxios,

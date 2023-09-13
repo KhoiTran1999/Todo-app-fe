@@ -1,19 +1,12 @@
-import { LabelSelector, TokenSelector } from "@/app/GlobalRedux/selector";
-import {
-  addTodoLabelAxios,
-  deleteTodoLabelAxios,
-  getTodoLabelAxios,
-} from "@/service/axiosService/labelAxios";
+import { LabelSelector } from "@/app/GlobalRedux/selector";
 import { faMagnifyingGlass, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { TodoLabel } from "./TodoLabel";
 
 export const AddTodoLabel = ({ todoId }) => {
   const labelList = useSelector(LabelSelector);
-  const { accessToken } = useSelector(TokenSelector);
-
   const [searchLabel, setSearchLabel] = useState(labelList);
 
   const searchLabelRef = useRef();

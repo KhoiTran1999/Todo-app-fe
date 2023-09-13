@@ -4,6 +4,7 @@ import moment from "moment";
 
 import {
   EditTodoModalSelector,
+  LimitSelector,
   TodoFormSelector,
   TodoListSelector,
   TokenSelector,
@@ -47,6 +48,7 @@ export const EditTodoModal = () => {
   const toggleTodoModal = useSelector(EditTodoModalSelector);
   const todoForm = useSelector(TodoFormSelector);
   const { accessToken } = useSelector(TokenSelector);
+  const limit = useSelector(LimitSelector);
 
   const modalRef = useRef();
   const titleRef = useRef("");
@@ -108,7 +110,7 @@ export const EditTodoModal = () => {
         color: todoForm.color,
         pin: todoForm.pin,
       });
-      const newTodoList = await getTodoAxios(accessToken);
+      const newTodoList = await getTodoAxios(accessToken, limit);
       dispatch(getTodoList(newTodoList.data));
       dispatch(
         getTodoForm({
@@ -277,9 +279,19 @@ export const EditTodoModal = () => {
             <div className="px-2 mt-4 bg-slate-100 w-fit rounded-full">
               <FontAwesomeIcon
                 icon={faClock}
-                className="w-3 h-3 text-slate-500"
+                className={`w-3 h-3 text-slate-500 ${
+                  new Date(timeValue).getTime() - new Date().getTime() < 0
+                    ? "text-red-500"
+                    : ""
+                }`}
               />
-              <span className="text-xs ml-2">
+              <span
+                className={`text-xs ml-2 w-3 h-3 text-slate-500 ${
+                  new Date(timeValue).getTime() - new Date().getTime() < 0
+                    ? "text-red-500"
+                    : ""
+                }`}
+              >
                 {moment(timeValue).calendar()}
               </span>
             </div>

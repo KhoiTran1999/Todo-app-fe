@@ -170,7 +170,7 @@ const StickyWall = () => {
       pathname === "/todo/search" ? (
         <></>
       ) : (
-        <div className="w-full my-10 flex justify-center items-center">
+        <div className="w-full my-10 flex justify-center items-center overscroll-none">
           {!isFocus ? (
             <div className="w-2/5 relative">
               <div
@@ -369,7 +369,7 @@ const StickyWall = () => {
       ) : (
         <>
           {viewMode ? (
-            <>
+            <div className="h-fit pb-3">
               <div>
                 {todoListPin.length === 0 || pathname === "/todo/trash" ? (
                   <></>
@@ -390,9 +390,9 @@ const StickyWall = () => {
                 )}
                 <StickyNoteGrid isPin={false} todoList={todoListUnpin} />
               </div>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="h-full">
               <div>
                 {todoListPin.length === 0 || pathname === "/todo/trash" ? (
                   <></>
@@ -413,7 +413,7 @@ const StickyWall = () => {
                 )}
                 <StickyNoteList isPin={false} todoList={todoListUnpin} />
               </div>
-            </>
+            </div>
           )}
         </>
       )}
