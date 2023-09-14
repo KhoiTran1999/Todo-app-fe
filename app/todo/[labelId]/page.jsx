@@ -1,14 +1,7 @@
 "use client";
 
-import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
-import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
-import {
-  LimitSelector,
-  TodoListPinSelector,
-  TodoListUnpinSelector,
-  TokenSelector,
-} from "@/app/GlobalRedux/selector";
+import { TokenSelector } from "@/app/GlobalRedux/selector";
 import StickyWall from "@/components/StickyWall/StickyWall";
 import { getTodoLabelAxios } from "@/service/axiosService/labelAxios";
 import { useEffect } from "react";
@@ -18,11 +11,14 @@ export default function page({ params }) {
   const dispatch = useDispatch();
 
   const { accessToken } = useSelector(TokenSelector);
-  const limit = useSelector(LimitSelector);
+
+  useEffect(() => {
+    dispatch(getTodoList([]));
+  }, []);
 
   useEffect(() => {
     if (accessToken) {
-      getTodoLabelAxios(accessToken, params.labelId, limit).then((res) => {
+      getTodoLabelAxios(accessToken, params.labelId).then((res) => {
         dispatch(getTodoList(res.data));
       });
     }

@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FirstRender from "../FirstRender/FirstRender";
 import { ToastContainer } from "react-toastify";
-import { LimitSelector, TokenSelector } from "@/app/GlobalRedux/selector";
+import {
+  LimitSelector,
+  TodoListSelector,
+  TokenSelector,
+} from "@/app/GlobalRedux/selector";
 import { usePathname } from "next/navigation";
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import {
@@ -19,6 +23,7 @@ export const MainWrapper = ({ children }) => {
 
   const { accessToken } = useSelector(TokenSelector);
   const limit = useSelector(LimitSelector);
+  const todoList = useSelector(TodoListSelector);
 
   const [isBottom, setIsBottom] = useState(false);
 
@@ -32,7 +37,7 @@ export const MainWrapper = ({ children }) => {
   };
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken && todoList.length + 10 >= limit) {
       if (pathname === "/todo/today") {
         getTodoAxios(accessToken, limit).then((res) =>
           dispatch(getTodoList(res.data))

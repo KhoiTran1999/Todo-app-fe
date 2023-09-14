@@ -31,7 +31,7 @@ export const AddTodoLabel = ({ todoId }) => {
         <input
           ref={searchLabelRef}
           onChange={handleChangeSearchLabel}
-          className="outline-none text-[15px]"
+          className="outline-none text-[15px] text-slate-700"
           id="searchLabel"
           type="text"
           placeholder="Nhập tên nhãn"

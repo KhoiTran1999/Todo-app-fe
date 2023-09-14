@@ -140,7 +140,7 @@ export const Todo = ({
     dispatch(getTodoList(newTodoList));
   };
 
-  const handleAddTodoLabel = (e) => {
+  const handleToggleTodoLabel = (e) => {
     e.stopPropagation();
     setLabelToggle((prev) => !prev);
   };
@@ -309,6 +309,7 @@ export const Todo = ({
 
                 <div
                   id={`selectedBackground` + id}
+                  data-tooltip-id={`selectedBackground` + id}
                   ref={colorRef}
                   onClick={handleColorToggle}
                   className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
@@ -317,30 +318,37 @@ export const Todo = ({
                     icon={faPalette}
                     className="w-5 h-5 text-slate-500"
                   />
-                  {colorToggle && (
-                    <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute -bottom-[52px] z-[1000]">
-                      <div className="flex justify-center items-center">
-                        <div
-                          onClick={(e) => handleChangeColor(e, "white")}
-                          className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
-                        >
-                          <FontAwesomeIcon
-                            icon={faDropletSlash}
-                            className="w-4 h-4 text-slate-500"
-                          />
-                        </div>
-                        {colorList.map((val, idx) => (
-                          <div
-                            onClick={(e) => handleChangeColor(e, val)}
-                            key={idx}
-                            className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
-                            style={{ backgroundColor: val }}
-                          ></div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
+                <Tooltip
+                  isOpen={colorToggle}
+                  opacity={1}
+                  clickable
+                  id={`selectedBackground` + id}
+                  style={{ backgroundColor: "transparent", transition: "none" }}
+                >
+                  <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg z-[1000]">
+                    <div className="flex justify-center items-center">
+                      <div
+                        onClick={(e) => handleChangeColor(e, "white")}
+                        className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full cursor-pointer"
+                      >
+                        <FontAwesomeIcon
+                          icon={faDropletSlash}
+                          className="w-4 h-4 text-slate-500"
+                        />
+                      </div>
+                      {colorList.map((val, idx) => (
+                        <div
+                          onClick={(e) => handleChangeColor(e, val)}
+                          key={idx}
+                          className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black cursor-pointer`}
+                          style={{ backgroundColor: val }}
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
+                </Tooltip>
+
                 <Tooltip
                   anchorSelect={`#selectedBackground` + id}
                   place="bottom"
@@ -352,10 +360,11 @@ export const Todo = ({
 
                 <div
                   id={`selectedLabel` + id}
+                  data-tooltip-id={`selectedLabel` + id}
                   className="flex items-center justify-center cursor-pointer"
                 >
                   <FontAwesomeIcon
-                    onClick={handleAddTodoLabel}
+                    onClick={handleToggleTodoLabel}
                     icon={faTag}
                     className="w-5 h-5 text-slate-500 p-2 hover:bg-slate-200 rounded-full"
                   />
@@ -430,11 +439,26 @@ export const Todo = ({
             </div>
           )}
         </div>
-        {labelToggle && (
-          <div className="absolute left-52 -bottom-2 z-[1000]" ref={labelRef}>
+        <Tooltip
+          isOpen={labelToggle}
+          opacity={1}
+          clickable
+          id={`selectedLabel` + id}
+          style={{
+            backgroundColor: "transparent",
+            transition: "none",
+            zIndex: "1000",
+          }}
+          place="top-start"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="z-[1000]"
+            ref={labelRef}
+          >
             <AddTodoLabel todoId={id} />
           </div>
-        )}
+        </Tooltip>
         {timePickerToggle && (
           <div
             ref={datePickerRef}

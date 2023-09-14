@@ -1,14 +1,18 @@
+import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import { TokenSelector } from "@/app/GlobalRedux/selector";
 import {
   addTodoLabelAxios,
   deleteTodoLabelAxios,
   getTodoLabelAxios,
 } from "@/service/axiosService/labelAxios";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const TodoLabel = ({ name, labelId, todoId }) => {
+  const dispatch = useDispatch();
   const { accessToken } = useSelector(TokenSelector);
+  const pathname = usePathname();
 
   const checkBoxRef = useRef();
 
@@ -23,29 +27,35 @@ export const TodoLabel = ({ name, labelId, todoId }) => {
   }, [accessToken]);
 
   const handleAddLabel = async (e, labelId) => {
+    e.stopPropagation();
+
     const isChecked = checkBoxRef.current.checked;
 
     if (!isChecked) {
       return await deleteTodoLabelAxios(accessToken, todoId, labelId)
-        .then((res) => console.log(res))
+        .then(async (res) => {
+          if (pathname === `/todo/${labelId}`) {
+            await getTodoLabelAxios(accessToken, labelId).then((res) =>
+              dispatch(getTodoList(res.data))
+            );
+          }
+        })
         .catch((err) => {
           console.log(err);
         });
     }
 
-    await addTodoLabelAxios(accessToken, { labelId, todoId })
-      .then((res) => console.log(res))
-      .catch((err) => {
-        console.log(err);
-      });
+    await addTodoLabelAxios(accessToken, { labelId, todoId }).catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
-    <div>
+    <div onClick={(e) => e.stopPropagation()}>
       <input
         ref={checkBoxRef}
         onChange={(e) => handleAddLabel(e, labelId)}
-        className="mr-2 "
+        className="mr-2 cursor-pointer"
         id={labelId + todoId}
         type="checkbox"
       />

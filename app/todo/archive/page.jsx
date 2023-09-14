@@ -13,6 +13,10 @@ export default function Todo() {
   const limit = useSelector(LimitSelector);
 
   useEffect(() => {
+    dispatch(getTodoList([]));
+  }, []);
+
+  useEffect(() => {
     if (accessToken) {
       getArchiveTodoAxios(accessToken, limit).then((res) =>
         dispatch(getTodoList(res.data))

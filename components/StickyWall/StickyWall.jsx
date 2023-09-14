@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { DateTimePicker } from "react-datetime-picker";
@@ -146,6 +146,15 @@ const StickyWall = () => {
     });
   };
 
+  const [skeleton, setSkeleton] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSkeleton(false);
+    }, [500]);
+    return () => setSkeleton(false);
+  }, []);
+
   return (
     <div
       className={`pl-3 pb-3 w-full h-full ${
@@ -165,9 +174,7 @@ const StickyWall = () => {
       ) : (
         <></>
       )}
-      {pathname === "/todo/archive" ||
-      pathname === "/todo/trash" ||
-      pathname === "/todo/search" ? (
+      {pathname !== "/todo/today" ? (
         <></>
       ) : (
         <div className="w-full my-10 flex justify-center items-center overscroll-none">
@@ -357,15 +364,33 @@ const StickyWall = () => {
         </div>
       )}
       {todoListPin.length === 0 && todoListUnpin.length === 0 ? (
-        <div className="w-full h-screen flex flex-col justify-start items-center">
-          <FontAwesomeIcon
-            icon={faFaceSmile}
-            className="w-24 h-24 text-slate-500 mb-6 mt-16"
-          />
-          <div className="text-2xl text-slate-500 font-medium">
-            Không có ghi chú nào
-          </div>
-        </div>
+        <>
+          {skeleton ? (
+            <div className="w-full h-fit -ml-3 p-4 flex justify-start items-start flex-wrap">
+              {[...Array(8).keys()].map((val, idx) => (
+                <div
+                  key={idx}
+                  className="border border-slate-200 bg-slate-50 w-[240px] h-[150px] mr-3 mb-3 p-4 shadow rounded-md"
+                >
+                  <div className="animate-pulse">
+                    <div className="h-7 bg-slate-400 rounded-sm mb-2"></div>
+                    <div className="h-[80px] bg-slate-400 rounded-sm "></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full h-screen flex flex-col justify-start items-center">
+              <FontAwesomeIcon
+                icon={faFaceSmile}
+                className="w-24 h-24 text-slate-500 mb-6 mt-16"
+              />
+              <div className="text-2xl text-slate-500 font-medium">
+                Không có ghi chú nào
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         <>
           {viewMode ? (

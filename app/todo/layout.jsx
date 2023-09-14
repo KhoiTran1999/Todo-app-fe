@@ -16,8 +16,6 @@ import {
 import { getToken } from "../GlobalRedux/Features/data/tokenSlider";
 import { verify } from "jsonwebtoken";
 import { env } from "@/config/env";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { TodoHeader } from "@/components/TodoHeader/TodoHeader";
 import { getLabelAxios } from "@/service/axiosService/labelAxios";
 import { getLabel } from "../GlobalRedux/Features/data/labelSlider";
@@ -28,7 +26,6 @@ export default function Layout({ children }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
   const token = useSelector(TokenSelector);
   const toggleEditLabelModalSelector = useSelector(EditLabelModalSelector);
   const toggleTodoModal = useSelector(EditTodoModalSelector);
@@ -48,7 +45,7 @@ export default function Layout({ children }) {
               refreshToken: res.refreshToken,
             })
           );
-          return setLoading(false);
+          return;
         }
 
         router.push("/login");
@@ -65,44 +62,31 @@ export default function Layout({ children }) {
               })
             );
           });
-          return setLoading(false);
+          return;
         }
       }
     );
   }, []);
 
   useEffect(() => {
-    if (token.accessToken && !loading) {
-      setLoading(true);
-
+    if (token.accessToken) {
       getLabelAxios(token.accessToken)
         .then((res) => {
           dispatch(getLabel(res.data));
-          setLoading(false);
         })
         .catch((err) => console.log(err));
     }
-  }, [token]);
+  }, [token.accessToken]);
 
   return (
     <>
-      {loading ? (
-        <div className="flex min-h-screen items-center justify-center">
-          <FontAwesomeIcon
-            icon={faSpinner}
-            className="w-16 h-16 text-slate-700"
-            spin={true}
-          />
+      <div>
+        <TodoHeader />
+        <div className="mt-[59px] flex h-full items-start justify-start">
+          <SideBar />
+          {children}
         </div>
-      ) : (
-        <div>
-          <TodoHeader />
-          <div className="mt-[59px] flex h-full items-start justify-start">
-            <SideBar />
-            {children}
-          </div>
-        </div>
-      )}
+      </div>
       {toggleEditLabelModalSelector && <EditLabelModal />}
       {toggleTodoModal && <EditTodoModal />}
     </>

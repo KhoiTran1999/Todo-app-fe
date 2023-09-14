@@ -14,6 +14,7 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,7 +52,6 @@ export const TodoHeader = () => {
     clearTokenAxios().then((res) => {
       dispatch(getToken({}));
     });
-    router.push("/");
   };
 
   const handleViewMode = () => {
@@ -66,7 +66,6 @@ export const TodoHeader = () => {
   const handleDeleteSearch = () => {
     setSearchValue("");
     setDeletedIcon(false);
-    router.push("/todo/today");
   };
 
   return (
@@ -104,11 +103,13 @@ export const TodoHeader = () => {
           />
         </form>
         {deletedIcon && (
-          <FontAwesomeIcon
-            onClick={handleDeleteSearch}
-            icon={faX}
-            className="w-4 h-4 px-2 py-[7px] text-slate-700 bg-slate-100 hover:bg-slate-300 rounded-full cursor-pointer absolute right-0 top-1/2 -translate-y-1/2"
-          />
+          <Link href={"/todo/today"}>
+            <FontAwesomeIcon
+              onClick={handleDeleteSearch}
+              icon={faX}
+              className="w-4 h-4 px-2 py-[7px] text-slate-700 bg-slate-100 hover:bg-slate-300 rounded-full cursor-pointer absolute right-0 top-1/2 -translate-y-1/2"
+            />
+          </Link>
         )}
       </div>
 
@@ -123,12 +124,14 @@ export const TodoHeader = () => {
           Chuyển chế độ xem
         </Tooltip>
 
-        <FontAwesomeIcon
-          id="logout"
-          onClick={handleLogout}
-          icon={faArrowRightFromBracket}
-          className="w-4 h-4 p-3 text-slate-700 hover:bg-slate-300 rounded-full cursor-pointer"
-        />
+        <Link href="/">
+          <FontAwesomeIcon
+            id="logout"
+            onClick={handleLogout}
+            icon={faArrowRightFromBracket}
+            className="w-4 h-4 p-3 text-slate-700 hover:bg-slate-300 rounded-full cursor-pointer"
+          />
+        </Link>
         <Tooltip anchorSelect="#logout" place="bottom" opacity={0.9}>
           Đăng xuất
         </Tooltip>

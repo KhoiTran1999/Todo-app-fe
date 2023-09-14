@@ -1,21 +1,18 @@
 import { SidebarSelector } from "@/app/GlobalRedux/selector";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Label = ({ id, name }) => {
-  const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useDispatch();
   const toggle = useSelector(SidebarSelector);
 
-  const handleClickLabel = () => {
-    router.push(`/todo/${id}`);
-  };
-
   return (
-    <div
-      onClick={handleClickLabel}
+    <Link
+      href={`/todo/${id}`}
       className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
         !toggle ? "rounded-full" : "rounded-r-full"
       } cursor-pointer ${
@@ -27,6 +24,6 @@ export const Label = ({ id, name }) => {
         className="w-5 h-5 mr-8 text-[#164B60]"
       />
       <p className={`font-medium ${!toggle && "hidden"}`}>{name}</p>
-    </div>
+    </Link>
   );
 };

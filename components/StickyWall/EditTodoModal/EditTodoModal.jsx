@@ -92,8 +92,8 @@ export const EditTodoModal = () => {
     }
   }, [toggleTodoModal]);
 
-  const titleDebounce = useDebounce(titleValue, 1000);
-  const contentDebounce = useDebounce(contentValue, 1000);
+  const titleDebounce = useDebounce(titleValue, 500);
+  const contentDebounce = useDebounce(contentValue, 500);
 
   useEffect(() => {
     const updateData = async () => {
@@ -261,7 +261,7 @@ export const EditTodoModal = () => {
                 onInput={autoGrow}
                 type="text"
                 name="title"
-                className="resize-none overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
+                className="resize-none h-[34px] overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
                 placeholder="Tiêu đề"
               />
               <textarea
@@ -296,7 +296,7 @@ export const EditTodoModal = () => {
               </span>
             </div>
           )}
-          <div className="text-right text-sm text-slate-700 my-1">
+          <div className="text-right text-xs text-slate-700 my-1">
             updated at {moment(todoForm.updatedAt).fromNow()}
           </div>
         </form>
