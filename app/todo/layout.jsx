@@ -48,10 +48,11 @@ export default function Layout({ children }) {
           return;
         }
 
-        router.push("/login");
+        router.push("/login", undefined, { shallow: true });
       },
       (err) => {
-        if (err.response.status === 404) return router.push("/login");
+        if (err.response.status === 404)
+          return router.push("/login", undefined, { shallow: true });
 
         if (err.response.status === 401) {
           refreshTokenAxios(err.response.data.refreshToken).then((res) => {

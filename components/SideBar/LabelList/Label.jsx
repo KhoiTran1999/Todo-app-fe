@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 export const Label = ({ id, name }) => {
   const pathname = usePathname();
-  const dispatch = useDispatch();
   const toggle = useSelector(SidebarSelector);
 
   return (
     <Link
       href={`/todo/${id}`}
+      shallow={true}
       className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
         !toggle ? "rounded-full" : "rounded-r-full"
       } cursor-pointer ${

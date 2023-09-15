@@ -33,6 +33,7 @@ const SideBar = () => {
     >
       <Link
         href={"/todo/today"}
+        shallow={true}
         onClick={() => {
           dispatch(getLimit(10));
         }}
@@ -48,6 +49,7 @@ const SideBar = () => {
       </Link>
       <Link
         href={"/todo/reminder"}
+        shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? "rounded-full" : "rounded-r-full"
         } cursor-pointer ${
@@ -77,6 +79,7 @@ const SideBar = () => {
       </div>
       <Link
         href={"/todo/archive"}
+        shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? "rounded-full" : "rounded-r-full"
         } cursor-pointer ${
@@ -91,6 +94,7 @@ const SideBar = () => {
       </Link>
       <Link
         href={"/todo/trash"}
+        shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? "rounded-full" : "rounded-r-full"
         } cursor-pointer ${

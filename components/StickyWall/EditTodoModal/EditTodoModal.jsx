@@ -110,8 +110,13 @@ export const EditTodoModal = () => {
         color: todoForm.color,
         pin: todoForm.pin,
       });
-      const newTodoList = await getTodoAxios(accessToken, limit);
-      dispatch(getTodoList(newTodoList.data));
+      // const newTodoList = await getTodoAxios(accessToken, limit);
+      const newTodoList = todoList.map((val) => {
+        if (val.id === todoForm.id)
+          return { ...val, title: titleDebounce, content: contentDebounce };
+        return val;
+      });
+      dispatch(getTodoList(newTodoList));
       dispatch(
         getTodoForm({
           ...todoForm,

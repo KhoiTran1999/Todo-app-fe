@@ -60,7 +60,7 @@ export const TodoHeader = () => {
 
   const handleFocus = () => {
     setDeletedIcon(true);
-    router.push("/todo/search");
+    router.push("/todo/search", undefined, { shallow: true });
   };
 
   const handleDeleteSearch = () => {
@@ -103,7 +103,7 @@ export const TodoHeader = () => {
           />
         </form>
         {deletedIcon && (
-          <Link href={"/todo/today"}>
+          <Link href={"/todo/today"} shallow={true}>
             <FontAwesomeIcon
               onClick={handleDeleteSearch}
               icon={faX}
@@ -124,7 +124,7 @@ export const TodoHeader = () => {
           Chuyển chế độ xem
         </Tooltip>
 
-        <Link href="/">
+        <Link href="/" shallow={true}>
           <FontAwesomeIcon
             id="logout"
             onClick={handleLogout}

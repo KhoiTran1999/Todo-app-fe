@@ -68,9 +68,9 @@ export const Todo = ({
   const [timePickerToggle, setTimePickerToggle] = useState(false);
   const [timeValue, setTimeValue] = useState(reminder);
 
-  const colorRef = useRef();
-  const labelRef = useRef();
-  const datePickerRef = useRef();
+  const colorRef = useRef("");
+  const labelRef = useRef("");
+  const datePickerRef = useRef("");
 
   useClickOutsideTodo(colorRef, setColorToggle);
   useClickOutsideTodo(labelRef, setLabelToggle);
@@ -157,7 +157,7 @@ export const Todo = ({
 
     if (archive) {
       await updateTodoAxios(token.accessToken, id, { archive: false });
-      const newTodoList = await getArchiveTodoAxios(token.accessToken, limit);
+      const newTodoList = await getArchiveTodoAxios(token.accessToken);
       dispatch(getTodoList(newTodoList.data));
       return;
     }

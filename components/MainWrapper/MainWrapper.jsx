@@ -1,5 +1,6 @@
+"use client";
+
 import { getLimit } from "@/app/GlobalRedux/Features/data/limitSlider";
-import { useDebounce } from "@/hooks/useDebounce";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FirstRender from "../FirstRender/FirstRender";
@@ -11,11 +12,7 @@ import {
 } from "@/app/GlobalRedux/selector";
 import { usePathname } from "next/navigation";
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
-import {
-  getAllTodoAxios,
-  getArchiveTodoAxios,
-  getTodoAxios,
-} from "@/service/axiosService/todoAxios";
+import { getTodoAxios } from "@/service/axiosService/todoAxios";
 
 export const MainWrapper = ({ children }) => {
   const dispatch = useDispatch();
@@ -40,15 +37,6 @@ export const MainWrapper = ({ children }) => {
     if (accessToken && todoList.length + 10 >= limit) {
       if (pathname === "/todo/today") {
         getTodoAxios(accessToken, limit).then((res) =>
-          dispatch(getTodoList(res.data))
-        );
-      } else if (pathname === "/todo/reminder") {
-        getAllTodoAxios(accessToken, limit).then((res) => {
-          const reminderTodoList = res.data.filter((val) => !!val.reminder);
-          dispatch(getTodoList(reminderTodoList));
-        });
-      } else if (pathname === "/todo/archive") {
-        getArchiveTodoAxios(accessToken, limit).then((res) =>
           dispatch(getTodoList(res.data))
         );
       }

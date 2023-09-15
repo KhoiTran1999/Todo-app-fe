@@ -16,11 +16,8 @@ const getTodoAxios = async (token, limit) => {
   return res.data;
 };
 
-const getArchiveTodoAxios = async (token, limit) => {
+const getArchiveTodoAxios = async (token) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/todo/archive`, {
-    params: {
-      limit,
-    },
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",

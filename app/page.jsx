@@ -25,12 +25,13 @@ export default function Home() {
         token.accessToken,
         env.JWT_ACCESSTOKEN_PRIVATE_KEY
       );
-      if (isValidAccessToken) return router.push("/todo/today");
+      if (isValidAccessToken)
+        return router.push("/todo/today", undefined, { shallow: true });
     } catch (error) {
       refreshTokenAxios(token.refreshToken)
         .then((res) => {
           if (!res.success) {
-            return router.push("/login");
+            return router.push("/login", undefined, { shallow: true });
           }
           dispatch(
             getToken({
@@ -39,10 +40,10 @@ export default function Home() {
             })
           );
 
-          router.push("/todo/today");
+          router.push("/todo/today", undefined, { shallow: true });
         })
         .catch((err) => {
-          router.push("/login");
+          router.push("/login", undefined, { shallow: true });
         });
     }
   }, [token]);
@@ -69,12 +70,14 @@ export default function Home() {
           <div className="flex flex-col">
             <Link
               href="/verifyEmail"
+              shallow={true}
               className="text-base py-2 px-3 text-slate-700 text-center bg-yellow-400 hover:bg-yellow-500 font-semibold rounded  ease-out duration-300"
             >
               Get Started
             </Link>
             <Link
               href="/login"
+              shallow={true}
               className="text-base font-semibold text-slate-700 text-center mt-3 hover:underline"
             >
               Already have an account? Sign in

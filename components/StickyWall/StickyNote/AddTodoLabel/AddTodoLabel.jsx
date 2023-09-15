@@ -1,15 +1,22 @@
-import { LabelSelector } from "@/app/GlobalRedux/selector";
+import { LabelSelector, TokenSelector } from "@/app/GlobalRedux/selector";
 import { faMagnifyingGlass, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TodoLabel } from "./TodoLabel";
+import { addLabelAxios } from "@/service/axiosService/labelAxios";
+import { getLabel } from "@/app/GlobalRedux/Features/data/labelSlider";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const AddTodoLabel = ({ todoId }) => {
+  const dispatch = useDispatch();
+
   const labelList = useSelector(LabelSelector);
   const [searchLabel, setSearchLabel] = useState(labelList);
+  const { accessToken } = useSelector(TokenSelector);
 
-  const searchLabelRef = useRef();
+  const searchLabelRef = useRef("");
 
   const handleChangeSearchLabel = (e) => {
     const value = e.target.value;
@@ -22,6 +29,23 @@ export const AddTodoLabel = ({ todoId }) => {
     });
 
     setSearchLabel(newLabelList);
+  };
+
+  const handleCreateLabel = () => {
+    addLabelAxios(accessToken, { name: searchLabelRef.current.value })
+      .then((res) => {
+        dispatch(getLabel(res.data));
+        setSearchLabel(res.data);
+      })
+      .catch((err) => {
+        if (err.response.data.message === "Validation error")
+          toast("Can not duplicate Label", {
+            type: "error",
+            containerId: "normalError",
+          });
+      });
+
+    searchLabelRef.current.value = "";
   };
 
   return (
@@ -54,15 +78,18 @@ export const AddTodoLabel = ({ todoId }) => {
         ))}
       </div>
       {searchLabel.length === 0 ? (
-        <div className="p-[2px] -mx-2 -mb-2 border-t mt-4 hover:bg-slate-100 cursor-pointer">
+        <div
+          onClick={handleCreateLabel}
+          className="p-[2px] -mx-2 -mb-2 border-t mt-4 hover:bg-slate-100 cursor-pointer"
+        >
           <FontAwesomeIcon
             icon={faPlus}
             className="w-4 h-4 ml-2 text-slate-500"
           />
-          <button className="text-sm ml-3">
+          <button className="text-sm text-slate-700 ml-3">
             Tạo{" "}
             <span className="text-sm font-medium">
-              "{searchLabelRef.current.value}"
+              "{searchLabelRef.current?.value}"
             </span>
           </button>
         </div>

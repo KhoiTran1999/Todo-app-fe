@@ -25,11 +25,11 @@ export default function register({ params }) {
       const user = verify(token, env.JWT_ACCESSTOKEN_PRIVATE_KEY);
 
       if (!user) {
-        return router.push("/verifyEmail");
+        return router.push("/verifyEmail", undefined, { shallow: true });
       }
       setEmail(user.email);
     } catch (error) {
-      return router.push("/verifyEmail");
+      return router.push("/verifyEmail", undefined, { shallow: true });
     }
   }, []);
 
@@ -57,7 +57,7 @@ export default function register({ params }) {
     registerAxios(data)
       .then((res) => {
         if (res.success) {
-          return router.push("/login");
+          return router.push("/login", undefined, { shallow: true });
         }
       })
       .catch((err) => {
@@ -65,7 +65,7 @@ export default function register({ params }) {
           type: "error",
           containerId: "normalError",
         });
-        router.push("/verifyEmail");
+        router.push("/verifyEmail", undefined, { shallow: true });
       });
     setIsLoading(false);
   };

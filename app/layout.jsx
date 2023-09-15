@@ -1,5 +1,3 @@
-"use client";
-
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Providers } from "./GlobalRedux/provider";
@@ -8,8 +6,8 @@ import { MainWrapper } from "@/components/MainWrapper/MainWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Todo-app",
-  description: "Basic todo-app",
+  title: "Fast Note - Free your mind",
+  description: "Free your mind",
 };
 
 export default function RootLayout({ children }) {

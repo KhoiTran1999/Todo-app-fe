@@ -23,7 +23,7 @@ export default function verifyEmail() {
   useEffect(() => {
     if (token.accessToken && token.refreshToken) {
       window.close();
-      return router.push("/todo/today");
+      return router.push("/todo/today", undefined, { shallow: true });
     }
   }, [token]);
 
@@ -139,6 +139,7 @@ export default function verifyEmail() {
         <div className="mt-8 w-full pt-2 text-center border-t border-slate-400">
           <Link
             href="/login"
+            shallow={true}
             className="text-base font-medium text-gray-800 text-center mt-3 hover:underline"
           >
             Already have an account? Sign in

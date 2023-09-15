@@ -22,7 +22,7 @@ export default function login() {
 
   useEffect(() => {
     if (token.accessToken && token.refreshToken)
-      return router.push("/todo/today");
+      return router.push("/todo/today", undefined, { shallow: true });
   }, [token]);
 
   const handleSubmit = async (e) => {
@@ -43,7 +43,7 @@ export default function login() {
             refreshToken: res.token.refreshToken,
           })
         );
-        return router.push("/todo/today");
+        return router.push("/todo/today", undefined, { shallow: true });
       })
       .catch((err) => {
         if (err.response.status === 429) {
@@ -116,6 +116,7 @@ export default function login() {
         <div className="mt-8 w-full pt-2 text-center border-t border-slate-400">
           <Link
             href="/verifyEmail"
+            shallow={true}
             className="text-base font-semibold text-slate-700 hover:underline"
           >
             Don't have an account? Sign up
