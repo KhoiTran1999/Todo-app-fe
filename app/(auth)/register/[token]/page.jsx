@@ -56,18 +56,15 @@ export default function register({ params }) {
     };
     registerAxios(data)
       .then((res) => {
-        if (res.success) {
-          return router.push("/login", undefined, { shallow: true });
-        }
+        router.push("/login", undefined, { shallow: true });
       })
       .catch((err) => {
-        toast(`${err.response.message}`, {
-          type: "error",
+        toast(`${err.response.data?.message}`, {
+          type: "info",
           containerId: "normalError",
         });
-        router.push("/verifyEmail", undefined, { shallow: true });
+        router.push("/login", undefined, { shallow: true });
       });
-    setIsLoading(false);
   };
 
   return (
@@ -122,7 +119,7 @@ export default function register({ params }) {
             required
             minLength={1}
           />
-          <div className="w-full mt-5 flex justify-between items-center">
+          <div className="w-full mt-5 flex justify-center items-center">
             {isLoading ? (
               <FontAwesomeIcon
                 icon={faSpinner}
