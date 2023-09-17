@@ -77,7 +77,7 @@ export const AddTodoLabel = ({ todoId }) => {
           />
         ))}
       </div>
-      {searchLabel.length === 0 ? (
+      {searchLabel.length === 0 && searchLabelRef.current?.value?.length > 0 ? (
         <div
           onClick={handleCreateLabel}
           className="p-[2px] -mx-2 -mb-2 border-t mt-4 hover:bg-slate-100 cursor-pointer"

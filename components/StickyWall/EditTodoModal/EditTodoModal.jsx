@@ -247,13 +247,13 @@ export const EditTodoModal = () => {
             <>
               <div
                 ref={titleRef}
-                className="overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
+                className="overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500 select-text"
               >
                 {todoForm.title}
               </div>
               <div
                 ref={contentRef}
-                className={`overflow-hidden w-full mt-5 bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
+                className={`overflow-hidden w-full mt-5 bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px] select-text`}
               >
                 {todoForm.content}
               </div>
@@ -266,7 +266,7 @@ export const EditTodoModal = () => {
                 onInput={autoGrow}
                 type="text"
                 name="title"
-                className="resize-none h-[34px] overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
+                className="resize-none h-[34px] overflow-hidden font-medium text-2xl pt-3 w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500 select-text"
                 placeholder="Tiêu đề"
               />
               <textarea
@@ -275,7 +275,7 @@ export const EditTodoModal = () => {
                 onInput={autoGrow}
                 type="text"
                 name="content"
-                className={`resize-none overflow-hidden w-full mt-5 bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
+                className={`resize-none overflow-hidden w-full mt-5 bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px] select-text`}
                 placeholder="Tạo ghi chú..."
               />
             </>

@@ -54,10 +54,9 @@ export default function register({ params }) {
       email: e.target.email.value,
       password: e.target.password.value,
     };
+
     registerAxios(data)
-      .then((res) => {
-        router.push("/login", undefined, { shallow: true });
-      })
+      .then((res) => router.push("/login", undefined, { shallow: true }))
       .catch((err) => {
         toast(`${err.response.data?.message}`, {
           type: "info",
@@ -65,6 +64,8 @@ export default function register({ params }) {
         });
         router.push("/login", undefined, { shallow: true });
       });
+
+    return router.push("/login", undefined, { shallow: true });
   };
 
   return (
