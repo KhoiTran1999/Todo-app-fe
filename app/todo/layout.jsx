@@ -15,7 +15,7 @@ import {
 } from "@/service/axiosService/authAxios";
 import { getToken } from "../GlobalRedux/Features/data/tokenSlider";
 import { verify } from "jsonwebtoken";
-import { env } from "@/config/env";
+import env from "@/config/env";
 import { TodoHeader } from "@/components/TodoHeader/TodoHeader";
 import { getLabelAxios } from "@/service/axiosService/labelAxios";
 import { getLabel } from "../GlobalRedux/Features/data/labelSlider";

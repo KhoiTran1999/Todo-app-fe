@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { verify } from "jsonwebtoken";
-import { env } from "@/config/env";
+import env from "@/config/env";
 import Image from "next/image";
 import { refreshTokenAxios } from "@/service/axiosService/authAxios";
 import { TokenSelector } from "./GlobalRedux/selector";

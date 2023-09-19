@@ -6,7 +6,7 @@ import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { env } from "@/config/env";
+import env from "@/config/env";
 import Image from "next/image";
 import { verify } from "jsonwebtoken";
 import { registerAxios } from "@/service/axiosService/authAxios";

@@ -1,8 +1,8 @@
-import { env } from "@/config/env";
+import env from "@/config/env";
 import axios from "axios";
 
 const getLabelAxios = async (token) => {
-  const res = await axios.get(`${env.SERVER_URL}/api/v1/label`, {
+  const res = await axios.get(`http://${env.SERVER_URL}/api/v1/label`, {
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",
@@ -15,13 +15,17 @@ const getLabelAxios = async (token) => {
 
 const addLabelAxios = async (token, data) => {
   const JSONdata = JSON.stringify(data);
-  const res = await axios.post(`${env.SERVER_URL}/api/v1/label`, JSONdata, {
-    withCredentials: true,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await axios.post(
+    `http://${env.SERVER_URL}/api/v1/label`,
+    JSONdata,
+    {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return res.data;
 };
 
@@ -32,7 +36,7 @@ const deleteLabelAxios = async (
   rejectHandling
 ) => {
   await axios
-    .delete(`${env.SERVER_URL}/api/v1/label/${id}`, {
+    .delete(`http://${env.SERVER_URL}/api/v1/label/${id}`, {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +56,7 @@ const updateLabelAxios = async (
 ) => {
   const JSONdata = JSON.stringify(data);
   await axios
-    .patch(`${env.SERVER_URL}/api/v1/label/${id}`, JSONdata, {
+    .patch(`http://${env.SERVER_URL}/api/v1/label/${id}`, JSONdata, {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -66,7 +70,7 @@ const updateLabelAxios = async (
 const addTodoLabelAxios = async (token, data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(
-    `${env.SERVER_URL}/api/v1/label/todoLabel`,
+    `http://${env.SERVER_URL}/api/v1/label/todoLabel`,
     JSONdata,
     {
       withCredentials: true,
@@ -81,7 +85,7 @@ const addTodoLabelAxios = async (token, data) => {
 
 const deleteTodoLabelAxios = async (token, todoId, labelId) => {
   const res = await axios.delete(
-    `${env.SERVER_URL}/api/v1/label/todoLabel/${todoId}/${labelId}`,
+    `http://${env.SERVER_URL}/api/v1/label/todoLabel/${todoId}/${labelId}`,
     {
       withCredentials: true,
       headers: {
@@ -95,7 +99,7 @@ const deleteTodoLabelAxios = async (token, todoId, labelId) => {
 
 const getTodoLabelAxios = async (token, id) => {
   const res = await axios.get(
-    `${env.SERVER_URL}/api/v1/label/todoLabel/${id}`,
+    `http://${env.SERVER_URL}/api/v1/label/todoLabel/${id}`,
     {
       withCredentials: true,
       headers: {
