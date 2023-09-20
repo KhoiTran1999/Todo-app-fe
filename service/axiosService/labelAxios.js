@@ -4,6 +4,7 @@ import axios from "axios";
 const getLabelAxios = async (token) => {
   const res = await axios.get(`https://${env.SERVER_URL}/api/v1/label`, {
     withCredentials: true,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -20,6 +21,7 @@ const addLabelAxios = async (token, data) => {
     JSONdata,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -38,6 +40,7 @@ const deleteLabelAxios = async (
   await axios
     .delete(`https://${env.SERVER_URL}/api/v1/label/${id}`, {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -58,6 +61,7 @@ const updateLabelAxios = async (
   await axios
     .patch(`https://${env.SERVER_URL}/api/v1/label/${id}`, JSONdata, {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -74,6 +78,7 @@ const addTodoLabelAxios = async (token, data) => {
     JSONdata,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -88,6 +93,7 @@ const deleteTodoLabelAxios = async (token, todoId, labelId) => {
     `https://${env.SERVER_URL}/api/v1/label/todoLabel/${todoId}/${labelId}`,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -102,6 +108,7 @@ const getTodoLabelAxios = async (token, id) => {
     `https://${env.SERVER_URL}/api/v1/label/todoLabel/${id}`,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

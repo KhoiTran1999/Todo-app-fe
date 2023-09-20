@@ -9,6 +9,7 @@ const loginAxios = async (data) => {
     JSONdata,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -24,6 +25,7 @@ const verifyEmailAxios = async (data) => {
     JSONdata,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -39,6 +41,7 @@ const registerAxios = async (data) => {
     JSONdata,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -51,6 +54,7 @@ const getTokenAxios = async (fulfilledHandling, rejectHandling) => {
   await axios
     .get(`https://${env.SERVER_URL}/api/v1/auth/cookie/getToken`, {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -66,6 +70,7 @@ const refreshTokenAxios = async (token) => {
     `https://${env.SERVER_URL}/api/v1/auth/cookie/refreshToken`,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -80,6 +85,7 @@ const clearTokenAxios = async () => {
     `https://${env.SERVER_URL}/api/v1/auth/cookie/clearToken`,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -104,7 +110,7 @@ export {
 //     `https://${env.SERVER_URL}/api/v1/auth/register`,
 //     JSONdata,
 //     {
-//       withCredentials: true,
+//       withCredentials: true, credentials: "include",
 //       headers: {
 //         "Content-Type": "application/json",
 //         Authorization: `Bearer ${token}`,

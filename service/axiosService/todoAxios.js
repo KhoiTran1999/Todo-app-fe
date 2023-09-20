@@ -7,6 +7,7 @@ const getTodoAxios = async (token, limit) => {
       limit,
     },
     withCredentials: true,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -19,6 +20,7 @@ const getTodoAxios = async (token, limit) => {
 const getArchiveTodoAxios = async (token) => {
   const res = await axios.get(`https://${env.SERVER_URL}/api/v1/todo/archive`, {
     withCredentials: true,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -31,6 +33,7 @@ const getArchiveTodoAxios = async (token) => {
 const getDeletedTodoAxios = async (token) => {
   const res = await axios.get(`https://${env.SERVER_URL}/api/v1/todo/trash`, {
     withCredentials: true,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -46,6 +49,7 @@ const getAllTodoAxios = async (token, limit) => {
       limit,
     },
     withCredentials: true,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -62,6 +66,7 @@ const getSearchTodoAxios = async (token, query, limit) => {
       limit,
     },
     withCredentials: true,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -78,6 +83,7 @@ const addTodoAxios = async (token, data) => {
     JSONdata,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -92,6 +98,7 @@ const deleteTodoAxios = async (token, id) => {
     `https://${env.SERVER_URL}/api/v1/todo/${id}`,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -106,6 +113,7 @@ const deletePermanentTodoAxios = async (token, id) => {
     `https://${env.SERVER_URL}/api/v1/todo/permanent/${id}`,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -122,6 +130,7 @@ const updateTodoAxios = async (token, id, data) => {
     JSONdata,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -136,6 +145,7 @@ const restoreTodoAxios = async (token, id) => {
     `https://${env.SERVER_URL}/api/v1/todo/restore/${id}`,
     {
       withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
