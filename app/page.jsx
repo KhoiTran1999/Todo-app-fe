@@ -18,8 +18,7 @@ export default function Home() {
   const token = useSelector(TokenSelector);
 
   useEffect(() => {
-    if (!token.refreshToken || !token.accessToken)
-      return router.push("/", undefined, { shallow: true });
+    if (!token.refreshToken || !token.accessToken) return;
 
     const isValidAccessToken = verify(
       token.accessToken,
