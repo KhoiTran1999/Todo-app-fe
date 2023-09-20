@@ -31,6 +31,10 @@ export default function login() {
         return router.push("/todo/today", undefined, { shallow: true });
       },
       (err) => {
+        toast(`Something went wrong`, {
+          type: "error",
+          containerId: "normalError",
+        });
         return dispatch(getToken({}));
       }
     );
