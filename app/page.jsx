@@ -18,34 +18,34 @@ export default function Home() {
   const token = useSelector(TokenSelector);
 
   useEffect(() => {
-    if (!token.refreshToken) return;
+    if (!token.refreshToken || !token.accessToken)
+      return router.push("/", undefined, { shallow: true });
 
-    try {
-      const isValidAccessToken = verify(
-        token.accessToken,
-        env.JWT_ACCESSTOKEN_PRIVATE_KEY
-      );
-      if (isValidAccessToken)
-        return router.push("/todo/today", undefined, { shallow: true });
-    } catch (error) {
-      refreshTokenAxios(token.refreshToken)
-        .then((res) => {
-          if (!res.success) {
-            return router.push("/login", undefined, { shallow: true });
-          }
-          dispatch(
-            getToken({
-              accessToken: res.accessToken,
-              refreshToken: token.refreshToken,
-            })
-          );
+    const isValidAccessToken = verify(
+      token.accessToken,
+      env.JWT_ACCESSTOKEN_PRIVATE_KEY
+    );
 
-          router.push("/todo/today", undefined, { shallow: true });
-        })
-        .catch((err) => {
-          router.push("/login", undefined, { shallow: true });
-        });
-    }
+    if (isValidAccessToken)
+      return router.push("/todo/today", undefined, { shallow: true });
+
+    refreshTokenAxios(token.refreshToken)
+      .then((res) => {
+        if (!res.success) {
+          return router.push("/login", undefined, { shallow: true });
+        }
+        dispatch(
+          getToken({
+            accessToken: res.accessToken,
+            refreshToken: token.refreshToken,
+          })
+        );
+
+        router.push("/todo/today", undefined, { shallow: true });
+      })
+      .catch((err) => {
+        router.push("/login", undefined, { shallow: true });
+      });
   }, [token]);
 
   return (
