@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
 import { TokenSelector } from "@/app/GlobalRedux/selector";
-import { loginAxios } from "@/service/axiosService/authAxios";
+import { getTokenAxios, loginAxios } from "@/service/axiosService/authAxios";
 import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -18,12 +18,23 @@ export default function login() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
-  const token = useSelector(TokenSelector);
-
   useEffect(() => {
-    if (token.accessToken && token.refreshToken)
-      return router.push("/todo/today", undefined, { shallow: true });
-  }, [token]);
+    getTokenAxios(
+      (res) => {
+        if (res.accessToken && res.refreshToken)
+          dispatch(
+            getToken({
+              accessToken: res.accessToken,
+              refreshToken: res.refreshToken,
+            })
+          );
+        return router.push("/todo/today", undefined, { shallow: true });
+      },
+      (err) => {
+        return dispatch(getToken({}));
+      }
+    );
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
