@@ -14,7 +14,6 @@ import { getToken } from "./GlobalRedux/Features/data/tokenSlider";
 export default function Home() {
   const router = useRouter();
   const dispatch = useDispatch();
-  console.log(env.SERVER_URL);
   const token = useSelector(TokenSelector);
 
   useEffect(() => {
@@ -46,6 +45,33 @@ export default function Home() {
         router.push("/login", undefined, { shallow: true });
       });
   }, [token]);
+
+  useEffect(() => {
+    console.log("resquest storage");
+    console.log("On Safari 12");
+    document.hasStorageAccess().then(
+      function successful(hasAccess) {
+        console.log("Testing if hasAccess");
+        if (hasAccess) {
+          console.log("Access granted already");
+        } else {
+          console.log("Requesting access");
+          document.requestStorageAccess().then(
+            function successful() {
+              console.log("Access request was a success");
+              window.location.reload();
+            },
+            function fail() {
+              console.log("Storage Access API call failed...");
+            }
+          );
+        }
+      },
+      function rejected(reason) {
+        console.log("hasStorageAccess failed: ", reason);
+      }
+    );
+  }, []);
 
   return (
     <main>
