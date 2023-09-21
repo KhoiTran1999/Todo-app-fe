@@ -367,7 +367,9 @@ const StickyWall = () => {
       {todoListPin.length === 0 && todoListUnpin.length === 0 ? (
         <>
           {skeleton ? (
-            <SkeletonLoading />
+            <div className="w-full mt-8 flex items-center">
+              <div className="animate-bounce">Loading...</div>
+            </div>
           ) : (
             <div className="w-full flex flex-col justify-start items-center">
               <FontAwesomeIcon

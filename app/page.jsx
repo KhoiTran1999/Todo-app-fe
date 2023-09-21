@@ -14,7 +14,7 @@ import { getToken } from "./GlobalRedux/Features/data/tokenSlider";
 export default function Home() {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  console.log(env.SERVER_URL);
   const token = useSelector(TokenSelector);
 
   useEffect(() => {
