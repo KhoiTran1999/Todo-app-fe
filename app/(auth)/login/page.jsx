@@ -57,14 +57,14 @@ export default function login() {
         return router.push("/todo/today", undefined, { shallow: true });
       })
       .catch((err) => {
-        if (err.response.status === 429) {
+        if (err.response?.status === 429) {
           toast(`${err.response.data?.message}`, {
             type: "error",
             containerId: "limiterError",
             toastId: "limiterError",
           });
         }
-        if (err.response.status === 401) {
+        if (err.response?.status === 401) {
           toast(`${err.response.data?.message}`, {
             type: "error",
             containerId: "normalError",

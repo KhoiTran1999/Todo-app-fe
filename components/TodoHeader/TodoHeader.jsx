@@ -49,10 +49,12 @@ export const TodoHeader = () => {
   };
 
   const handleLogout = () => {
-    clearTokenAxios().then((res) => {
-      dispatch(getToken({}));
-    });
-    router.push("/", undefined, { shallow: true });
+    clearTokenAxios()
+      .then((res) => {
+        router.push("/login", undefined, { shallow: true });
+        dispatch(getToken({}));
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleViewMode = () => {

@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 const loginAxios = async (data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(
-    `https://${env.SERVER_URL}/api/v1/auth/login`,
+    `${env.SERVER_URL}/api/v1/auth/login`,
     JSONdata,
     {
       withCredentials: true,
@@ -21,7 +21,7 @@ const loginAxios = async (data) => {
 const verifyEmailAxios = async (data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(
-    `https://${env.SERVER_URL}/api/v1/auth/verifyEmail`,
+    `${env.SERVER_URL}/api/v1/auth/verifyEmail`,
     JSONdata,
     {
       withCredentials: true,
@@ -37,7 +37,7 @@ const verifyEmailAxios = async (data) => {
 const registerAxios = async (data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(
-    `https://${env.SERVER_URL}/api/v1/auth/register`,
+    `${env.SERVER_URL}/api/v1/auth/register`,
     JSONdata,
     {
       withCredentials: true,
@@ -52,7 +52,7 @@ const registerAxios = async (data) => {
 
 const getTokenAxios = async (fulfilledHandling, rejectHandling) => {
   await axios
-    .get(`https://${env.SERVER_URL}/api/v1/auth/cookie/getToken`, {
+    .get(`${env.SERVER_URL}/api/v1/auth/cookie/getToken`, {
       withCredentials: true,
       credentials: "include",
       headers: {
@@ -67,7 +67,7 @@ const getTokenAxios = async (fulfilledHandling, rejectHandling) => {
 
 const refreshTokenAxios = async (token) => {
   const res = await axios.get(
-    `https://${env.SERVER_URL}/api/v1/auth/cookie/refreshToken`,
+    `${env.SERVER_URL}/api/v1/auth/cookie/refreshToken`,
     {
       withCredentials: true,
       credentials: "include",
@@ -82,7 +82,7 @@ const refreshTokenAxios = async (token) => {
 
 const clearTokenAxios = async () => {
   const res = await axios.delete(
-    `https://${env.SERVER_URL}/api/v1/auth/cookie/clearToken`,
+    `${env.SERVER_URL}/api/v1/auth/cookie/clearToken`,
     {
       withCredentials: true,
       credentials: "include",
@@ -107,7 +107,7 @@ export {
 // const registerAxios = async (token, data) => {
 //   const JSONdata = JSON.stringify(data);
 //   const res = await axios.post(
-//     `https://${env.SERVER_URL}/api/v1/auth/register`,
+//     `${env.SERVER_URL}/api/v1/auth/register`,
 //     JSONdata,
 //     {
 //       withCredentials: true, credentials: "include",
