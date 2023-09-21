@@ -31,7 +31,7 @@ export const TodoHeader = () => {
   const [searchValue, setSearchValue] = useState("");
   const [deletedIcon, setDeletedIcon] = useState(false);
 
-  const searchDebounce = useDebounce(searchValue, 1000);
+  const searchDebounce = useDebounce(searchValue, 600);
 
   useEffect(() => {
     const getData = async () => {

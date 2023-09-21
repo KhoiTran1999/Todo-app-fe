@@ -40,6 +40,7 @@ import { colorList } from "@/constant/colorList";
 import { useClickOutsideTodo } from "@/hooks/useClickOutsideTodo";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SkeletonLoading from "../Loading/SkeletonLoading";
 
 const StickyWall = () => {
   const dispatch = useDispatch();
@@ -366,7 +367,7 @@ const StickyWall = () => {
       {todoListPin.length === 0 && todoListUnpin.length === 0 ? (
         <>
           {skeleton ? (
-            <></>
+            <SkeletonLoading />
           ) : (
             <div className="w-full flex flex-col justify-start items-center">
               <FontAwesomeIcon
