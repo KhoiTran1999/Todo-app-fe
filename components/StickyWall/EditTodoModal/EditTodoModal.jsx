@@ -4,7 +4,6 @@ import moment from "moment";
 
 import {
   EditTodoModalSelector,
-  LimitSelector,
   TodoFormSelector,
   TodoListSelector,
   TokenSelector,
@@ -27,7 +26,6 @@ import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 import {
   deletePermanentTodoAxios,
   deleteTodoAxios,
-  getTodoAxios,
   restoreTodoAxios,
   updateTodoAxios,
 } from "@/service/axiosService/todoAxios";
@@ -48,7 +46,6 @@ export const EditTodoModal = () => {
   const toggleTodoModal = useSelector(EditTodoModalSelector);
   const todoForm = useSelector(TodoFormSelector);
   const { accessToken } = useSelector(TokenSelector);
-  const limit = useSelector(LimitSelector);
 
   const modalRef = useRef();
   const titleRef = useRef("");
@@ -234,7 +231,7 @@ export const EditTodoModal = () => {
         ref={modalRef}
         className={`bg-white ${
           toggleTodoModal ? "opacity-100" : "opacity-0"
-        } w-[600px] max-h-[580px] transition-opacity flex flex-col justify-between items-center absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 rounded select-none`}
+        } max-h-[580px] w-[600px] max-[628px]:w-[400px] max-[422px]:w-[300px] transition-opacity flex flex-col justify-between items-center absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 rounded select-none`}
         style={{ backgroundColor: todoForm.color }}
       >
         <form
@@ -372,11 +369,11 @@ export const EditTodoModal = () => {
                     className="w-5 h-5 text-slate-500"
                   />
                   {colorToggle && (
-                    <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute -top-[52px] ">
-                      <div className="flex justify-center items-center">
+                    <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute -top-[80px] z-[1000]">
+                      <div className="flex justify-center items-center flex-wrap max-[321px]:justify-start max-[321px]:w-60">
                         <div
                           onClick={(e) => handleChangeColor(e, "white")}
-                          className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
+                          className="py-[2px] px-[6px] mr-1 mb-1 border-2 hover:border-black border-slate-200 rounded-full"
                         >
                           <FontAwesomeIcon
                             icon={faDropletSlash}
@@ -387,7 +384,7 @@ export const EditTodoModal = () => {
                           <div
                             onClick={(e) => handleChangeColor(e, val)}
                             key={idx}
-                            className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
+                            className={`p-[12px] mr-1 mb-1 rounded-full border-2 border-transparent hover:border-black`}
                             style={{ backgroundColor: val }}
                           ></div>
                         ))}
@@ -395,7 +392,11 @@ export const EditTodoModal = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full">
+                <div
+                  id={`selectedLabel` + todoForm.id}
+                  data-tooltip-id={`selectedLabel` + todoForm.id}
+                  className="flex items-center justify-center cursor-pointer p-2 hover:bg-slate-200 rounded-full"
+                >
                   <FontAwesomeIcon
                     onClick={handleAddTodoLabel}
                     icon={faTag}
@@ -443,11 +444,26 @@ export const EditTodoModal = () => {
             )}
           </div>
         )}
-        {labelToggle && (
-          <div className="absolute left-60 bottom-12 z-[1000]" ref={labelRef}>
+        <Tooltip
+          isOpen={labelToggle}
+          opacity={1}
+          clickable
+          id={`selectedLabel` + todoForm.id}
+          style={{
+            backgroundColor: "transparent",
+            transition: "none",
+            zIndex: "1000",
+          }}
+          place="top-start"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="z-[1000]"
+            ref={labelRef}
+          >
             <AddTodoLabel todoId={todoForm.id} />
           </div>
-        )}
+        </Tooltip>
         {timePickerToggle && (
           <div ref={datePickerRef} className="absolute -bottom-8 z-[1000]">
             <div className=" bg-white">

@@ -79,8 +79,14 @@ export const TodoHeader = () => {
           icon={faBars}
           className="w-5 h-5 p-3 mr-4 text-[#164B60] hover:bg-slate-100 cursor-pointer rounded-full"
         />
-        <img className="w-8 h-8 mr-4" src="/favicon/favicon.ico" alt="" />
-        <h1 className="text-xl font-bold text-slate-500">Fast Note</h1>
+        <img
+          className="w-8 h-8 mr-4 hidden sm:inline-block"
+          src="/favicon/favicon.ico"
+          alt=""
+        />
+        <h1 className="text-xl font-bold text-slate-500 hidden sm:inline-block">
+          Fast Note
+        </h1>
       </div>
 
       <div className="w-1/2 p-1 bg-slate-100 rounded-xl relative">
@@ -92,12 +98,12 @@ export const TodoHeader = () => {
           <label htmlFor="search">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
-              className="w-4 h-4 p-3 -mb-[2px] mx-3 text-slate-700 hover:bg-slate-300 rounded-full cursor-pointer"
+              className="w-4 h-4 p-3 max-[768px]:p-1 -mb-[2px] mx-3 text-slate-700 hover:bg-slate-300 rounded-full cursor-pointer"
             />
           </label>
           <input
             onFocus={handleFocus}
-            className=" w-full bg-transparent outline-none"
+            className=" w-full bg-transparent outline-none max-[321px]:text-sm"
             id="search"
             type="search"
             placeholder="Tìm kiếm"
@@ -121,7 +127,7 @@ export const TodoHeader = () => {
           id="viewMode"
           onClick={handleViewMode}
           icon={faListUl}
-          className="w-4 h-4 p-3 text-slate-700 hover:bg-slate-300 rounded-full outline-none cursor-pointer"
+          className="w-4 h-4 p-3 text-slate-700 hover:bg-slate-300 rounded-full outline-none cursor-pointer hidden md:inline-block"
         />
         <Tooltip anchorSelect="#viewMode" place="bottom" opacity={0.9}>
           Chuyển chế độ xem

@@ -49,16 +49,17 @@ export const AddTodoLabel = ({ todoId }) => {
   };
 
   return (
-    <div className="p-2 bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded cursor-default">
+    <div className="p-2 max-w-[270px] overflow-hidden bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded cursor-default">
       <h4 className="text-slate-700 text-sm font-medium">Ghi chú nhãn</h4>
-      <form action="" className="mt-2 flex justify-start items-center">
+      <form action="" className="mt-2 flex justify-between items-center">
         <input
           ref={searchLabelRef}
           onChange={handleChangeSearchLabel}
-          className="outline-none text-[15px] text-slate-700"
+          className="w-full mr-1 outline-none text-[15px] text-slate-700"
           id="searchLabel"
           type="text"
           placeholder="Nhập tên nhãn"
+          maxLength={50}
         />
         <label htmlFor="searchLabel">
           <FontAwesomeIcon
@@ -80,7 +81,7 @@ export const AddTodoLabel = ({ todoId }) => {
       {searchLabel.length === 0 && searchLabelRef.current?.value?.length > 0 ? (
         <div
           onClick={handleCreateLabel}
-          className="p-[2px] -mx-2 -mb-2 border-t mt-4 hover:bg-slate-100 cursor-pointer"
+          className="p-[2px] -mx-2 -mb-2 border-t mt-4 hover:bg-slate-100 flex justify-start items-center cursor-pointer"
         >
           <FontAwesomeIcon
             icon={faPlus}
@@ -88,7 +89,7 @@ export const AddTodoLabel = ({ todoId }) => {
           />
           <button className="text-sm text-slate-700 ml-3">
             Tạo{" "}
-            <span className="text-sm font-medium">
+            <span className="text-sm font-medium break-all">
               "{searchLabelRef.current?.value}"
             </span>
           </button>

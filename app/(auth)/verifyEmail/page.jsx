@@ -63,8 +63,8 @@ export default function verifyEmail() {
   };
 
   return (
-    <div className="flex min-h-screen min-w-full items-center justify-center">
-      <div className="w-2/5 p-4 mr-3 min-h-screen flex items-center justify-center">
+    <div className="p-3 flex min-h-screen min-w-full items-center justify-center">
+      <div className="w-2/5 p-4 mr-3 min-h-screen flex items-center justify-center max-[660px]:hidden">
         <Image
           src="/static/img/verifyEmail.jpg"
           className="rounded-lg"

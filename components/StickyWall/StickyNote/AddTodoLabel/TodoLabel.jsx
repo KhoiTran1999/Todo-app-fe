@@ -18,13 +18,15 @@ export const TodoLabel = ({ name, labelId, todoId }) => {
 
   useEffect(() => {
     if (accessToken) {
-      getTodoLabelAxios(accessToken, labelId).then((res) => {
-        res.data.forEach((val) => {
-          if (val.id === todoId) checkBoxRef.current.checked = true;
-        });
-      });
+      getTodoLabelAxios(accessToken, labelId)
+        .then((res) => {
+          res.data.forEach((val) => {
+            if (val.id === todoId) checkBoxRef.current.checked = true;
+          });
+        })
+        .catch((err) => console.log(err));
     }
-  }, [accessToken]);
+  }, []);
 
   const handleAddLabel = async (e, labelId) => {
     e.stopPropagation();
@@ -59,7 +61,10 @@ export const TodoLabel = ({ name, labelId, todoId }) => {
         id={labelId + todoId}
         type="checkbox"
       />
-      <label className="text-sm text-slate-600" htmlFor={labelId + todoId}>
+      <label
+        className="text-sm text-slate-600 overflow-hidden"
+        htmlFor={labelId + todoId}
+      >
         {name}
       </label>
     </div>

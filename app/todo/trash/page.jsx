@@ -13,10 +13,6 @@ export default function Todo() {
   const { accessToken } = useSelector(TokenSelector);
 
   useEffect(() => {
-    dispatch(getTodoList([]));
-  }, []);
-
-  useEffect(() => {
     if (accessToken) {
       getDeletedTodoAxios(accessToken).then((res) => {
         dispatch(getTodoList(res.data));

@@ -13,6 +13,7 @@ import { Label } from "./LabelList/Label";
 import { usePathname } from "next/navigation";
 import { getLimit } from "@/app/GlobalRedux/Features/data/limitSlider";
 import Link from "next/link";
+import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -25,16 +26,21 @@ const SideBar = () => {
     dispatch(toggleEditLabelModal(true));
   };
 
+  const handleNavigate = () => {
+    dispatch(getTodoList([]));
+  };
+
   return (
     <div
       className={`${
-        toggle ? "w-[300px]" : "w-[70px]"
+        toggle ? "w-[300px]" : "w-0"
       } h-screen py-3 bg-white fixed top-0 left-0 right-0 mt-[59px] hover:shadow z-[100] transition-all overflow-hidden hover:overflow-y-auto overscroll-none`}
     >
       <Link
         href={"/todo/today"}
         shallow={true}
         onClick={() => {
+          dispatch(getTodoList([]));
           dispatch(getLimit(10));
         }}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-full ${
@@ -48,6 +54,7 @@ const SideBar = () => {
         <p className={`font-medium ${!toggle && "hidden"}`}>Ghi chú</p>
       </Link>
       <Link
+        onClick={handleNavigate}
         href={"/todo/reminder"}
         shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
@@ -78,6 +85,7 @@ const SideBar = () => {
         <p className={`font-medium ${!toggle && "hidden"}`}>Chỉnh sửa nhãn</p>
       </div>
       <Link
+        onClick={handleNavigate}
         href={"/todo/archive"}
         shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
@@ -93,6 +101,7 @@ const SideBar = () => {
         <p className={`font-medium ${!toggle && "hidden"}`}>Lưu trữ</p>
       </Link>
       <Link
+        onClick={handleNavigate}
         href={"/todo/trash"}
         shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${

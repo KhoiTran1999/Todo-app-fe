@@ -13,10 +13,6 @@ export default function Todo() {
   const { accessToken } = useSelector(TokenSelector);
 
   useEffect(() => {
-    dispatch(getTodoList([]));
-  }, []);
-
-  useEffect(() => {
     if (accessToken) {
       getAllTodoAxios(accessToken, undefined).then((res) => {
         const reminderTodoList = res.data.filter((val) => !!val.reminder);

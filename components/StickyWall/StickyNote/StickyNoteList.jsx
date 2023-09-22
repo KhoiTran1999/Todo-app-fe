@@ -16,14 +16,21 @@ import {
 } from "@dnd-kit/sortable";
 import Masonry from "react-responsive-masonry";
 import { useDispatch, useSelector } from "react-redux";
-import { TokenSelector } from "@/app/GlobalRedux/selector";
-import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
+import {
+  TodoListPinSelector,
+  TodoListUnpinSelector,
+  TokenSelector,
+} from "@/app/GlobalRedux/selector";
 import { updateTodoAxios } from "@/service/axiosService/todoAxios";
-import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
+import { usePathname } from "next/navigation";
+import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
 
 function StickyNoteList({ isPin, todoList }) {
+  const pathname = usePathname();
   const dispatch = useDispatch();
   const token = useSelector(TokenSelector);
+  const todoListPin = useSelector(TodoListPinSelector);
+  const todoListUnpin = useSelector(TodoListUnpinSelector);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -51,8 +58,8 @@ function StickyNoteList({ isPin, todoList }) {
       });
     });
 
-    if (isPin) return dispatch(getTodoListPin(newTodoList));
-    dispatch(getTodoListUnpin(newTodoList));
+    if (isPin) return dispatch(getTodoList([...newTodoList, ...todoListUnpin]));
+    dispatch(getTodoList([...todoListPin, ...newTodoList]));
   };
 
   const mouseSensor = useSensor(MouseSensor, {
@@ -68,7 +75,7 @@ function StickyNoteList({ isPin, todoList }) {
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
+        onDragEnd={pathname !== "/todo/trash" && handleDragEnd}
       >
         <ul>
           <SortableContext

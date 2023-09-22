@@ -1,6 +1,4 @@
-import { getTodoListPin } from "@/app/GlobalRedux/Features/data/todoListPinSlider";
 import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
-import { getTodoListUnpin } from "@/app/GlobalRedux/Features/data/todoListUnPinSlider";
 import { TokenSelector } from "@/app/GlobalRedux/selector";
 import { addTodoAxios } from "@/service/axiosService/todoAxios";
 import { useEffect } from "react";
@@ -69,5 +67,5 @@ export function useClickOutsideStickyWall(
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [ref, color, timeValue]);
+  }, [ref, color, timeValue, token]);
 }

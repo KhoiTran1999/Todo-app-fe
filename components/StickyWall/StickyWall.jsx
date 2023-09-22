@@ -152,15 +152,13 @@ const StickyWall = () => {
   useEffect(() => {
     setTimeout(() => {
       setSkeleton(false);
-    }, [300]);
+    }, [500]);
     return () => setSkeleton(false);
   }, []);
 
   return (
     <div
-      className={`pl-3 pb-3 w-full h-full ${
-        toggle ? "ml-[300px]" : "ml-[70px]"
-      }`}
+      className={`pl-3 pb-3 w-full h-full ${toggle ? "ml-[300px]" : "ml-0]"}`}
     >
       {pathname === "/todo/trash" ? (
         <div
@@ -180,7 +178,7 @@ const StickyWall = () => {
       ) : (
         <div className="w-full my-10 flex justify-center items-center overscroll-none">
           {!isFocus ? (
-            <div className="w-2/5 relative">
+            <div className="w-2/3 md:w-2/5 relative">
               <div
                 className="pt-2 pl-4 pr-7 max-h-[650px] overflow-y-auto bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg relative"
                 style={{ backgroundColor: color }}
@@ -200,7 +198,7 @@ const StickyWall = () => {
               </div>
             </div>
           ) : (
-            <div ref={wrapperRef} className="w-2/5 relative">
+            <div ref={wrapperRef} className="w-2/3 md:w-2/5 relative">
               <div
                 className="pt-2 pl-4 pr-7 max-h-[650px] overflow-y-auto bg-white shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg relative"
                 style={{ backgroundColor: color }}
@@ -230,7 +228,7 @@ const StickyWall = () => {
                 </form>
                 {isFocus ? (
                   <>
-                    <div className="mt-4 flex justify-center items-center relative">
+                    <div className="mt-4 flex justify-center max-[426px]:justify-start items-center relative">
                       <div
                         id="Reminder"
                         onClick={hanldeReminder}
@@ -291,7 +289,7 @@ const StickyWall = () => {
                       <button
                         form="addTodo"
                         type="submit"
-                        className="font-medium text-slate-700 px-5 py-1 rounded hover:bg-slate-100  absolute right-0 top-1/2 -translate-y-1/2"
+                        className="font-medium text-slate-700 px-5 py-1 rounded hover:bg-slate-100  absolute -right-6 max-[320px]:hidden max-[407px]:-right-7 sm:right-0 top-1/2 -translate-y-1/2"
                       >
                         Đóng
                       </button>
@@ -323,10 +321,10 @@ const StickyWall = () => {
                 <div
                   className={`bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg absolute ${colorPosition} z-50 cursor-pointer`}
                 >
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-center items-center flex-wrap max-[321px]:justify-start max-[321px]:w-50">
                     <div
                       onClick={(e) => handleChangeColor(e, "white")}
-                      className="py-[2px] px-[6px] mr-1 border-2 hover:border-black border-slate-200 rounded-full"
+                      className="py-[2px] px-[6px] mr-1 mb-1 border-2 hover:border-black border-slate-200 rounded-full"
                     >
                       <FontAwesomeIcon
                         icon={faDropletSlash}
@@ -337,7 +335,7 @@ const StickyWall = () => {
                       <div
                         onClick={(e) => handleChangeColor(e, val)}
                         key={idx}
-                        className={`p-[12px] mr-1 rounded-full border-2 border-transparent hover:border-black`}
+                        className={`p-[12px] mr-1 mb-1 rounded-full border-2 border-transparent hover:border-black`}
                         style={{ backgroundColor: val }}
                       ></div>
                     ))}
@@ -367,9 +365,7 @@ const StickyWall = () => {
       {todoListPin.length === 0 && todoListUnpin.length === 0 ? (
         <>
           {skeleton ? (
-            <div className="w-full mt-8 flex items-center">
-              <div className="animate-bounce">Loading...</div>
-            </div>
+            <></>
           ) : (
             <div className="w-full flex flex-col justify-start items-center">
               <FontAwesomeIcon
@@ -385,7 +381,7 @@ const StickyWall = () => {
       ) : (
         <>
           {viewMode ? (
-            <div className="h-fit pb-3">
+            <div className="h-fit p-3">
               <div>
                 {todoListPin.length === 0 || pathname === "/todo/trash" ? (
                   <></>

@@ -46,37 +46,10 @@ export default function Home() {
       });
   }, [token]);
 
-  useEffect(() => {
-    console.log("resquest storage");
-    console.log("On Safari 12");
-    document.hasStorageAccess().then(
-      function successful(hasAccess) {
-        console.log("Testing if hasAccess");
-        if (hasAccess) {
-          console.log("Access granted already");
-        } else {
-          console.log("Requesting access");
-          document.requestStorageAccess().then(
-            function successful() {
-              console.log("Access request was a success");
-              window.location.reload();
-            },
-            function fail() {
-              console.log("Storage Access API call failed...");
-            }
-          );
-        }
-      },
-      function rejected(reason) {
-        console.log("hasStorageAccess failed: ", reason);
-      }
-    );
-  }, []);
-
   return (
     <main>
-      <div className="flex min-h-screen min-w-full items-center justify-center ">
-        <div className="w-2/5 p-4 mr-20 min-h-screen flex items-center justify-center">
+      <div className="p-3 flex min-h-screen min-w-full items-center justify-center">
+        <div className="w-2/5 p-4 mr-20 min-h-screen flex items-center justify-center max-[660px]:hidden">
           <Image
             src="/static/img/home.jpg"
             className="rounded-lg"
@@ -89,7 +62,7 @@ export default function Home() {
           <h1 className="text-5xl font-bold text-slate-700 text-center">
             Free your mind
           </h1>
-          <p className="font-medium text-slate-700 my-8">
+          <p className="font-medium text-slate-700 my-8 text-center">
             Simplify, Be Inspired, Be Original, Work Hard, Enjoy
           </p>
           <div className="flex flex-col">

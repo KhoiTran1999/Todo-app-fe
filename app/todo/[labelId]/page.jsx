@@ -13,10 +13,6 @@ export default function page({ params }) {
   const { accessToken } = useSelector(TokenSelector);
 
   useEffect(() => {
-    dispatch(getTodoList([]));
-  }, []);
-
-  useEffect(() => {
     if (accessToken) {
       getTodoLabelAxios(accessToken, params.labelId).then((res) => {
         dispatch(getTodoList(res.data));

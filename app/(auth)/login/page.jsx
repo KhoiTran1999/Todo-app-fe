@@ -3,7 +3,6 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
-import { TokenSelector } from "@/app/GlobalRedux/selector";
 import { getTokenAxios, loginAxios } from "@/service/axiosService/authAxios";
 import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function login() {
   const router = useRouter();
@@ -76,8 +75,8 @@ export default function login() {
   };
 
   return (
-    <div className="flex min-h-screen min-w-full items-center justify-center">
-      <div className="w-2/5 p-4 mr-20 min-h-screen flex items-center justify-center">
+    <div className="p-3 flex min-h-screen min-w-full items-center justify-center">
+      <div className="w-2/5 p-4 mr-20 min-h-screen flex items-center justify-center max-[660px]:hidden">
         <Image
           src="/static/img/login.jpg"
           className="rounded-lg"

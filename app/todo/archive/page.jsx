@@ -12,10 +12,6 @@ export default function Todo() {
   const { accessToken } = useSelector(TokenSelector);
 
   useEffect(() => {
-    dispatch(getTodoList([]));
-  }, []);
-
-  useEffect(() => {
     if (accessToken) {
       getArchiveTodoAxios(accessToken).then((res) =>
         dispatch(getTodoList(res.data))

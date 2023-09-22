@@ -3,7 +3,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: true,
+  value: false,
 };
 
 export const sidebarSlider = createSlice({
