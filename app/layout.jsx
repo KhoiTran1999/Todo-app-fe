@@ -1,13 +1,13 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
-import { Providers } from "./GlobalRedux/provider";
-import { MainWrapper } from "@/components/MainWrapper/MainWrapper";
+import './globals.css';
+import { Inter } from 'next/font/google';
+import { Providers } from './GlobalRedux/provider';
+import { MainWrapper } from '@/components/MainWrapper/MainWrapper';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: "Fast Note - Free your mind",
-  description: "Free your mind",
+  title: 'Fast Note - Free your mind',
+  description: 'Free your mind',
 };
 
 export default function RootLayout({ children }) {

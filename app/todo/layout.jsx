@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import SideBar from "@/components/SideBar/SideBar";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import SideBar from '@/components/SideBar/SideBar';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   EditLabelModalSelector,
   EditTodoModalSelector,
   TokenSelector,
-} from "../GlobalRedux/selector";
+} from '../GlobalRedux/selector';
 import {
   getTokenAxios,
   refreshTokenAxios,
-} from "@/service/axiosService/authAxios";
-import { getToken } from "../GlobalRedux/Features/data/tokenSlider";
-import { verify } from "jsonwebtoken";
-import env from "@/config/env";
-import { TodoHeader } from "@/components/TodoHeader/TodoHeader";
-import { getLabelAxios } from "@/service/axiosService/labelAxios";
-import { getLabel } from "../GlobalRedux/Features/data/labelSlider";
-import { EditLabelModal } from "@/components/SideBar/EditLabelModal/EditLabelModal";
-import { EditTodoModal } from "@/components/StickyWall/EditTodoModal/EditTodoModal";
+} from '@/service/axiosService/authAxios';
+import { getToken } from '../GlobalRedux/Features/data/tokenSlider';
+import { verify } from 'jsonwebtoken';
+import env from '@/config/env';
+import { TodoHeader } from '@/components/TodoHeader/TodoHeader';
+import { getLabelAxios } from '@/service/axiosService/labelAxios';
+import { getLabel } from '../GlobalRedux/Features/data/labelSlider';
+import { EditLabelModal } from '@/components/SideBar/EditLabelModal/EditLabelModal';
+import { EditTodoModal } from '@/components/StickyWall/EditTodoModal/EditTodoModal';
 
 export default function Layout({ children }) {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function Layout({ children }) {
       (res) => {
         const isValidToken = verify(
           res.accessToken,
-          env.JWT_ACCESSTOKEN_PRIVATE_KEY
+          env.JWT_ACCESSTOKEN_PRIVATE_KEY,
         );
 
         if (isValidToken) {
@@ -43,16 +43,16 @@ export default function Layout({ children }) {
             getToken({
               accessToken: res.accessToken,
               refreshToken: res.refreshToken,
-            })
+            }),
           );
           return;
         }
 
-        router.push("/login", undefined, { shallow: true });
+        router.push('/login', undefined, { shallow: true });
       },
       (err) => {
         if (err.response.status === 404)
-          return router.push("/login", undefined, { shallow: true });
+          return router.push('/login', undefined, { shallow: true });
 
         if (err.response.status === 401) {
           refreshTokenAxios(err.response.data.refreshToken).then((res) => {
@@ -60,12 +60,12 @@ export default function Layout({ children }) {
               getToken({
                 accessToken: res.accessToken,
                 refreshToken: refreshToken,
-              })
+              }),
             );
           });
           return;
         }
-      }
+      },
     );
   }, []);
 

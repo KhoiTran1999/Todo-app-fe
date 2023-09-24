@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: false,
 };
 
 export const sidebarSlider = createSlice({
-  name: "sidebar",
+  name: 'sidebar',
   initialState,
   reducers: {
     toggleSidebar: (state, action) => {

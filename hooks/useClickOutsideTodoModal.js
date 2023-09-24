@@ -1,7 +1,7 @@
-import { getTodoForm } from "@/app/GlobalRedux/Features/data/todoFormSlider";
-import { toggleEditTodoModal } from "@/app/GlobalRedux/Features/toggle/editTodoModalSlider";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { getTodoForm } from '@/app/GlobalRedux/Features/data/todoFormSlider';
+import { toggleEditTodoModal } from '@/app/GlobalRedux/Features/toggle/editTodoModalSlider';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -20,10 +20,10 @@ export function useClickOutsideTodoModal(ref) {
       }
     }
     // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
 }

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { useDispatch, useSelector } from "react-redux";
-import { DateTimePicker } from "react-datetime-picker";
-import "react-datetime-picker/dist/DateTimePicker.css";
-import "react-calendar/dist/Calendar.css";
-import "react-clock/dist/Clock.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import StickyNoteGrid from "./StickyNote/StickyNoteGrid";
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
+import { DateTimePicker } from 'react-datetime-picker';
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import StickyNoteGrid from './StickyNote/StickyNoteGrid';
 import {
   faBell,
   faDropletSlash,
@@ -17,9 +17,9 @@ import {
   faTag,
   faThumbTack,
   faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
-import { usePathname } from "next/navigation";
-import { Tooltip } from "react-tooltip";
+} from '@fortawesome/free-solid-svg-icons';
+import { usePathname } from 'next/navigation';
+import { Tooltip } from 'react-tooltip';
 
 import {
   SidebarSelector,
@@ -28,19 +28,19 @@ import {
   TodoListUnpinSelector,
   TokenSelector,
   ViewModeSelector,
-} from "@/app/GlobalRedux/selector";
-import StickyNoteList from "./StickyNote/StickyNoteList";
-import { useClickOutsideStickyWall } from "@/hooks/useClickOutsideStickyWall";
+} from '@/app/GlobalRedux/selector';
+import StickyNoteList from './StickyNote/StickyNoteList';
+import { useClickOutsideStickyWall } from '@/hooks/useClickOutsideStickyWall';
 import {
   addTodoAxios,
   deletePermanentTodoAxios,
-} from "@/service/axiosService/todoAxios";
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
-import { colorList } from "@/constant/colorList";
-import { useClickOutsideTodo } from "@/hooks/useClickOutsideTodo";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import SkeletonLoading from "../Loading/SkeletonLoading";
+} from '@/service/axiosService/todoAxios';
+import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
+import { colorList } from '@/constant/colorList';
+import { useClickOutsideTodo } from '@/hooks/useClickOutsideTodo';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import SkeletonLoading from '../Loading/SkeletonLoading';
 
 const StickyWall = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const StickyWall = () => {
   const [isFocus, setIsFocus] = useState(false);
   const [colorPosition, setColorPosition] = useState(48);
   const [colorToggle, setColorToggle] = useState(false);
-  const [color, setColor] = useState("white");
+  const [color, setColor] = useState('white');
   const [isPin, setIsPin] = useState(false);
   const [timePickerToggle, setTimePickerToggle] = useState(false);
   const [timeValue, setTimeValue] = useState(null);
@@ -61,8 +61,8 @@ const StickyWall = () => {
   const viewMode = useSelector(ViewModeSelector);
   const token = useSelector(TokenSelector);
 
-  const titleRef = useRef("");
-  const contentRef = useRef("");
+  const titleRef = useRef('');
+  const contentRef = useRef('');
   const wrapperRef = useRef(null);
   const datePickerRef = useRef(null);
 
@@ -77,13 +77,13 @@ const StickyWall = () => {
     isPin,
     setIsPin,
     setTimeValue,
-    timeValue
+    timeValue,
   );
   useClickOutsideTodo(datePickerRef, setTimePickerToggle);
 
   const autoGrow = (element) => {
-    element.target.style.height = "5px";
-    element.target.style.height = element.target.scrollHeight + "px";
+    element.target.style.height = '5px';
+    element.target.style.height = element.target.scrollHeight + 'px';
     setColorPosition((prev) => `${prev + element.target.scrollHeight}px`);
   };
 
@@ -102,20 +102,20 @@ const StickyWall = () => {
     }
 
     if (e.target.content.value.trim().length === 0) {
-      toast("Content could not empty", {
-        type: "error",
-        toastId: "contentError",
-        containerId: "normalError",
+      toast('Content could not empty', {
+        type: 'error',
+        toastId: 'contentError',
+        containerId: 'normalError',
       });
     }
 
-    titleRef.current.style.height = "24px";
-    contentRef.current.style.height = "24px";
+    titleRef.current.style.height = '24px';
+    contentRef.current.style.height = '24px';
     e.target.title.value = null;
     e.target.content.value = null;
     setIsPin(false);
     setIsFocus(false);
-    setColor("white");
+    setColor('white');
     setColorToggle(false);
     setTimeValue(null);
     setTimePickerToggle(false);
@@ -125,7 +125,7 @@ const StickyWall = () => {
     titleRef.current.value = null;
     contentRef.current.value = null;
     setIsFocus(false);
-    setColor("white");
+    setColor('white');
   };
 
   const handleColorToggle = () => {
@@ -157,15 +157,13 @@ const StickyWall = () => {
   }, []);
 
   return (
-    <div
-      className={`pl-3 pb-3 w-full h-full ${toggle ? "ml-[300px]" : "ml-0]"}`}
-    >
-      {pathname === "/todo/trash" ? (
+    <div className={`pb-3 w-full h-full ${toggle ? 'ml-[300px]' : 'ml-0'}`}>
+      {pathname === '/todo/trash' ? (
         <div
           onClick={handleDeleteAllTrash}
           className="text-center italic font-medium text-slate-700 mt-7"
         >
-          Ghi chú trong Thùng rác bị xóa sau 7 ngày.{" "}
+          Ghi chú trong Thùng rác bị xóa sau 7 ngày.{' '}
           <span className="text-sm not-italic text-blue-500 hover:underline cursor-pointer">
             Dọn sạch thùng rác
           </span>
@@ -173,7 +171,7 @@ const StickyWall = () => {
       ) : (
         <></>
       )}
-      {pathname !== "/todo/today" ? (
+      {pathname !== '/todo/today' ? (
         <></>
       ) : (
         <div className="w-full my-10 flex justify-center items-center overscroll-none">
@@ -192,7 +190,7 @@ const StickyWall = () => {
                     className="resize-none overflow-hidden h-6 font-medium w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
                     type="text"
                     name="title"
-                    placeholder={isFocus ? "Tiêu đề" : "Tạo ghi chú..."}
+                    placeholder={isFocus ? 'Tiêu đề' : 'Tạo ghi chú...'}
                   />
                 </form>
               </div>
@@ -212,14 +210,14 @@ const StickyWall = () => {
                     className="resize-none overflow-hidden h-6 font-medium w-full bg-transparent outline-none placeholder:font-medium placeholder:text-slate-500"
                     type="text"
                     name="title"
-                    placeholder={isFocus ? "Tiêu đề" : "Tạo ghi chú..."}
+                    placeholder={isFocus ? 'Tiêu đề' : 'Tạo ghi chú...'}
                   />
                   <textarea
                     ref={contentRef}
                     maxLength={20000}
                     onInput={autoGrow}
                     className={`resize-none overflow-hidden ${
-                      isFocus ? "h-6 w-full mt-5" : "h-0 w-0"
+                      isFocus ? 'h-6 w-full mt-5' : 'h-0 w-0'
                     } bg-transparent outline-none placeholder:text-slate-400 placeholder:text-[15px]`}
                     type="text"
                     name="content"
@@ -243,7 +241,7 @@ const StickyWall = () => {
                         place="top"
                         anchorSelect="#Reminder"
                         opacity={0.9}
-                        style={{ transition: "none" }}
+                        style={{ transition: 'none' }}
                       >
                         Nhắc tôi
                       </Tooltip>
@@ -262,7 +260,7 @@ const StickyWall = () => {
                         place="top"
                         anchorSelect="#SelectedBackground"
                         opacity={0.9}
-                        style={{ transition: "none" }}
+                        style={{ transition: 'none' }}
                       >
                         Lựa chọn nền
                       </Tooltip>
@@ -281,7 +279,7 @@ const StickyWall = () => {
                         place="top"
                         anchorSelect="#DeletedTodo"
                         opacity={0.9}
-                        style={{ transition: "none" }}
+                        style={{ transition: 'none' }}
                       >
                         Xóa ghi chú
                       </Tooltip>
@@ -323,7 +321,7 @@ const StickyWall = () => {
                 >
                   <div className="flex justify-center items-center flex-wrap max-[321px]:justify-start max-[321px]:w-50">
                     <div
-                      onClick={(e) => handleChangeColor(e, "white")}
+                      onClick={(e) => handleChangeColor(e, 'white')}
                       className="py-[2px] px-[6px] mr-1 mb-1 border-2 hover:border-black border-slate-200 rounded-full"
                     >
                       <FontAwesomeIcon
@@ -381,9 +379,9 @@ const StickyWall = () => {
       ) : (
         <>
           {viewMode ? (
-            <div className="h-fit p-3">
+            <div className="h-fit pl-3 py-3 pr-2">
               <div>
-                {todoListPin.length === 0 || pathname === "/todo/trash" ? (
+                {todoListPin.length === 0 || pathname === '/todo/trash' ? (
                   <></>
                 ) : (
                   <div className="text-[11px] m-3 font-medium text text-slate-500">
@@ -393,7 +391,7 @@ const StickyWall = () => {
                 <StickyNoteGrid isPin={true} todoList={todoListPin} />
               </div>
               <div className="mt-10">
-                {todoListUnpin.length === 0 || pathname === "/todo/trash" ? (
+                {todoListUnpin.length === 0 || pathname === '/todo/trash' ? (
                   <></>
                 ) : (
                   <div className="text-[11px] m-3 font-medium text text-slate-500">
@@ -406,7 +404,7 @@ const StickyWall = () => {
           ) : (
             <div className="h-full">
               <div>
-                {todoListPin.length === 0 || pathname === "/todo/trash" ? (
+                {todoListPin.length === 0 || pathname === '/todo/trash' ? (
                   <></>
                 ) : (
                   <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">
@@ -416,7 +414,7 @@ const StickyWall = () => {
                 <StickyNoteList isPin={true} todoList={todoListPin} />
               </div>
               <div className="mt-10">
-                {todoListUnpin.length === 0 || pathname === "/todo/trash" ? (
+                {todoListUnpin.length === 0 || pathname === '/todo/trash' ? (
                   <></>
                 ) : (
                   <div className="w-full max-w-[600px] m-auto text-[11px] my-3 font-medium text text-slate-500">

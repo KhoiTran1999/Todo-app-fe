@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: true,
 };
 
 export const viewModeSlider = createSlice({
-  name: "sidebar",
+  name: 'sidebar',
   initialState,
   reducers: {
     toggleviewMode: (state, action) => {

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: [],
 };
 
 export const todoListUnpinSlider = createSlice({
-  name: "todoListUnpin",
+  name: 'todoListUnpin',
   initialState,
   reducers: {
     getTodoListUnpin: (state, action) => {

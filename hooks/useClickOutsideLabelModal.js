@@ -1,6 +1,6 @@
-import { toggleEditLabelModal } from "@/app/GlobalRedux/Features/toggle/editLabelModalSlider";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { toggleEditLabelModal } from '@/app/GlobalRedux/Features/toggle/editLabelModalSlider';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -18,10 +18,10 @@ export function useClickOutsideLabelModal(ref) {
       }
     }
     // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
 }

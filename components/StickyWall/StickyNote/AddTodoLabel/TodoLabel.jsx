@@ -1,13 +1,13 @@
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
-import { TokenSelector } from "@/app/GlobalRedux/selector";
+import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
+import { TokenSelector } from '@/app/GlobalRedux/selector';
 import {
   addTodoLabelAxios,
   deleteTodoLabelAxios,
   getTodoLabelAxios,
-} from "@/service/axiosService/labelAxios";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+} from '@/service/axiosService/labelAxios';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const TodoLabel = ({ name, labelId, todoId }) => {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ export const TodoLabel = ({ name, labelId, todoId }) => {
         .then(async (res) => {
           if (pathname === `/todo/${labelId}`) {
             await getTodoLabelAxios(accessToken, labelId).then((res) =>
-              dispatch(getTodoList(res.data))
+              dispatch(getTodoList(res.data)),
             );
           }
         })

@@ -1,13 +1,13 @@
-import { LabelSelector, TokenSelector } from "@/app/GlobalRedux/selector";
-import { faMagnifyingGlass, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { TodoLabel } from "./TodoLabel";
-import { addLabelAxios } from "@/service/axiosService/labelAxios";
-import { getLabel } from "@/app/GlobalRedux/Features/data/labelSlider";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { LabelSelector, TokenSelector } from '@/app/GlobalRedux/selector';
+import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { TodoLabel } from './TodoLabel';
+import { addLabelAxios } from '@/service/axiosService/labelAxios';
+import { getLabel } from '@/app/GlobalRedux/Features/data/labelSlider';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const AddTodoLabel = ({ todoId }) => {
   const dispatch = useDispatch();
@@ -16,13 +16,13 @@ export const AddTodoLabel = ({ todoId }) => {
   const [searchLabel, setSearchLabel] = useState(labelList);
   const { accessToken } = useSelector(TokenSelector);
 
-  const searchLabelRef = useRef("");
+  const searchLabelRef = useRef('');
 
   const handleChangeSearchLabel = (e) => {
     const value = e.target.value;
     if (value.trim().length === 0) setSearchLabel(labelList);
     const newLabelList = labelList.filter((val) => {
-      const regex = new RegExp(`${value}`, "gi");
+      const regex = new RegExp(`${value}`, 'gi');
       const index = val.name.search(regex);
       if (index === -1) return false;
       else return true;
@@ -38,14 +38,14 @@ export const AddTodoLabel = ({ todoId }) => {
         setSearchLabel(res.data);
       })
       .catch((err) => {
-        if (err.response.data.message === "Validation error")
-          toast("Can not duplicate Label", {
-            type: "error",
-            containerId: "normalError",
+        if (err.response.data.message === 'Validation error')
+          toast('Can not duplicate Label', {
+            type: 'error',
+            containerId: 'normalError',
           });
       });
 
-    searchLabelRef.current.value = "";
+    searchLabelRef.current.value = '';
   };
 
   return (
@@ -88,7 +88,7 @@ export const AddTodoLabel = ({ todoId }) => {
             className="w-4 h-4 ml-2 text-slate-500"
           />
           <button className="text-sm text-slate-700 ml-3">
-            Tạo{" "}
+            Tạo{' '}
             <span className="text-sm font-medium break-all">
               "{searchLabelRef.current?.value}"
             </span>

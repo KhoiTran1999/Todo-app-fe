@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import env from "@/config/env";
-import Image from "next/image";
-import { verify } from "jsonwebtoken";
-import { registerAxios } from "@/service/axiosService/authAxios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import env from '@/config/env';
+import Image from 'next/image';
+import { verify } from 'jsonwebtoken';
+import { registerAxios } from '@/service/axiosService/authAxios';
 
 export default function register({ params }) {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function register({ params }) {
   const token = decodeURIComponent(rawToken);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     //check that user really clicked the link in their email or just random type a string on url
@@ -25,11 +25,11 @@ export default function register({ params }) {
       const user = verify(token, env.JWT_ACCESSTOKEN_PRIVATE_KEY);
 
       if (!user) {
-        return router.push("/verifyEmail", undefined, { shallow: true });
+        return router.push('/verifyEmail', undefined, { shallow: true });
       }
       setEmail(user.email);
     } catch (error) {
-      return router.push("/verifyEmail", undefined, { shallow: true });
+      return router.push('/verifyEmail', undefined, { shallow: true });
     }
   }, []);
 
@@ -39,12 +39,12 @@ export default function register({ params }) {
     setIsLoading(true);
 
     if (e.target.password.value !== e.target.confirmPassword.value) {
-      e.target.password.value = "";
-      e.target.confirmPassword.value = "";
+      e.target.password.value = '';
+      e.target.confirmPassword.value = '';
       setIsLoading(false);
       return toast("Password didn't match", {
-        type: "error",
-        containerId: "normalError",
+        type: 'error',
+        containerId: 'normalError',
       });
     }
 
@@ -56,16 +56,16 @@ export default function register({ params }) {
     };
 
     registerAxios(data)
-      .then((res) => router.push("/login", undefined, { shallow: true }))
+      .then((res) => router.push('/login', undefined, { shallow: true }))
       .catch((err) => {
         toast(`${err.response.data?.message}`, {
-          type: "info",
-          containerId: "normalError",
+          type: 'info',
+          containerId: 'normalError',
         });
-        router.push("/login", undefined, { shallow: true });
+        router.push('/login', undefined, { shallow: true });
       });
 
-    return router.push("/login", undefined, { shallow: true });
+    return router.push('/login', undefined, { shallow: true });
   };
 
   return (

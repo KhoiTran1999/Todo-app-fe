@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: [],
 };
 
 export const labelSlider = createSlice({
-  name: "label",
+  name: 'label',
   initialState,
   reducers: {
     getLabel: (state, action) => {

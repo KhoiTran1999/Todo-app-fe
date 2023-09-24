@@ -1,24 +1,24 @@
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
-import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
-import { toggleSidebar } from "@/app/GlobalRedux/Features/toggle/sidebarSlider";
-import { toggleviewMode } from "@/app/GlobalRedux/Features/toggle/viewModeSlider";
-import { LimitSelector, TokenSelector } from "@/app/GlobalRedux/selector";
-import { useDebounce } from "@/hooks/useDebounce";
-import { clearTokenAxios } from "@/service/axiosService/authAxios";
-import { getSearchTodoAxios } from "@/service/axiosService/todoAxios";
+import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
+import { getToken } from '@/app/GlobalRedux/Features/data/tokenSlider';
+import { toggleSidebar } from '@/app/GlobalRedux/Features/toggle/sidebarSlider';
+import { toggleviewMode } from '@/app/GlobalRedux/Features/toggle/viewModeSlider';
+import { LimitSelector, TokenSelector } from '@/app/GlobalRedux/selector';
+import { useDebounce } from '@/hooks/useDebounce';
+import { clearTokenAxios } from '@/service/axiosService/authAxios';
+import { getSearchTodoAxios } from '@/service/axiosService/todoAxios';
 import {
   faArrowRightFromBracket,
   faBars,
   faListUl,
   faMagnifyingGlass,
   faX,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Tooltip } from "react-tooltip";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Tooltip } from 'react-tooltip';
 
 export const TodoHeader = () => {
   const router = useRouter();
@@ -28,7 +28,7 @@ export const TodoHeader = () => {
   const { accessToken } = useSelector(TokenSelector);
   const limit = useSelector(LimitSelector);
 
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const [deletedIcon, setDeletedIcon] = useState(false);
 
   const searchDebounce = useDebounce(searchValue, 600);
@@ -39,7 +39,7 @@ export const TodoHeader = () => {
       dispatch(getTodoList(res.data));
     };
 
-    if (accessToken && pathname === "/todo/search") {
+    if (accessToken && pathname === '/todo/search') {
       getData();
     }
   }, [searchDebounce]);
@@ -51,7 +51,7 @@ export const TodoHeader = () => {
   const handleLogout = () => {
     clearTokenAxios()
       .then((res) => {
-        router.push("/login", undefined, { shallow: true });
+        router.push('/login', undefined, { shallow: true });
         dispatch(getToken({}));
       })
       .catch((err) => console.log(err));
@@ -63,11 +63,11 @@ export const TodoHeader = () => {
 
   const handleFocus = () => {
     setDeletedIcon(true);
-    router.push("/todo/search", undefined, { shallow: true });
+    router.push('/todo/search', undefined, { shallow: true });
   };
 
   const handleDeleteSearch = () => {
-    setSearchValue("");
+    setSearchValue('');
     setDeletedIcon(false);
   };
 
@@ -112,7 +112,7 @@ export const TodoHeader = () => {
           />
         </form>
         {deletedIcon && (
-          <Link href={"/todo/today"} shallow={true}>
+          <Link href={'/todo/today'} shallow={true}>
             <FontAwesomeIcon
               onClick={handleDeleteSearch}
               icon={faX}

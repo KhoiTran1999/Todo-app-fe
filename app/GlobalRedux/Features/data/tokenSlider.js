@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: {},
 };
 
 export const tokenSlider = createSlice({
-  name: "token",
+  name: 'token',
   initialState,
   reducers: {
     getToken: (state, action) => {

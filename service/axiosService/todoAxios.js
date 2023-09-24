@@ -1,5 +1,5 @@
-import env from "@/config/env";
-import axios from "axios";
+import env from '@/config/env';
+import axios from 'axios';
 
 const getTodoAxios = async (token, limit) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/todo`, {
@@ -7,9 +7,9 @@ const getTodoAxios = async (token, limit) => {
       limit,
     },
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -20,9 +20,9 @@ const getTodoAxios = async (token, limit) => {
 const getArchiveTodoAxios = async (token) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/todo/archive`, {
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -33,9 +33,9 @@ const getArchiveTodoAxios = async (token) => {
 const getDeletedTodoAxios = async (token) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/todo/trash`, {
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -49,9 +49,9 @@ const getAllTodoAxios = async (token, limit) => {
       limit,
     },
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -66,9 +66,9 @@ const getSearchTodoAxios = async (token, query, limit) => {
       limit,
     },
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -80,9 +80,9 @@ const addTodoAxios = async (token, data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(`${env.SERVER_URL}/api/v1/todo`, JSONdata, {
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -92,9 +92,9 @@ const addTodoAxios = async (token, data) => {
 const deleteTodoAxios = async (token, id) => {
   const res = await axios.delete(`${env.SERVER_URL}/api/v1/todo/${id}`, {
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -106,12 +106,12 @@ const deletePermanentTodoAxios = async (token, id) => {
     `${env.SERVER_URL}/api/v1/todo/permanent/${id}`,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return res.data;
 };
@@ -123,12 +123,12 @@ const updateTodoAxios = async (token, id, data) => {
     JSONdata,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return res.data;
 };
@@ -136,9 +136,9 @@ const updateTodoAxios = async (token, id, data) => {
 const restoreTodoAxios = async (token, id) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/todo/restore/${id}`, {
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Todo } from "./Todo";
+import { Todo } from './Todo';
 import {
   DndContext,
   KeyboardSensor,
@@ -9,24 +9,24 @@ import {
   useSensor,
   useSensors,
   TouchSensor,
-} from "@dnd-kit/core";
+} from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   horizontalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { useDispatch, useSelector } from "react-redux";
+} from '@dnd-kit/sortable';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   SidebarSelector,
   TodoListPinSelector,
   TodoListUnpinSelector,
   TokenSelector,
-} from "@/app/GlobalRedux/selector";
-import { createSnapModifier, restrictToWindowEdges } from "@dnd-kit/modifiers";
-import { updateTodoAxios } from "@/service/axiosService/todoAxios";
-import { usePathname } from "next/navigation";
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+} from '@/app/GlobalRedux/selector';
+import { createSnapModifier, restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { updateTodoAxios } from '@/service/axiosService/todoAxios';
+import { usePathname } from 'next/navigation';
+import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
 
 function StickyNoteGrid({ isPin, todoList }) {
   const pathname = usePathname();
@@ -84,7 +84,7 @@ function StickyNoteGrid({ isPin, todoList }) {
       modifiers={modifiers}
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragEnd={pathname !== "/todo/trash" && handleDragEnd}
+      onDragEnd={pathname !== '/todo/trash' && handleDragEnd}
     >
       <ul>
         <SortableContext
@@ -124,7 +124,7 @@ function StickyNoteGrid({ isPin, todoList }) {
             <ResponsiveMasonry
               columnsCountBreakPoints={{
                 100: 1,
-                583: 2,
+                360: 2,
                 844: 3,
                 1071: 4,
                 1345: 5,

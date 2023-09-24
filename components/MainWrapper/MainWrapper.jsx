@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { getLimit } from "@/app/GlobalRedux/Features/data/limitSlider";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import FirstRender from "../FirstRender/FirstRender";
-import { ToastContainer } from "react-toastify";
+import { getLimit } from '@/app/GlobalRedux/Features/data/limitSlider';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import FirstRender from '../FirstRender/FirstRender';
+import { ToastContainer } from 'react-toastify';
 import {
   LimitSelector,
   TodoListSelector,
   TokenSelector,
-} from "@/app/GlobalRedux/selector";
-import { usePathname } from "next/navigation";
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
-import { getTodoAxios } from "@/service/axiosService/todoAxios";
+} from '@/app/GlobalRedux/selector';
+import { usePathname } from 'next/navigation';
+import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
+import { getTodoAxios } from '@/service/axiosService/todoAxios';
 
 export const MainWrapper = ({ children }) => {
   const dispatch = useDispatch();
@@ -35,9 +35,9 @@ export const MainWrapper = ({ children }) => {
 
   useEffect(() => {
     if (accessToken && todoList.length + 10 >= limit) {
-      if (pathname === "/todo/today") {
+      if (pathname === '/todo/today') {
         getTodoAxios(accessToken, limit).then((res) =>
-          dispatch(getTodoList(res.data))
+          dispatch(getTodoList(res.data)),
         );
       }
     }
@@ -55,14 +55,15 @@ export const MainWrapper = ({ children }) => {
       className="bg-white select-none h-screen overflow-y-auto"
     >
       <FirstRender>{children}</FirstRender>
+
       <ToastContainer
-        containerId={"normalError"}
+        containerId={'normalError'}
         autoClose={3000}
         position="top-center"
         enableMultiContainer
       />
       <ToastContainer
-        containerId={"limiterError"}
+        containerId={'limiterError'}
         autoClose={3000}
         position="top-center"
         pauseOnFocusLoss={false}

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: 10,
 };
 
 export const limitSlider = createSlice({
-  name: "limit",
+  name: 'limit',
   initialState,
   reducers: {
     getLimit: (state, action) => {

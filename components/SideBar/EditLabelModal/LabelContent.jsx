@@ -1,15 +1,15 @@
-import { getLabel } from "@/app/GlobalRedux/Features/data/labelSlider";
-import { LabelSelector, TokenSelector } from "@/app/GlobalRedux/selector";
+import { getLabel } from '@/app/GlobalRedux/Features/data/labelSlider';
+import { LabelSelector, TokenSelector } from '@/app/GlobalRedux/selector';
 import {
   deleteLabelAxios,
   updateLabelAxios,
-} from "@/service/axiosService/labelAxios";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+} from '@/service/axiosService/labelAxios';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const LabelContent = ({ name, id }) => {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export const LabelContent = ({ name, id }) => {
       (res) => {
         dispatch(getLabel(labelList.filter((val) => val.id !== id)));
       },
-      (err) => console.log(err)
+      (err) => console.log(err),
     );
   };
 
@@ -50,11 +50,11 @@ export const LabelContent = ({ name, id }) => {
           }
         });
         dispatch(getLabel(labelList));
-        toast("Could not duplicate label", {
-          type: "error",
-          containerId: "normalError",
+        toast('Could not duplicate label', {
+          type: 'error',
+          containerId: 'normalError',
         });
-      }
+      },
     );
   };
 
@@ -73,7 +73,7 @@ export const LabelContent = ({ name, id }) => {
               name="label"
               type="text"
               className={`text-slate-700 font-medium outline-none border-b  ${
-                isEdit ? "border-slate-400" : "border-transparent"
+                isEdit ? 'border-slate-400' : 'border-transparent'
               }`}
               readOnly={!isEdit}
               maxLength={50}

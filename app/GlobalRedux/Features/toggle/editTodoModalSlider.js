@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: false,
 };
 
 export const editTodoModalSlider = createSlice({
-  name: "editTodomodal",
+  name: 'editTodomodal',
   initialState,
   reducers: {
     toggleEditTodoModal: (state, action) => {

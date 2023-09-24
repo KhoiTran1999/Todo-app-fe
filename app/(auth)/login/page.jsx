@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { getToken } from "@/app/GlobalRedux/Features/data/tokenSlider";
-import { getTokenAxios, loginAxios } from "@/service/axiosService/authAxios";
-import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getToken } from '@/app/GlobalRedux/Features/data/tokenSlider';
+import { getTokenAxios, loginAxios } from '@/service/axiosService/authAxios';
+import { faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 export default function login() {
   const router = useRouter();
@@ -25,13 +25,13 @@ export default function login() {
             getToken({
               accessToken: res.accessToken,
               refreshToken: res.refreshToken,
-            })
+            }),
           );
-        return router.push("/todo/today", undefined, { shallow: true });
+        return router.push('/todo/today', undefined, { shallow: true });
       },
       (err) => {
         return dispatch(getToken({}));
-      }
+      },
     );
   }, []);
 
@@ -51,25 +51,25 @@ export default function login() {
           getToken({
             accessToken: res.token.accessToken,
             refreshToken: res.token.refreshToken,
-          })
+          }),
         );
-        return router.push("/todo/today", undefined, { shallow: true });
+        return router.push('/todo/today', undefined, { shallow: true });
       })
       .catch((err) => {
         if (err.response?.status === 429) {
           toast(`${err.response.data?.message}`, {
-            type: "error",
-            containerId: "limiterError",
-            toastId: "limiterError",
+            type: 'error',
+            containerId: 'limiterError',
+            toastId: 'limiterError',
           });
         }
         if (err.response?.status === 401) {
           toast(`${err.response.data?.message}`, {
-            type: "error",
-            containerId: "normalError",
+            type: 'error',
+            containerId: 'normalError',
           });
         }
-        e.target.password.value = "";
+        e.target.password.value = '';
         setIsLoading(false);
       });
   };

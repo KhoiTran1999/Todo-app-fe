@@ -1,4 +1,4 @@
-import { createSelector } from "@reduxjs/toolkit";
+import { createSelector } from '@reduxjs/toolkit';
 
 const TokenSelector = (state) => state.token.value;
 const LabelSelector = (state) => state.label.value;
@@ -10,7 +10,7 @@ const TodoListUnpinSelector = createSelector(
   (TodoListSelector, state) => {
     if (state.length > 0) return state;
     return TodoListSelector.filter((val) => val.pin === false);
-  }
+  },
 );
 
 const TodoListPinSelector = createSelector(
@@ -19,7 +19,7 @@ const TodoListPinSelector = createSelector(
   (TodoListSelector, state) => {
     if (state.length > 0) return state;
     return TodoListSelector.filter((val) => val.pin === true);
-  }
+  },
 );
 
 const SidebarSelector = (state) => state.sidebar.value;

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Todo } from "./Todo";
+import { Todo } from './Todo';
 import {
   DndContext,
   KeyboardSensor,
@@ -8,22 +8,22 @@ import {
   closestCenter,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
+} from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import Masonry from "react-responsive-masonry";
-import { useDispatch, useSelector } from "react-redux";
+} from '@dnd-kit/sortable';
+import Masonry from 'react-responsive-masonry';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   TodoListPinSelector,
   TodoListUnpinSelector,
   TokenSelector,
-} from "@/app/GlobalRedux/selector";
-import { updateTodoAxios } from "@/service/axiosService/todoAxios";
-import { usePathname } from "next/navigation";
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
+} from '@/app/GlobalRedux/selector';
+import { updateTodoAxios } from '@/service/axiosService/todoAxios';
+import { usePathname } from 'next/navigation';
+import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
 
 function StickyNoteList({ isPin, todoList }) {
   const pathname = usePathname();
@@ -75,7 +75,7 @@ function StickyNoteList({ isPin, todoList }) {
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
-        onDragEnd={pathname !== "/todo/trash" && handleDragEnd}
+        onDragEnd={pathname !== '/todo/trash' && handleDragEnd}
       >
         <ul>
           <SortableContext

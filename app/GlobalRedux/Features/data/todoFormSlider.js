@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: {},
 };
 
 export const todoFormSlider = createSlice({
-  name: "todoForm",
+  name: 'todoForm',
   initialState,
   reducers: {
     getTodoForm: (state, action) => {

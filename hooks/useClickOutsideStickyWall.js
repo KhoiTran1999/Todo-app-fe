@@ -1,10 +1,10 @@
-import { getTodoList } from "@/app/GlobalRedux/Features/data/todoListSlider";
-import { TokenSelector } from "@/app/GlobalRedux/selector";
-import { addTodoAxios } from "@/service/axiosService/todoAxios";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
+import { TokenSelector } from '@/app/GlobalRedux/selector';
+import { addTodoAxios } from '@/service/axiosService/todoAxios';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -20,7 +20,7 @@ export function useClickOutsideStickyWall(
   isPin,
   setIsPin,
   setTimeValue,
-  timeValue
+  timeValue,
 ) {
   const dispatch = useDispatch();
   const token = useSelector(TokenSelector);
@@ -43,29 +43,29 @@ export function useClickOutsideStickyWall(
         }
 
         if (contentRef.current?.value?.trim().length === 0) {
-          toast("Content could not empty", {
-            type: "error",
-            toastId: "contentError",
+          toast('Content could not empty', {
+            type: 'error',
+            toastId: 'contentError',
           });
         }
 
         //reset after add todo
-        titleRef.current.style.height = "24px";
-        contentRef.current.style.height = "24px";
+        titleRef.current.style.height = '24px';
+        contentRef.current.style.height = '24px';
         titleRef.current.value = null;
         contentRef.current.value = null;
         setTexterea(false);
         setColorToggle(false);
-        setColor("white");
+        setColor('white');
         setIsPin(false);
         setTimeValue(null);
       }
     }
     // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref, color, timeValue, token]);
 }

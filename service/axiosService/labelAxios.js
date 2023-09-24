@@ -1,12 +1,12 @@
-import env from "@/config/env";
-import axios from "axios";
+import env from '@/config/env';
+import axios from 'axios';
 
 const getLabelAxios = async (token) => {
   const res = await axios.get(`${env.SERVER_URL}/api/v1/label`, {
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -18,9 +18,9 @@ const addLabelAxios = async (token, data) => {
   const JSONdata = JSON.stringify(data);
   const res = await axios.post(`${env.SERVER_URL}/api/v1/label`, JSONdata, {
     withCredentials: true,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -31,14 +31,14 @@ const deleteLabelAxios = async (
   token,
   id,
   fulfilledHandling,
-  rejectHandling
+  rejectHandling,
 ) => {
   await axios
     .delete(`${env.SERVER_URL}/api/v1/label/${id}`, {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     })
@@ -51,15 +51,15 @@ const updateLabelAxios = async (
   id,
   data,
   fulfillHandling,
-  rejectHandling
+  rejectHandling,
 ) => {
   const JSONdata = JSON.stringify(data);
   await axios
     .patch(`${env.SERVER_URL}/api/v1/label/${id}`, JSONdata, {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     })
@@ -74,12 +74,12 @@ const addTodoLabelAxios = async (token, data) => {
     JSONdata,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return res.data;
 };
@@ -89,12 +89,12 @@ const deleteTodoLabelAxios = async (token, todoId, labelId) => {
     `${env.SERVER_URL}/api/v1/label/todoLabel/${todoId}/${labelId}`,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return res.data;
 };
@@ -104,12 +104,12 @@ const getTodoLabelAxios = async (token, id) => {
     `${env.SERVER_URL}/api/v1/label/todoLabel/${id}`,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return res.data;
 };

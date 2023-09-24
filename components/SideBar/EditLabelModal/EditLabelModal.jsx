@@ -1,19 +1,19 @@
-import { getLabel } from "@/app/GlobalRedux/Features/data/labelSlider";
-import { toggleEditLabelModal } from "@/app/GlobalRedux/Features/toggle/editLabelModalSlider";
+import { getLabel } from '@/app/GlobalRedux/Features/data/labelSlider';
+import { toggleEditLabelModal } from '@/app/GlobalRedux/Features/toggle/editLabelModalSlider';
 import {
   LabelSelector,
   EditLabelModalSelector,
   TokenSelector,
-} from "@/app/GlobalRedux/selector";
-import { useClickOutsideLabelModal } from "@/hooks/useClickOutsideLabelModal";
-import { addLabelAxios } from "@/service/axiosService/labelAxios";
-import { faCheck, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { LabelContent } from "./LabelContent";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+} from '@/app/GlobalRedux/selector';
+import { useClickOutsideLabelModal } from '@/hooks/useClickOutsideLabelModal';
+import { addLabelAxios } from '@/service/axiosService/labelAxios';
+import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { LabelContent } from './LabelContent';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const EditLabelModal = () => {
   const dispatch = useDispatch();
@@ -37,10 +37,10 @@ export const EditLabelModal = () => {
         dispatch(getLabel(res.data));
       })
       .catch((err) => {
-        if (err.response.data.message === "Validation error")
-          toast("Can not duplicate Label", {
-            type: "error",
-            containerId: "normalError",
+        if (err.response.data.message === 'Validation error')
+          toast('Can not duplicate Label', {
+            type: 'error',
+            containerId: 'normalError',
           });
       });
 
@@ -50,7 +50,7 @@ export const EditLabelModal = () => {
   return (
     <div
       className={`text-center bg-neutral-700 bg-opacity-30 fixed top-0 left-0 z-[1001] ${
-        toggleEditLabelModalSelector ? "w-screen h-screen" : "hidden"
+        toggleEditLabelModalSelector ? 'w-screen h-screen' : 'hidden'
       }`}
     >
       <div

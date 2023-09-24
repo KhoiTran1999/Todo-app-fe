@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { TokenSelector } from "@/app/GlobalRedux/selector";
-import { verifyEmailAxios } from "@/service/axiosService/authAxios";
-import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { TokenSelector } from '@/app/GlobalRedux/selector';
+import { verifyEmailAxios } from '@/service/axiosService/authAxios';
+import { faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function verifyEmail() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function verifyEmail() {
   useEffect(() => {
     if (token.accessToken && token.refreshToken) {
       window.close();
-      return router.push("/todo/today", undefined, { shallow: true });
+      return router.push('/todo/today', undefined, { shallow: true });
     }
   }, [token]);
 
@@ -43,14 +43,14 @@ export default function verifyEmail() {
       .catch((err) => {
         if (err.response.status === 429) {
           toast(`${err.response.data?.message}`, {
-            type: "error",
-            containerId: "limiterError",
-            toastId: "limiterError",
+            type: 'error',
+            containerId: 'limiterError',
+            toastId: 'limiterError',
           });
         } else {
           toast(`${err.response.data?.message}`, {
-            type: "error",
-            containerId: "normalError",
+            type: 'error',
+            containerId: 'normalError',
           });
         }
         setIsLoading(false);

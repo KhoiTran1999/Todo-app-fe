@@ -1,6 +1,6 @@
-import env from "@/config/env";
-import axios from "axios";
-import "react-toastify/dist/ReactToastify.css";
+import env from '@/config/env';
+import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
 
 const loginAxios = async (data) => {
   const JSONdata = JSON.stringify(data);
@@ -9,11 +9,11 @@ const loginAxios = async (data) => {
     JSONdata,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    }
+    },
   );
   return res.data;
 };
@@ -25,11 +25,11 @@ const verifyEmailAxios = async (data) => {
     JSONdata,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    }
+    },
   );
   return res.data;
 };
@@ -41,11 +41,11 @@ const registerAxios = async (data) => {
     JSONdata,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    }
+    },
   );
   return res.data;
 };
@@ -54,9 +54,9 @@ const getTokenAxios = async (fulfilledHandling, rejectHandling) => {
   await axios
     .get(`${env.SERVER_URL}/api/v1/auth/cookie/getToken`, {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
     .then(async (res) => await fulfilledHandling(res.data))
@@ -70,12 +70,12 @@ const refreshTokenAxios = async (token) => {
     `${env.SERVER_URL}/api/v1/auth/cookie/refreshToken`,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return res.data;
 };
@@ -85,11 +85,11 @@ const clearTokenAxios = async () => {
     `${env.SERVER_URL}/api/v1/auth/cookie/clearToken`,
     {
       withCredentials: true,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    }
+    },
   );
   return res.data;
 };

@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
-import { verify } from "jsonwebtoken";
-import env from "@/config/env";
-import Image from "next/image";
-import { refreshTokenAxios } from "@/service/axiosService/authAxios";
-import { TokenSelector } from "./GlobalRedux/selector";
-import { getToken } from "./GlobalRedux/Features/data/tokenSlider";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import Typewriter from 'typewriter-effect';
+import { verify } from 'jsonwebtoken';
+import env from '@/config/env';
+import Image from 'next/image';
+import { refreshTokenAxios } from '@/service/axiosService/authAxios';
+import { TokenSelector } from './GlobalRedux/selector';
+import { getToken } from './GlobalRedux/Features/data/tokenSlider';
 
 export default function Home() {
   const router = useRouter();
@@ -21,28 +22,28 @@ export default function Home() {
 
     const isValidAccessToken = verify(
       token.accessToken,
-      env.JWT_ACCESSTOKEN_PRIVATE_KEY
+      env.JWT_ACCESSTOKEN_PRIVATE_KEY,
     );
 
     if (isValidAccessToken)
-      return router.push("/todo/today", undefined, { shallow: true });
+      return router.push('/todo/today', undefined, { shallow: true });
 
     refreshTokenAxios(token.refreshToken)
       .then((res) => {
         if (!res.success) {
-          return router.push("/login", undefined, { shallow: true });
+          return router.push('/login', undefined, { shallow: true });
         }
         dispatch(
           getToken({
             accessToken: res.accessToken,
             refreshToken: token.refreshToken,
-          })
+          }),
         );
 
-        router.push("/todo/today", undefined, { shallow: true });
+        router.push('/todo/today', undefined, { shallow: true });
       })
       .catch((err) => {
-        router.push("/login", undefined, { shallow: true });
+        router.push('/login', undefined, { shallow: true });
       });
   }, [token]);
 
@@ -62,14 +63,26 @@ export default function Home() {
           <h1 className="text-5xl font-bold text-slate-700 text-center">
             Free your mind
           </h1>
-          <p className="font-medium text-slate-700 my-8 text-center">
-            Simplify, Be Inspired, Be Original, Work Hard, Enjoy
-          </p>
-          <div className="flex flex-col">
+          <div>
+            <div className="font-medium w-[340px] max-[330px]:w-[320px] h-12 text-slate-700 my-8 text-center break-words">
+              <Typewriter
+                options={{
+                  strings: [
+                    'Simplify, Be Inspired, Be Original and Work Hard',
+                    "Let's enjoy now 🚀",
+                  ],
+                  autoStart: true,
+                  loop: true,
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center items-center">
             <Link
               href="/verifyEmail"
               shallow={true}
-              className="text-base py-2 px-3 text-slate-700 text-center bg-yellow-400 hover:bg-yellow-500 font-semibold rounded  ease-out duration-300"
+              className="text-base w-full max-[368px]:w-[250px] py-2 px-3 text-slate-700 text-center bg-yellow-400 hover:bg-yellow-500 font-semibold rounded  ease-out duration-300"
             >
               Get Started
             </Link>
