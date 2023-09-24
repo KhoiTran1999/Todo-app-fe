@@ -14,6 +14,7 @@ import { usePathname } from 'next/navigation';
 import { getLimit } from '@/app/GlobalRedux/Features/data/limitSlider';
 import Link from 'next/link';
 import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
+import { toggleSidebar } from '@/app/GlobalRedux/Features/toggle/sidebarSlider';
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -28,6 +29,7 @@ const SideBar = () => {
 
   const handleNavigate = () => {
     dispatch(getTodoList([]));
+    dispatch(toggleSidebar(false));
   };
 
   return (
@@ -42,6 +44,7 @@ const SideBar = () => {
         onClick={() => {
           dispatch(getTodoList([]));
           dispatch(getLimit(10));
+          dispatch(toggleSidebar(false));
         }}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-full ${
           pathname === '/todo/today' ? 'bg-blue-200' : 'hover:bg-slate-100'

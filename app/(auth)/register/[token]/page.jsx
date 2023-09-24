@@ -6,6 +6,7 @@ import { faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import env from '@/config/env';
 import Image from 'next/image';
 import { verify } from 'jsonwebtoken';
@@ -69,72 +70,84 @@ export default function register({ params }) {
   };
 
   return (
-    <div className="p-3 flex min-h-screen min-w-full items-center justify-center">
-      <div className="w-2/5 p-4 mr-3 min-h-screen flex items-center justify-center max-[660px]:hidden">
-        <Image
-          src="/static/img/register.jpg"
-          className="rounded-lg"
-          width={600}
-          height={400}
-          alt="Main picture"
-        ></Image>
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        <FontAwesomeIcon icon={faUser} className="w-16 h-16 text-slate-700" />
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col items-center justify-center"
-          method="post"
-        >
-          <input
-            className="mt-9 mb-6 py-1 px-3 text-xl text-slate-700 bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
-            type="text"
-            name="username"
-            placeholder="Username"
-            required
-            minLength={4}
-            maxLength={20}
-            autoFocus
-          />
-          <input
-            className="mb-6 py-1 px-3 text-xl text-slate-700 bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded cursor-not-allowed focus:outline-none"
-            type="email"
-            name="email"
-            placeholder={email}
-            value={email}
-            readOnly
-          />
-          <input
-            className="mb-6 py-1 px-3 text-xl text-slate-700 bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            minLength={1}
-          />
-          <input
-            className="py-1 px-3 text-xl text-slate-700 bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            required
-            minLength={1}
-          />
-          <div className="w-full mt-5 flex justify-center items-center">
-            {isLoading ? (
-              <FontAwesomeIcon
-                icon={faSpinner}
-                className="w-7 h-7 text-slate-700"
-                spin={true}
-              />
-            ) : (
-              <button className="text-base font-medium py-2 px-3 w-full text-slate-700 text-center bg-yellow-400 hover:bg-yellow-500 rounded  ease-out duration-300">
-                Register
-              </button>
-            )}
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        exist={{ opacity: 0, y: 15 }}
+        transition={{ delay: 0.25 }}
+      >
+        <div className="p-3 flex min-h-screen min-w-full items-center justify-center">
+          <div className="w-2/5 p-4 mr-3 min-h-screen flex items-center justify-center max-[660px]:hidden">
+            <Image
+              src="/static/img/register.jpg"
+              className="rounded-lg"
+              width={600}
+              height={400}
+              alt="Main picture"
+            ></Image>
           </div>
-        </form>
-      </div>
-    </div>
+          <div className="flex flex-col items-center justify-center">
+            <FontAwesomeIcon
+              icon={faUser}
+              className="w-16 h-16 text-slate-700"
+            />
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col items-center justify-center"
+              method="post"
+            >
+              <input
+                className="mt-9 mb-6 py-1 px-3 text-xl text-slate-700 bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
+                type="text"
+                name="username"
+                placeholder="Username"
+                required
+                minLength={4}
+                maxLength={20}
+                autoFocus
+              />
+              <input
+                className="mb-6 py-1 px-3 text-xl text-slate-700 bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded cursor-not-allowed focus:outline-none"
+                type="email"
+                name="email"
+                placeholder={email}
+                value={email}
+                readOnly
+              />
+              <input
+                className="mb-6 py-1 px-3 text-xl text-slate-700 bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+                minLength={1}
+              />
+              <input
+                className="py-1 px-3 text-xl text-slate-700 bg-opacity-25 placeholder-gray-400 border-gray-400 border rounded focus:outline-none"
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                required
+                minLength={1}
+              />
+              <div className="w-full mt-5 flex justify-center items-center">
+                {isLoading ? (
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    className="w-7 h-7 text-slate-700"
+                    spin={true}
+                  />
+                ) : (
+                  <button className="text-base font-medium py-2 px-3 w-full text-slate-700 text-center bg-yellow-400 hover:bg-yellow-500 rounded  ease-out duration-300">
+                    Register
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
+      </motion.div>
+    </>
   );
 }

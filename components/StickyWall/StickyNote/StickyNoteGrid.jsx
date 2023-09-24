@@ -17,15 +17,16 @@ import {
 } from '@dnd-kit/sortable';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useDispatch, useSelector } from 'react-redux';
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { usePathname } from 'next/navigation';
+
 import {
   SidebarSelector,
   TodoListPinSelector,
   TodoListUnpinSelector,
   TokenSelector,
 } from '@/app/GlobalRedux/selector';
-import { createSnapModifier, restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { updateTodoAxios } from '@/service/axiosService/todoAxios';
-import { usePathname } from 'next/navigation';
 import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
 
 function StickyNoteGrid({ isPin, todoList }) {
@@ -94,8 +95,8 @@ function StickyNoteGrid({ isPin, todoList }) {
           {toggleSidebar ? (
             <ResponsiveMasonry
               columnsCountBreakPoints={{
-                686: 1,
-                804: 2,
+                400: 1,
+                600: 2,
                 1060: 3,
                 1292: 4,
                 1536: 5,
