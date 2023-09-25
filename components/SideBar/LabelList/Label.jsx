@@ -16,7 +16,7 @@ export const Label = ({ id, name }) => {
       onClick={() => dispatch(toggleSidebar(false))}
       href={`/todo/${id}`}
       shallow={true}
-      className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
+      className={`py-3 pl-6 h-[48px] flex justify-start items-center  w-ful ${
         !toggle ? 'rounded-full' : 'rounded-r-full'
       } cursor-pointer ${
         pathname === `/todo/${id}` ? 'bg-blue-200' : 'hover:bg-slate-100'
