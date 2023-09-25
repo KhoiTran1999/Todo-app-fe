@@ -43,7 +43,12 @@ jobs:
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY}}'
           command: 'echo Hello world'
       - name: Run gg server
-        run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603; sudo su -; docker rm frontend; docker image rm khoitran990120/fast-note:todo-app-fe; docker run --name frontend --network todo-network -dp 3000:3000 khoitran990120/fast-note:todo-app-fe"
+        run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
+      -name: Stop container
+        run: |-
+          docker stop frontend
+
+
       # - run:
       # - run: sudo docker rm frontend
       # - run: sudo docker image rm khoitran990120/fast-note:todo-app-fe
