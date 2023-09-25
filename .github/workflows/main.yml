@@ -23,12 +23,10 @@ jobs:
       - name: Docker Push
         run: docker push ${{ secrets.DOCKER_USERNAME }}/fast-note:todo-app-fe
 
-      - id: 'auth'
       uses: 'google-github-actions/auth@v0'
       with:
         credentials_json: '${{ secrets.GOOGLE_CLOUD_CREDENTIALS }}'
 
-      - id: 'compute-ssh'
       uses: 'google-github-actions/ssh-compute@v0'
       with:
         instance_name: 'instance-1'
