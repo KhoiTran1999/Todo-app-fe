@@ -41,7 +41,7 @@ jobs:
           instance_name: 'instance-1'
           zone: 'asia-southeast1-b'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY}}'
-          command: 'ok lahhh'
+          command: 'echo lahhh'
 
       - name: Stop container
         shell: pwsh
