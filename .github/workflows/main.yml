@@ -42,7 +42,9 @@ jobs:
           zone: 'asia-southeast1-b'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY}}'
           command: 'sudo -h'
-          args: [sudo -h; sudo docker ps]
+          args:
+            - sudo -h
+            - sudo docker ps
       # - name: Run gg server
       #   run: gcloud compute ssh -t --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
 
