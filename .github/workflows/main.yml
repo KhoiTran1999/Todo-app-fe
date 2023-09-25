@@ -47,11 +47,12 @@ jobs:
         shell: pwsh
         run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
 
-      - name: Run docker
-        shell: pwsh
-        run: sudo docker ps
+      # Example of using the output
+    - id: 'test'
+      run: |-
+        echo '${{ steps.compute-ssh.outputs.stdout }}'
+        echo '${{ steps.compute-ssh.outputs.stderr }}'
 
-      # - run:
       # - run: sudo docker rm frontend
       # - run: sudo docker image rm khoitran990120/fast-note:todo-app-fe
       # - run: sudo docker run --name frontend --network todo-network -dp 3000:3000 khoitran990120/fast-note:todo-app-fe
