@@ -1,3 +1,4 @@
+import { toggleSidebar } from '@/app/GlobalRedux/Features/toggle/sidebarSlider';
 import { SidebarSelector } from '@/app/GlobalRedux/selector';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,9 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 export const Label = ({ id, name }) => {
   const pathname = usePathname();
   const toggle = useSelector(SidebarSelector);
+  const dispatch = useDispatch();
 
   return (
     <Link
+      onClick={() => dispatch(toggleSidebar(false))}
       href={`/todo/${id}`}
       shallow={true}
       className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
