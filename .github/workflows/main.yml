@@ -41,9 +41,9 @@ jobs:
           instance_name: 'instance-1'
           zone: 'asia-southeast1-b'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY}}'
-          command: 'echo Hello world'
-      - name: Run gg server
-        run: gcloud compute ssh -t --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
+          command: 'sudo -h'
+      # - name: Run gg server
+      #   run: gcloud compute ssh -t --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
 
       # - run:
       # - run: sudo docker rm frontend
