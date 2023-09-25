@@ -38,6 +38,7 @@ jobs:
           instance_name: 'instance-1'
           zone: 'asia-southeast1-b'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY}}'
+          command: 'echo Hello world'
       # - run:
       # - run: sudo docker rm frontend
       # - run: sudo docker image rm khoitran990120/fast-note:todo-app-fe
