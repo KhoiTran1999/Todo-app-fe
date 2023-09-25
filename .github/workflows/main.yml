@@ -44,8 +44,8 @@ jobs:
           command: 'echo Hello world'
       - name: Run gg server
         run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
-      - name: Test
-        run: sudo docker ps
+        command: ['/bin/sh', '-c']
+        args: ['sudo docker ps', sudo docker images]
 
       # - run:
       # - run: sudo docker rm frontend
