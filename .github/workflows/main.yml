@@ -5,12 +5,12 @@ on:
     branches: ['master']
 
 jobs:
-  permissions:
-    contents: 'read'
-    id-token: 'write'
-
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
       - uses: actions/checkout@v3
