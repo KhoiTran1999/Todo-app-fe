@@ -44,10 +44,8 @@ jobs:
           command: 'echo Hello world'
       - name: Run gg server
         run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
-      -name: Stop container
-        run: |-
-          docker stop frontend
-
+      - name: Test
+        run: gcloud -h
 
       # - run:
       # - run: sudo docker rm frontend
