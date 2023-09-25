@@ -45,7 +45,7 @@ jobs:
       - name: Run gg server
         run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
       - name: Test
-        run: gcloud -h
+        run: sudo -h
 
       # - run:
       # - run: sudo docker rm frontend
