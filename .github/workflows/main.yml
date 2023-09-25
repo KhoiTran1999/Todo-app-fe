@@ -23,17 +23,13 @@ jobs:
       - name: Docker Push
         run: docker push ${{ secrets.DOCKER_USERNAME }}/fast-note:todo-app-fe
 
-      # Authenticate to Google Cloud
-      - uses: google-github-actions/auth@v1
+      # Install and configure the gcloud CLI
+      - uses: google-github-actions/setup-gcloud@v1
         with:
           credentials: ${{ secrets.GOOGLE_CLOUD_CREDENTIALS }}
 
-      # SSH to the VM instance
-      - uses: google-github-actions/ssh-compute@v1
-        with:
-          instance_name: instance-1
-          region: asia-southeast1-b
-          command: "sudo docker stop frontend"
-          command: "sudo docker rm frontend"
-          command: "sudo docker image rm khoitran990120/fast-note:todo-app-fe"
-          command: "sudo docker run --name frontend --network todo-network -dp 3000:3000 khoitran990120/fast-note:todo-app-fe"
+      # Run a gcloud command
+      - run: sudo docker stop frontend
+      - run: sudo docker rm frontend
+      - run: sudo docker image rm khoitran990120/fast-note:todo-app-fe
+      - run: sudo docker run --name frontend --network todo-network -dp 3000:3000 khoitran990120/fast-note:todo-app-fe
