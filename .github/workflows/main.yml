@@ -23,9 +23,11 @@ jobs:
       - name: Docker Push
         run: docker push ${{ secrets.DOCKER_USERNAME }}/fast-note:todo-app-fe
 
-      - uses: 'google-github-actions/auth@v0'
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
         with:
-          credentials_json: '${{ secrets.GOOGLE_CLOUD_CREDENTIALS }}'
+          workload_identity_provider: '${{secrets.WIF_PROVIDER}}'
+          service_account: '${{secrets.SA_EMAIL}}'
 
       - uses: 'google-github-actions/ssh-compute@v0'
         with:
