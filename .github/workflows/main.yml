@@ -42,8 +42,8 @@ jobs:
           zone: 'asia-southeast1-b'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY}}'
           command: 'echo Hello world'
-      - name: Stop container frontend
-        run: gcloud docker stop fronted
+      - name: run gg server
+        run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "fastnote-399603"
       # - run:
       # - run: sudo docker rm frontend
       # - run: sudo docker image rm khoitran990120/fast-note:todo-app-fe
