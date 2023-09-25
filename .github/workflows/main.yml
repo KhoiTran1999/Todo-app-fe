@@ -33,7 +33,7 @@ jobs:
         with:
           instance_name: 'instance-1'
           zone: 'asia-southeast1-b'
-          ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
+          ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KE }}'
           command: 'sudo docker stop frontend'
       # - run:
       # - run: sudo docker rm frontend
