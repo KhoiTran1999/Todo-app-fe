@@ -1,8 +1,13 @@
 import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
 import { getToken } from '@/app/GlobalRedux/Features/data/tokenSlider';
+import { toggleDeletedSearchIcon } from '@/app/GlobalRedux/Features/toggle/deletedSearchIconSlider';
 import { toggleSidebar } from '@/app/GlobalRedux/Features/toggle/sidebarSlider';
 import { toggleviewMode } from '@/app/GlobalRedux/Features/toggle/viewModeSlider';
-import { LimitSelector, TokenSelector } from '@/app/GlobalRedux/selector';
+import {
+  DeletedSearchIconSelector,
+  LimitSelector,
+  TokenSelector,
+} from '@/app/GlobalRedux/selector';
 import { useDebounce } from '@/hooks/useDebounce';
 import { clearTokenAxios } from '@/service/axiosService/authAxios';
 import { getSearchTodoAxios } from '@/service/axiosService/todoAxios';
@@ -27,9 +32,9 @@ export const TodoHeader = () => {
 
   const { accessToken } = useSelector(TokenSelector);
   const limit = useSelector(LimitSelector);
+  const deletedIcon = useSelector(DeletedSearchIconSelector);
 
   const [searchValue, setSearchValue] = useState('');
-  const [deletedIcon, setDeletedIcon] = useState(false);
 
   const searchDebounce = useDebounce(searchValue, 600);
 
@@ -62,13 +67,13 @@ export const TodoHeader = () => {
   };
 
   const handleFocus = () => {
-    setDeletedIcon(true);
+    dispatch(toggleDeletedSearchIcon(true));
     router.push('/todo/search', undefined, { shallow: true });
   };
 
   const handleDeleteSearch = () => {
     setSearchValue('');
-    setDeletedIcon(false);
+    dispatch(toggleDeletedSearchIcon(false));
   };
 
   return (

@@ -23,7 +23,9 @@ const TodoListPinSelector = createSelector(
 );
 
 const SidebarSelector = (state) => state.sidebar.value;
+const AxiosLoadingSelector = (state) => state.axiosLoading.value;
 const ViewModeSelector = (state) => state.viewMode.value;
+const DeletedSearchIconSelector = (state) => state.deletedSearchIcon.value;
 const EditLabelModalSelector = (state) => state.editLabelModal.value;
 const EditTodoModalSelector = (state) => state.editTodoModal.value;
 const TodoFormSelector = (state) => state.todoForm.value;
@@ -33,6 +35,8 @@ export {
   TokenSelector,
   LabelSelector,
   SidebarSelector,
+  AxiosLoadingSelector,
+  DeletedSearchIconSelector,
   ViewModeSelector,
   EditLabelModalSelector,
   EditTodoModalSelector,

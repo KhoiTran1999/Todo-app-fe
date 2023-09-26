@@ -1,3 +1,4 @@
+import { toggleDeletedSearchIcon } from '@/app/GlobalRedux/Features/toggle/deletedSearchIconSlider';
 import { toggleSidebar } from '@/app/GlobalRedux/Features/toggle/sidebarSlider';
 import { SidebarSelector } from '@/app/GlobalRedux/selector';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
@@ -11,9 +12,14 @@ export const Label = ({ id, name }) => {
   const toggle = useSelector(SidebarSelector);
   const dispatch = useDispatch();
 
+  const handleClick = () => {
+    dispatch(toggleSidebar(false));
+    dispatch(toggleDeletedSearchIcon(false));
+  };
+
   return (
     <Link
-      onClick={() => dispatch(toggleSidebar(false))}
+      onClick={handleClick}
       href={`/todo/${id}`}
       shallow={true}
       className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${

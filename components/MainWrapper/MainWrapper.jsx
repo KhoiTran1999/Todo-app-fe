@@ -52,7 +52,7 @@ export const MainWrapper = ({ children }) => {
   return (
     <div
       onScroll={handleScroll}
-      className="bg-white select-none h-screen overflow-y-auto"
+      className="bg-white select-none h-screen overflow-auto"
     >
       <FirstRender>{children}</FirstRender>
 

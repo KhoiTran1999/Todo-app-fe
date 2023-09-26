@@ -261,7 +261,7 @@ export const Todo = ({
         </div>
       )}
       <div
-        className={`opacity-0 invisible md:visible md:opacity-0 md:hover:visible md:hover:opacity-100 ${
+        className={`opacity-0 invisible lg:visible lg:opacity-0 lg:hover:visible lg:hover:opacity-100 ${
           colorToggle && 'opacity-100'
         } transition-all absolute w-full h-full top-0 left-0`}
       >

@@ -7,6 +7,8 @@ import todoListReducer from './Features/data/todoListSlider';
 import todoListUnpinReducer from './Features/data/todoListUnPinSlider';
 import todoListPinReducer from './Features/data/todoListPinSlider';
 import sidebarReducer from './Features/toggle/sidebarSlider';
+import axiosLoadingReducer from './Features/toggle/axiosLoadingSlider';
+import deletedSearchIconReducer from './Features/toggle/deletedSearchIconSlider';
 import viewModeReducer from './Features/toggle/viewModeSlider';
 import EditLabelModalReducer from './Features/toggle/editLabelModalSlider';
 import EditTodoModalReducer from './Features/toggle/editTodoModalSlider';
@@ -21,6 +23,8 @@ export const store = configureStore({
     todoListUnpin: todoListUnpinReducer,
     todoListPin: todoListPinReducer,
     sidebar: sidebarReducer,
+    axiosLoading: axiosLoadingReducer,
+    deletedSearchIcon: deletedSearchIconReducer,
     viewMode: viewModeReducer,
     editLabelModal: EditLabelModalReducer,
     editTodoModal: EditTodoModalReducer,

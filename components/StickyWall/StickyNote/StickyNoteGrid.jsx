@@ -92,67 +92,36 @@ function StickyNoteGrid({ isPin, todoList }) {
           items={todoList}
           strategy={horizontalListSortingStrategy}
         >
-          {toggleSidebar ? (
-            <ResponsiveMasonry
-              columnsCountBreakPoints={{
-                400: 1,
-                600: 2,
-                1060: 3,
-                1292: 4,
-                1536: 5,
-                1780: 6,
-                2036: 7,
-              }}
-            >
-              <Masonry gutter="12px">
-                {todoList.map((val, idx) => (
-                  <Todo
-                    key={idx}
-                    id={val.id}
-                    content={val.content}
-                    title={val.title}
-                    color={val.color}
-                    pin={val.pin}
-                    reminder={val.reminder}
-                    archive={val.archive}
-                    updatedAt={val.updatedAt}
-                    deletedAt={val.deletedAt}
-                  />
-                ))}
-              </Masonry>
-            </ResponsiveMasonry>
-          ) : (
-            <ResponsiveMasonry
-              columnsCountBreakPoints={{
-                100: 1,
-                360: 2,
-                844: 3,
-                1071: 4,
-                1345: 5,
-                1565: 6,
-                1830: 7,
-                2068: 8,
-                2314: 9,
-              }}
-            >
-              <Masonry gutter="12px">
-                {todoList.map((val, idx) => (
-                  <Todo
-                    key={idx}
-                    id={val.id}
-                    content={val.content}
-                    title={val.title}
-                    color={val.color}
-                    pin={val.pin}
-                    reminder={val.reminder}
-                    archive={val.archive}
-                    updatedAt={val.updatedAt}
-                    deletedAt={val.deletedAt}
-                  />
-                ))}
-              </Masonry>
-            </ResponsiveMasonry>
-          )}
+          <ResponsiveMasonry
+            columnsCountBreakPoints={{
+              100: 1,
+              320: 2,
+              550: 3,
+              800: 4,
+              1092: 5,
+              1200: 6,
+              1640: 7,
+              2068: 8,
+              2314: 9,
+            }}
+          >
+            <Masonry gutter="12px">
+              {todoList.map((val, idx) => (
+                <Todo
+                  key={idx}
+                  id={val.id}
+                  content={val.content}
+                  title={val.title}
+                  color={val.color}
+                  pin={val.pin}
+                  reminder={val.reminder}
+                  archive={val.archive}
+                  updatedAt={val.updatedAt}
+                  deletedAt={val.deletedAt}
+                />
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
         </SortableContext>
       </ul>
     </DndContext>

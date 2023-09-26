@@ -7,3 +7,6 @@ const nextConfig = {
   },
 };
 module.exports = nextConfig;
+
+//Development: http://localhost:80
+//Product: https://api.fastnote.click

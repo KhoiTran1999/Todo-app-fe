@@ -6,11 +6,11 @@ const initialState = {
   value: false,
 };
 
-export const sidebarSlider = createSlice({
-  name: 'sidebar',
+export const deletedSearchIconSlider = createSlice({
+  name: 'deletedSearchIcon',
   initialState,
   reducers: {
-    toggleSidebar: (state, action) => {
+    toggleDeletedSearchIcon: (state, action) => {
       if (action.payload === false) {
         return void (state.value = action.payload);
       }
@@ -19,5 +19,5 @@ export const sidebarSlider = createSlice({
   },
 });
 
-export const { toggleSidebar } = sidebarSlider.actions;
-export default sidebarSlider.reducer;
+export const { toggleDeletedSearchIcon } = deletedSearchIconSlider.actions;
+export default deletedSearchIconSlider.reducer;

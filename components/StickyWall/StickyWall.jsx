@@ -22,6 +22,7 @@ import { usePathname } from 'next/navigation';
 import { Tooltip } from 'react-tooltip';
 
 import {
+  AxiosLoadingSelector,
   SidebarSelector,
   TodoListPinSelector,
   TodoListSelector,
@@ -40,7 +41,6 @@ import { colorList } from '@/constant/colorList';
 import { useClickOutsideTodo } from '@/hooks/useClickOutsideTodo';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import SkeletonLoading from '../Loading/SkeletonLoading';
 
 const StickyWall = () => {
   const dispatch = useDispatch();
@@ -60,6 +60,7 @@ const StickyWall = () => {
   const toggle = useSelector(SidebarSelector);
   const viewMode = useSelector(ViewModeSelector);
   const token = useSelector(TokenSelector);
+  const axiosLoading = useSelector(AxiosLoadingSelector);
 
   const titleRef = useRef('');
   const contentRef = useRef('');
@@ -146,15 +147,6 @@ const StickyWall = () => {
       dispatch(getTodoList([]));
     });
   };
-
-  const [skeleton, setSkeleton] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false);
-    }, [500]);
-    return () => setSkeleton(false);
-  }, []);
 
   return (
     <div className={`pb-3 w-full h-full ${toggle ? 'ml-[300px]' : 'ml-0'}`}>
@@ -362,8 +354,8 @@ const StickyWall = () => {
       )}
       {todoListPin.length === 0 && todoListUnpin.length === 0 ? (
         <>
-          {skeleton ? (
-            <></>
+          {axiosLoading ? (
+            <div></div>
           ) : (
             <div className="w-full flex flex-col justify-start items-center">
               <FontAwesomeIcon
