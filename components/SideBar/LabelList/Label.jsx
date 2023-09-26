@@ -15,6 +15,11 @@ export const Label = ({ id, name }) => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
+    if (pathname === `/todo/${id}`) {
+      dispatch(toggleSidebar(false));
+      return dispatch(toggleDeletedSearchIcon(false));
+    }
+
     dispatch(toggleAxiosLoading(true));
     dispatch(getTodoList([]));
     dispatch(toggleSidebar(false));

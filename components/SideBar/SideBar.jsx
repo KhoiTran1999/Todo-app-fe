@@ -32,6 +32,11 @@ const SideBar = () => {
   };
 
   const handleNavigate = (routeName, limit = null) => {
+    if (pathname === `/todo/${routeName}`) {
+      dispatch(toggleSidebar(false));
+      return dispatch(toggleDeletedSearchIcon(false));
+    }
+
     dispatch(toggleAxiosLoading(true));
     router.push(`/todo/${routeName}`, undefined, { shallow: 'true' });
     if (limit) dispatch(getLimit(limit));

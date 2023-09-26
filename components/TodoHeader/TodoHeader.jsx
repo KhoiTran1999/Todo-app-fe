@@ -79,6 +79,10 @@ export const TodoHeader = () => {
   };
 
   const handleBackToMain = () => {
+    if (pathname === `/todo/today`) {
+      dispatch(toggleSidebar(false));
+      return dispatch(toggleDeletedSearchIcon(false));
+    }
     dispatch(toggleAxiosLoading(true));
     router.push('/todo/today', undefined, { shallow: 'true' });
     dispatch(getTodoList([]));
