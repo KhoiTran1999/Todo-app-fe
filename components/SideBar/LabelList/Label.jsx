@@ -29,9 +29,7 @@ export const Label = ({ id, name }) => {
       className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
         !toggle ? 'rounded-full' : 'rounded-r-full'
       } cursor-pointer ${
-        pathname === `/todo/${id}`
-          ? 'bg-blue-200'
-          : 'hover:bg-white bg-white xl:hover:bg-slate-100'
+        pathname === `/todo/${id}` ? 'bg-blue-200' : 'xl:hover:bg-slate-100'
       } transition-all`}
     >
       <FontAwesomeIcon

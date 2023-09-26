@@ -50,9 +50,7 @@ const SideBar = () => {
         href={'/todo/today'}
         onClick={() => handleNavigate('today', 10)}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-full ${
-          pathname === '/todo/today'
-            ? 'bg-blue-200'
-            : 'hover:bg-white xl:bg-slate-100 xl:hover:bg-slate-100'
+          pathname === '/todo/today' ? 'bg-blue-200' : ' xl:hover:bg-slate-100'
         } ${!toggle ? 'rounded-full' : 'rounded-r-full'} cursor-pointer`}
       >
         <FontAwesomeIcon
@@ -68,7 +66,7 @@ const SideBar = () => {
         } cursor-pointer ${
           pathname === '/todo/reminder'
             ? 'bg-blue-200'
-            : 'hover:bg-white xl:bg-slate-100 xl:hover:bg-slate-100'
+            : ' xl:hover:bg-slate-100'
         } transition-all`}
       >
         <FontAwesomeIcon
@@ -84,7 +82,7 @@ const SideBar = () => {
         onClick={handleModal}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? 'rounded-full' : 'rounded-r-full'
-        } cursor-pointer hover:bg-white xl:bg-slate-100 xl:hover:bg-slate-100`}
+        } cursor-pointerxl:hover:bg-slate-100`}
       >
         <FontAwesomeIcon
           icon={faPenToSquare}
@@ -98,9 +96,7 @@ const SideBar = () => {
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? 'rounded-full' : 'rounded-r-full'
         } cursor-pointer ${
-          pathname === '/todo/archive'
-            ? 'bg-blue-200'
-            : 'hover:bg-white xl:bg-slate-100 xl:hover:bg-slate-100'
+          pathname === '/todo/archive' ? 'bg-blue-200' : 'xl:hover:bg-slate-100'
         } transition-all`}
       >
         <FontAwesomeIcon
@@ -115,9 +111,7 @@ const SideBar = () => {
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? 'rounded-full' : 'rounded-r-full'
         } cursor-pointer ${
-          pathname === '/todo/trash'
-            ? 'bg-blue-200'
-            : 'hover:bg-white xl:bg-slate-100 xl:hover:bg-slate-100'
+          pathname === '/todo/trash' ? 'bg-blue-200' : 'xl:hover:bg-slate-100'
         } transition-all`}
       >
         <FontAwesomeIcon

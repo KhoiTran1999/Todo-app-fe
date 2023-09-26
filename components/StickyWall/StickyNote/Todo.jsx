@@ -229,7 +229,7 @@ export const Todo = ({
         toggleTodoModal && todoForm.id === id
           ? 'opacity-0 invisible'
           : 'opacity-100 visible'
-      } bg-white  border border-slate-200 transition-shadow rounded-xl hover:shadow-xl cursor-default ${
+      } bg-white  border border-slate-200 transition-shadow rounded-xl xl:hover:shadow-xl cursor-default ${
         pathname !== '/todo/trash' && 'active:cursor-move'
       } relative`}
     >
