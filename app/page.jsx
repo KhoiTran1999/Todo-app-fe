@@ -27,12 +27,12 @@ export default function Home() {
     );
 
     if (isValidAccessToken)
-      return router.push('/todo/today', undefined, { shallow: true });
+      return router.push('/todo/today', undefined, { shallow: 'true' });
 
     refreshTokenAxios(token.refreshToken)
       .then((res) => {
         if (!res.success) {
-          return router.push('/login', undefined, { shallow: true });
+          return router.push('/login', undefined, { shallow: 'true' });
         }
         dispatch(
           getToken({
@@ -41,10 +41,10 @@ export default function Home() {
           }),
         );
 
-        router.push('/todo/today', undefined, { shallow: true });
+        router.push('/todo/today', undefined, { shallow: 'true' });
       })
       .catch((err) => {
-        router.push('/login', undefined, { shallow: true });
+        router.push('/login', undefined, { shallow: 'true' });
       });
   }, [token]);
 

@@ -33,7 +33,7 @@ const SideBar = () => {
 
   const handleNavigate = (routeName, limit = null) => {
     dispatch(toggleAxiosLoading(true));
-    router.push(`/todo/${routeName}`, undefined, { shallow: true });
+    router.push(`/todo/${routeName}`, undefined, { shallow: 'true' });
     if (limit) dispatch(getLimit(limit));
     dispatch(getTodoList([]));
     dispatch(toggleSidebar(false));
@@ -48,7 +48,6 @@ const SideBar = () => {
     >
       <div
         href={'/todo/today'}
-        shallow={true}
         onClick={() => handleNavigate('today', 10)}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-full ${
           pathname === '/todo/today' ? 'bg-blue-200' : 'hover:bg-slate-100'
@@ -62,7 +61,6 @@ const SideBar = () => {
       </div>
       <div
         onClick={() => handleNavigate('reminder')}
-        shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? 'rounded-full' : 'rounded-r-full'
         } cursor-pointer ${
@@ -93,7 +91,6 @@ const SideBar = () => {
       <div
         onClick={() => handleNavigate('archive')}
         href={'/todo/archive'}
-        shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? 'rounded-full' : 'rounded-r-full'
         } cursor-pointer ${
@@ -109,7 +106,6 @@ const SideBar = () => {
       <div
         onClick={() => handleNavigate('trash')}
         href={'/todo/trash'}
-        shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? 'rounded-full' : 'rounded-r-full'
         } cursor-pointer ${

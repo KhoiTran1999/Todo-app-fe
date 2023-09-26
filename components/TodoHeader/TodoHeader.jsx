@@ -58,7 +58,7 @@ export const TodoHeader = () => {
   const handleLogout = () => {
     clearTokenAxios()
       .then((res) => {
-        router.push('/login', undefined, { shallow: true });
+        router.push('/login', undefined, { shallow: 'true' });
         dispatch(getToken({}));
       })
       .catch((err) => console.log(err));
@@ -70,7 +70,7 @@ export const TodoHeader = () => {
 
   const handleFocus = () => {
     dispatch(toggleDeletedSearchIcon(true));
-    router.push('/todo/search', undefined, { shallow: true });
+    router.push('/todo/search', undefined, { shallow: 'true' });
   };
 
   const handleDeleteSearch = () => {
@@ -80,7 +80,7 @@ export const TodoHeader = () => {
 
   const handleBackToMain = () => {
     dispatch(toggleAxiosLoading(true));
-    router.push('/todo/today', undefined, { shallow: true });
+    router.push('/todo/today', undefined, { shallow: 'true' });
     dispatch(getTodoList([]));
     dispatch(getLimit(10));
     dispatch(toggleSidebar(false));

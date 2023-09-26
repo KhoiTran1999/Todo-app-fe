@@ -28,7 +28,7 @@ export default function login() {
               refreshToken: res.refreshToken,
             }),
           );
-        return router.push('/todo/today', undefined, { shallow: true });
+        return router.push('/todo/today', undefined, { shallow: 'true' });
       },
       (err) => {
         return dispatch(getToken({}));
@@ -54,7 +54,7 @@ export default function login() {
             refreshToken: res.token.refreshToken,
           }),
         );
-        return router.push('/todo/today', undefined, { shallow: true });
+        return router.push('/todo/today', undefined, { shallow: 'true' });
       })
       .catch((err) => {
         if (err.response?.status === 429) {

@@ -24,7 +24,7 @@ export default function verifyEmail() {
   useEffect(() => {
     if (token.accessToken && token.refreshToken) {
       window.close();
-      return router.push('/todo/today', undefined, { shallow: true });
+      return router.push('/todo/today', undefined, { shallow: 'true' });
     }
   }, [token]);
 

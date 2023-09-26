@@ -26,11 +26,11 @@ export default function register({ params }) {
       const user = verify(token, env.JWT_ACCESSTOKEN_PRIVATE_KEY);
 
       if (!user) {
-        return router.push('/verifyEmail', undefined, { shallow: true });
+        return router.push('/verifyEmail', undefined, { shallow: 'true' });
       }
       setEmail(user.email);
     } catch (error) {
-      return router.push('/verifyEmail', undefined, { shallow: true });
+      return router.push('/verifyEmail', undefined, { shallow: 'true' });
     }
   }, []);
 
@@ -57,16 +57,16 @@ export default function register({ params }) {
     };
 
     registerAxios(data)
-      .then((res) => router.push('/login', undefined, { shallow: true }))
+      .then((res) => router.push('/login', undefined, { shallow: 'true' }))
       .catch((err) => {
         toast(`${err.response.data?.message}`, {
           type: 'info',
           containerId: 'normalError',
         });
-        router.push('/login', undefined, { shallow: true });
+        router.push('/login', undefined, { shallow: 'true' });
       });
 
-    return router.push('/login', undefined, { shallow: true });
+    return router.push('/login', undefined, { shallow: 'true' });
   };
 
   return (
