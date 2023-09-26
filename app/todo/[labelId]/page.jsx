@@ -16,7 +16,6 @@ export default function page({ params }) {
   const toggle = useSelector(SidebarSelector);
 
   useEffect(() => {
-    dispatch(toggleAxiosLoading(true));
     if (accessToken) {
       getTodoLabelAxios(accessToken, params.labelId).then((res) => {
         dispatch(getTodoList(res.data));
@@ -30,7 +29,7 @@ export default function page({ params }) {
       <motion.div
         initial={{ opacity: 0, y: 15, width: '100%', height: '100%' }}
         animate={{ opacity: 1, y: 0, width: '100%', height: '100%' }}
-        exist={{ opacity: 0, y: 15, width: '100%', height: '100%' }}
+        exit={{ opacity: 0, y: 15, width: '100%', height: '100%' }}
         transition={{ delay: 0.25, width: '100%', height: '100%' }}
       >
         <StickyWall />

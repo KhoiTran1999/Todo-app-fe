@@ -1,3 +1,4 @@
+import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
 import { toggleDeletedSearchIcon } from '@/app/GlobalRedux/Features/toggle/deletedSearchIconSlider';
 import { toggleSidebar } from '@/app/GlobalRedux/Features/toggle/sidebarSlider';
 import { SidebarSelector } from '@/app/GlobalRedux/selector';
@@ -13,6 +14,8 @@ export const Label = ({ id, name }) => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
+    dispatch(toggleAxiosLoading(true));
+    dispatch(getTodoList([]));
     dispatch(toggleSidebar(false));
     dispatch(toggleDeletedSearchIcon(false));
   };

@@ -95,11 +95,11 @@ function StickyNoteGrid({ isPin, todoList }) {
           <ResponsiveMasonry
             columnsCountBreakPoints={{
               100: 1,
-              320: 2,
-              550: 3,
-              800: 4,
-              1092: 5,
-              1200: 6,
+              488: 2,
+              718: 3,
+              934: 4,
+              1166: 5,
+              1407: 6,
               1640: 7,
               2068: 8,
               2314: 9,

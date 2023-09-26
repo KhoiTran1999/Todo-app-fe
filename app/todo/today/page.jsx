@@ -21,7 +21,6 @@ export default function Todo() {
   const toggle = useSelector(SidebarSelector);
 
   useEffect(() => {
-    dispatch(toggleAxiosLoading(true));
     if (accessToken) {
       getTodoAxios(accessToken, limit).then((res) => {
         dispatch(getTodoList(res.data));
@@ -35,7 +34,7 @@ export default function Todo() {
       <motion.div
         initial={{ opacity: 0, y: 15, width: '100%', height: '100%' }}
         animate={{ opacity: 1, y: 0, width: '100%', height: '100%' }}
-        exist={{ opacity: 0, y: 15, width: '100%', height: '100%' }}
+        exit={{ opacity: 0, y: 15, width: '100%', height: '100%' }}
         transition={{ delay: 0.25, width: '100%', height: '100%' }}
       >
         <StickyWall />

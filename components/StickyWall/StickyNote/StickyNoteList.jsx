@@ -82,7 +82,7 @@ function StickyNoteList({ isPin, todoList }) {
             items={todoList}
             strategy={verticalListSortingStrategy}
           >
-            <Masonry columnsCount={1}>
+            <Masonry gutter="12px" columnsCount={1}>
               {todoList.map((val, idx) => (
                 <Todo
                   key={idx}

@@ -229,11 +229,11 @@ export const Todo = ({
         toggleTodoModal && todoForm.id === id
           ? 'opacity-0 invisible'
           : 'opacity-100 visible'
-      } bg-white  border border-slate-200 transition-shadow rounded-xl hover:shadow-lg cursor-default ${
+      } bg-white  border border-slate-200 transition-shadow rounded-xl hover:shadow-xl cursor-default ${
         pathname !== '/todo/trash' && 'active:cursor-move'
       } relative`}
     >
-      <h4 className="max-h-[100px] break-words line-clamp-[3] text-ellipsis overflow-hidden text-lg font-semibold text-slate-700 mb-2">
+      <h4 className="max-h-[100px] break-words line-clamp-[3] text-ellipsis overflow-hidden text-xl font-semibold text-slate-700 mb-2">
         {title}
       </h4>
       <p className="max-h-[360px] break-words line-clamp-[15] text-ellipsis overflow-hidden">
@@ -261,7 +261,7 @@ export const Todo = ({
         </div>
       )}
       <div
-        className={`opacity-0 invisible lg:visible lg:opacity-0 lg:hover:visible lg:hover:opacity-100 ${
+        className={`opacity-0 invisible xl:visible xl:opacity-0 xl:hover:visible xl:hover:opacity-100 ${
           colorToggle && 'opacity-100'
         } transition-all absolute w-full h-full top-0 left-0`}
       >
@@ -349,7 +349,7 @@ export const Todo = ({
                 id={`selectedBackground` + id}
                 style={{ backgroundColor: 'transparent', transition: 'none' }}
               >
-                <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-lg z-[1000]">
+                <div className="bg-white p-2 shadow-[0_1px_5px_1px_rgba(0,0,0,0.3)] rounded-xl z-[1000]">
                   <div className="flex justify-center items-center flex-wrap max-[321px]:justify-start max-[321px]:w-60">
                     <div
                       onClick={(e) => handleChangeColor(e, 'white')}

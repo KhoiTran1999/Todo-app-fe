@@ -80,7 +80,7 @@ export default function login() {
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        exist={{ opacity: 0, y: 15 }}
+        exit={{ opacity: 0, y: 15 }}
         transition={{ delay: 0.25 }}
       >
         <div className="p-3 flex min-h-screen min-w-full items-center justify-center">

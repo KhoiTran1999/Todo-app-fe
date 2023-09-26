@@ -1,5 +1,7 @@
+import { getLimit } from '@/app/GlobalRedux/Features/data/limitSlider';
 import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
 import { getToken } from '@/app/GlobalRedux/Features/data/tokenSlider';
+import { toggleAxiosLoading } from '@/app/GlobalRedux/Features/toggle/axiosLoadingSlider';
 import { toggleDeletedSearchIcon } from '@/app/GlobalRedux/Features/toggle/deletedSearchIconSlider';
 import { toggleSidebar } from '@/app/GlobalRedux/Features/toggle/sidebarSlider';
 import { toggleviewMode } from '@/app/GlobalRedux/Features/toggle/viewModeSlider';
@@ -76,20 +78,33 @@ export const TodoHeader = () => {
     dispatch(toggleDeletedSearchIcon(false));
   };
 
+  const handleBackToMain = () => {
+    dispatch(toggleAxiosLoading(true));
+    router.push('/todo/today', undefined, { shallow: true });
+    dispatch(getTodoList([]));
+    dispatch(getLimit(10));
+    dispatch(toggleSidebar(false));
+    dispatch(toggleDeletedSearchIcon(false));
+  };
+
   return (
     <div className="px-4 py-1 bg-white z-[1000] border-b border-b-slate-300 flex justify-between items-center fixed top-0 left-0 right-0">
-      <div className="flex items-center">
+      <div className="flex items-center cursor-pointer">
         <FontAwesomeIcon
           onClick={handleSidebar}
           icon={faBars}
           className="w-5 h-5 p-3 mr-4 text-[#164B60] hover:bg-slate-100 cursor-pointer rounded-full"
         />
         <img
+          onClick={handleBackToMain}
           className="w-8 h-8 mr-4 hidden sm:inline-block"
           src="/favicon/favicon.ico"
           alt=""
         />
-        <h1 className="text-xl font-bold text-slate-500 hidden sm:inline-block">
+        <h1
+          onClick={handleBackToMain}
+          className="text-xl font-bold text-slate-500 hidden sm:inline-block"
+        >
           Fast Note
         </h1>
       </div>

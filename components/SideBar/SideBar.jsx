@@ -1,5 +1,3 @@
-import { toggleEditLabelModal } from '@/app/GlobalRedux/Features/toggle/editLabelModalSlider';
-import { LabelSelector, SidebarSelector } from '@/app/GlobalRedux/selector';
 import {
   faBell,
   faBoxArchive,
@@ -9,17 +7,22 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
-import { Label } from './LabelList/Label';
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+
+import { toggleEditLabelModal } from '@/app/GlobalRedux/Features/toggle/editLabelModalSlider';
+import { LabelSelector, SidebarSelector } from '@/app/GlobalRedux/selector';
+import { Label } from './LabelList/Label';
 import { getLimit } from '@/app/GlobalRedux/Features/data/limitSlider';
-import Link from 'next/link';
 import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
 import { toggleSidebar } from '@/app/GlobalRedux/Features/toggle/sidebarSlider';
 import { toggleDeletedSearchIcon } from '@/app/GlobalRedux/Features/toggle/deletedSearchIconSlider';
+import { toggleAxiosLoading } from '@/app/GlobalRedux/Features/toggle/axiosLoadingSlider';
 
 const SideBar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const toggle = useSelector(SidebarSelector);
   const labelList = useSelector(LabelSelector);
@@ -28,7 +31,10 @@ const SideBar = () => {
     dispatch(toggleEditLabelModal(true));
   };
 
-  const handleNavigate = () => {
+  const handleNavigate = (routeName, limit = null) => {
+    dispatch(toggleAxiosLoading(true));
+    router.push(`/todo/${routeName}`, undefined, { shallow: true });
+    if (limit) dispatch(getLimit(limit));
     dispatch(getTodoList([]));
     dispatch(toggleSidebar(false));
     dispatch(toggleDeletedSearchIcon(false));
@@ -40,15 +46,10 @@ const SideBar = () => {
         toggle ? 'w-[300px] max-[556px]:w-full' : 'w-0'
       } h-screen py-3 bg-white fixed top-0 left-0 right-0 mt-[59px] shadow-[0_5px_5px_1px_rgba(0,0,0,0.3)] rounded z-[100] transition-all overflow-hidden hover:overflow-y-auto overscroll-none`}
     >
-      <Link
+      <div
         href={'/todo/today'}
         shallow={true}
-        onClick={() => {
-          dispatch(getTodoList([]));
-          dispatch(getLimit(10));
-          dispatch(toggleSidebar(false));
-          dispatch(toggleDeletedSearchIcon(false));
-        }}
+        onClick={() => handleNavigate('today', 10)}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-full ${
           pathname === '/todo/today' ? 'bg-blue-200' : 'hover:bg-slate-100'
         } ${!toggle ? 'rounded-full' : 'rounded-r-full'} cursor-pointer`}
@@ -58,10 +59,9 @@ const SideBar = () => {
           className="w-5 h-5 mr-8 text-[#164B60]"
         />
         <p className={`font-medium ${!toggle && 'hidden'}`}>Ghi chú</p>
-      </Link>
-      <Link
-        onClick={handleNavigate}
-        href={'/todo/reminder'}
+      </div>
+      <div
+        onClick={() => handleNavigate('reminder')}
         shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? 'rounded-full' : 'rounded-r-full'
@@ -74,7 +74,7 @@ const SideBar = () => {
           className="w-5 h-5 mr-8 text-[#164B60]"
         />
         <p className={`font-medium ${!toggle && 'hidden'}`}>Lời nhắc</p>
-      </Link>
+      </div>
       {labelList.map((val) => (
         <Label key={val.id} id={val.id} name={val.name} />
       ))}
@@ -90,8 +90,8 @@ const SideBar = () => {
         />
         <p className={`font-medium ${!toggle && 'hidden'}`}>Chỉnh sửa nhãn</p>
       </div>
-      <Link
-        onClick={handleNavigate}
+      <div
+        onClick={() => handleNavigate('archive')}
         href={'/todo/archive'}
         shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
@@ -105,9 +105,9 @@ const SideBar = () => {
           className="w-5 h-5 mr-8 text-[#164B60]"
         />
         <p className={`font-medium ${!toggle && 'hidden'}`}>Lưu trữ</p>
-      </Link>
-      <Link
-        onClick={handleNavigate}
+      </div>
+      <div
+        onClick={() => handleNavigate('trash')}
         href={'/todo/trash'}
         shallow={true}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
@@ -121,7 +121,7 @@ const SideBar = () => {
           className="w-5 h-5 mr-8 text-[#164B60]"
         />
         <p className={`font-medium ${!toggle && 'hidden'}`}>Thùng rác</p>
-      </Link>
+      </div>
     </div>
   );
 };
