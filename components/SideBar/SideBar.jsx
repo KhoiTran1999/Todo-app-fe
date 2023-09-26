@@ -72,7 +72,7 @@ const SideBar = () => {
           pathname === '/todo/reminder'
             ? 'bg-blue-200'
             : ' xl:hover:bg-slate-100'
-        } transition-all`}
+        }`}
       >
         <FontAwesomeIcon
           icon={faBell}
@@ -87,7 +87,7 @@ const SideBar = () => {
         onClick={handleModal}
         className={`py-3 pl-6 h-[48px] flex justify-start items-center w-ful ${
           !toggle ? 'rounded-full' : 'rounded-r-full'
-        } cursor-pointerxl:hover:bg-slate-100`}
+        } cursor-pointer xl:hover:bg-slate-100`}
       >
         <FontAwesomeIcon
           icon={faPenToSquare}
@@ -102,7 +102,7 @@ const SideBar = () => {
           !toggle ? 'rounded-full' : 'rounded-r-full'
         } cursor-pointer ${
           pathname === '/todo/archive' ? 'bg-blue-200' : 'xl:hover:bg-slate-100'
-        } transition-all`}
+        }`}
       >
         <FontAwesomeIcon
           icon={faBoxArchive}
@@ -117,7 +117,7 @@ const SideBar = () => {
           !toggle ? 'rounded-full' : 'rounded-r-full'
         } cursor-pointer ${
           pathname === '/todo/trash' ? 'bg-blue-200' : 'xl:hover:bg-slate-100'
-        } transition-all`}
+        }`}
       >
         <FontAwesomeIcon
           icon={faTrashCan}

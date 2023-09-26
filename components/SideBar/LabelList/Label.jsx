@@ -35,7 +35,7 @@ export const Label = ({ id, name }) => {
         !toggle ? 'rounded-full' : 'rounded-r-full'
       } cursor-pointer ${
         pathname === `/todo/${id}` ? 'bg-blue-200' : 'xl:hover:bg-slate-100'
-      } transition-all`}
+      }`}
     >
       <FontAwesomeIcon
         icon={faBookmark}
