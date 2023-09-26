@@ -23,15 +23,6 @@ export default function page({ params }) {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    if (accessToken) {
-      getTodoLabelAxios(accessToken, params.labelId).then((res) => {
-        dispatch(getTodoList(res.data));
-        dispatch(toggleAxiosLoading(false));
-      });
-    }
-  }, []);
-
   return (
     <>
       <motion.div

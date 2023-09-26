@@ -24,15 +24,6 @@ export default function Todo() {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    if (accessToken) {
-      getTodoAxios(accessToken, limit).then((res) => {
-        dispatch(getTodoList(res.data));
-        dispatch(toggleAxiosLoading(false));
-      });
-    }
-  }, []);
-
   return (
     <>
       <motion.div

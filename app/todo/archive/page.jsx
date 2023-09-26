@@ -23,15 +23,6 @@ export default function Todo() {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    if (accessToken) {
-      getArchiveTodoAxios(accessToken).then((res) => {
-        dispatch(getTodoList(res.data));
-        dispatch(toggleAxiosLoading(false));
-      });
-    }
-  }, []);
-
   return (
     <>
       <motion.div

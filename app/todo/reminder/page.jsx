@@ -24,16 +24,6 @@ export default function Todo() {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    if (accessToken) {
-      getAllTodoAxios(accessToken, undefined).then((res) => {
-        const reminderTodoList = res.data.filter((val) => !!val.reminder);
-        dispatch(getTodoList(reminderTodoList));
-        dispatch(toggleAxiosLoading(false));
-      });
-    }
-  }, []);
-
   return (
     <>
       <motion.div
