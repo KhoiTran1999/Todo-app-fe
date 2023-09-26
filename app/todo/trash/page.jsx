@@ -1,7 +1,7 @@
 'use client';
 
 import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
-import { SidebarSelector, TokenSelector } from '@/app/GlobalRedux/selector';
+import { TokenSelector } from '@/app/GlobalRedux/selector';
 import StickyWall from '@/components/StickyWall/StickyWall';
 import { getDeletedTodoAxios } from '@/service/axiosService/todoAxios';
 import { useEffect } from 'react';
@@ -13,7 +13,6 @@ export default function Todo() {
   const dispatch = useDispatch();
 
   const { accessToken } = useSelector(TokenSelector);
-  const toggle = useSelector(SidebarSelector);
 
   useEffect(() => {
     if (accessToken) {
@@ -22,7 +21,16 @@ export default function Todo() {
         dispatch(toggleAxiosLoading(false));
       });
     }
-  }, [accessToken, toggle]);
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (accessToken) {
+      getDeletedTodoAxios(accessToken).then((res) => {
+        dispatch(getTodoList(res.data));
+        dispatch(toggleAxiosLoading(false));
+      });
+    }
+  }, []);
 
   return (
     <>

@@ -1,7 +1,7 @@
 'use client';
 
 import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
-import { SidebarSelector, TokenSelector } from '@/app/GlobalRedux/selector';
+import { TokenSelector } from '@/app/GlobalRedux/selector';
 import StickyWall from '@/components/StickyWall/StickyWall';
 import { getAllTodoAxios } from '@/service/axiosService/todoAxios';
 import { useEffect } from 'react';
@@ -13,7 +13,6 @@ export default function Todo() {
   const dispatch = useDispatch();
 
   const { accessToken } = useSelector(TokenSelector);
-  const toggle = useSelector(SidebarSelector);
 
   useEffect(() => {
     if (accessToken) {
@@ -23,7 +22,17 @@ export default function Todo() {
         dispatch(toggleAxiosLoading(false));
       });
     }
-  }, [accessToken, toggle]);
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (accessToken) {
+      getAllTodoAxios(accessToken, undefined).then((res) => {
+        const reminderTodoList = res.data.filter((val) => !!val.reminder);
+        dispatch(getTodoList(reminderTodoList));
+        dispatch(toggleAxiosLoading(false));
+      });
+    }
+  }, []);
 
   return (
     <>

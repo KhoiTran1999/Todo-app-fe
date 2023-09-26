@@ -1,11 +1,7 @@
 'use client';
 
 import { getTodoList } from '@/app/GlobalRedux/Features/data/todoListSlider';
-import {
-  LimitSelector,
-  SidebarSelector,
-  TokenSelector,
-} from '@/app/GlobalRedux/selector';
+import { LimitSelector, TokenSelector } from '@/app/GlobalRedux/selector';
 import StickyWall from '@/components/StickyWall/StickyWall';
 import { getTodoAxios } from '@/service/axiosService/todoAxios';
 import { useEffect } from 'react';
@@ -18,7 +14,6 @@ export default function Todo() {
 
   const { accessToken } = useSelector(TokenSelector);
   const limit = useSelector(LimitSelector);
-  const toggle = useSelector(SidebarSelector);
 
   useEffect(() => {
     if (accessToken) {
@@ -27,7 +22,16 @@ export default function Todo() {
         dispatch(toggleAxiosLoading(false));
       });
     }
-  }, [accessToken, toggle]);
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (accessToken) {
+      getTodoAxios(accessToken, limit).then((res) => {
+        dispatch(getTodoList(res.data));
+        dispatch(toggleAxiosLoading(false));
+      });
+    }
+  }, []);
 
   return (
     <>
